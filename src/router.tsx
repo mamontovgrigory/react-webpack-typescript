@@ -17,8 +17,8 @@ class HelloWrapper extends React.Component<{}, {}>{
 ReactDOM.render(
     <Router history={hashHistory}>
         <Route path='/' component={Layout}>
-            <IndexRoute component={HelloWrapper} key="index" />
-            <Route path="test" component={Test} key="test" />
+            <IndexRoute component={HelloWrapper} />
+            <Route path="test" component={Test} />
         </Route>
     </Router>,
     document.getElementById('app')
