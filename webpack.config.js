@@ -1,6 +1,8 @@
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
+const NODE_ENV = process.env.NODE_ENV || 'production';
+
 module.exports = {
     entry: "./src/index.tsx",
     output: {
@@ -19,7 +21,14 @@ module.exports = {
     module: {
         loaders: [
             // All files with a '.ts' or '.tsx' extension will be handled by 'ts-loader'.
-            {test: /\.tsx?$/, loader: "ts-loader"}
+            {
+                test: /\.tsx?$/,
+                loader: "ts-loader"
+            },
+            {
+                test: /\.scss$/,
+                loaders: ["style-loader", "css-loader", "sass-loader"]
+            }
         ],
 
         preLoaders: [
@@ -39,5 +48,10 @@ module.exports = {
         contentBase: ".",
         host: "localhost",
         port: 9000
+    },
+
+    watch: NODE_ENV === 'development',
+    watchOptions: {
+        aggregateTimeout: 100
     }
 };

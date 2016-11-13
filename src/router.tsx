@@ -6,27 +6,19 @@ import { Layout } from './Layout';
 import { Hello } from './components/Hello';
 import { Test } from './components/Test';
 
+class HelloWrapper extends React.Component<{}, {}>{
+    render(){
+        return (
+            <Hello compiler={'Webpack'} framework={'React'} />
+        )
+    }
+}
+
 ReactDOM.render(
     <Router history={hashHistory}>
         <Route path='/' component={Layout}>
-            <IndexRoute component={Hello} />
-            <Route path="test" component={Test} />
-            {
-                /*system.routes.map((route, index) => {
-                    return (
-                        route.path === 'index' ?
-                            <IndexRoute
-                                key={index}
-                                component={route.component}
-                                breadcrumb={route.path}/>
-                            :
-                            <Route key={index}
-                                   path={route.path}
-                                   component={route.component}
-                                   breadcrumb={route.path} />
-                    )
-                })*/
-            }
+            <IndexRoute component={HelloWrapper} key="index" />
+            <Route path="test" component={Test} key="test" />
         </Route>
     </Router>,
     document.getElementById('app')
