@@ -4,7 +4,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 const NODE_ENV = process.env.NODE_ENV || 'production';
 
 module.exports = {
-    entry: "./src/index.tsx",
+    entry: "./src/index.ts",
     output: {
         path: __dirname + "/public",
         filename: '[hash].bundle.js'
@@ -28,6 +28,10 @@ module.exports = {
             {
                 test: /\.scss$/,
                 loaders: ["style-loader", "css-loader", "sass-loader"]
+            },
+            {
+                test: /\.(png|jpg|gif|ico|svg|ttf|eot|woff|woff2|mp3)$/,
+                loader: "url-loader?limit=10000"
             }
         ],
 

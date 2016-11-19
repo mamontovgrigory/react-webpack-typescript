@@ -2,9 +2,9 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Router, Route, IndexRoute, hashHistory } from 'react-router';
 
-import { Layout } from './Layout';
-import { Hello } from './components/Hello';
-import { Test } from './components/Test';
+import { Layout } from '../app/Layout';
+import { Hello } from '../app/components/Hello';
+import { Test } from '../app/components/Test';
 
 class HelloWrapper extends React.Component<{}, {}>{
     render(){
