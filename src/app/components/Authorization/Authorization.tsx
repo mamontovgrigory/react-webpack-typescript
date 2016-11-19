@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {browserHistory} from 'react-router';
 
 interface AuthorizationState {
     login?: string,
@@ -43,6 +44,7 @@ export default class Authorization extends React.Component<{}, AuthorizationStat
                 login: 'test',
                 isAdmin: true
             };
+            browserHistory.push('/');
         } else {
             if (this.state.login) {
                 $("[name='password']").focus();

@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router';
 
-import Navigation from '../../stores/Navigation/Navigation';
-
 interface Module{
     name: string;
     icon: string;
@@ -26,11 +24,11 @@ export default class NavPanel extends React.Component<{}, NavPanelState>{
     }
     componentWillMount() {
         var self = this;
-        Navigation.getItems(function(modules: Module[]){
+        /*Navigation.getList(function(modules: Module[]){
             self.setState({
                 modules: modules
             });
-        });
+        });*/
         /*mediator.publish(channels.NAVIGATION_GET_ITEMS, null, function (response) {
             self.setState({
                 modules: response

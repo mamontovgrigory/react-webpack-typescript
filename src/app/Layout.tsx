@@ -12,18 +12,9 @@ export interface LayoutProps {
     }
 }
 
-import { browserHistory } from 'react-router'
-
 export class Layout extends React.Component<LayoutProps, {}>{
-    hello(){
-        browserHistory.push('/');
-    }
-    test(){
-        browserHistory.push('test');
-    }
     render(){
         const key = this.props.location.pathname;
-        console.log('layout', system.user);
         return (
             <div>
                 <NavPanel />
@@ -37,8 +28,6 @@ export class Layout extends React.Component<LayoutProps, {}>{
                         transitionEnterTimeout={500}
                         transitionLeave={false}>
                         <div key={key}>
-                            <button onClick={this.hello.bind(this)}>Hello</button>
-                            <button onClick={this.test.bind(this)}>Test</button>
                             {system.user ? this.props.children : <Authorization />}
                         </div>
                     </ReactCSSTransitionGroup>

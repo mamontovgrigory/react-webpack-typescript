@@ -9,8 +9,8 @@ interface Item{
     roles: string[]
 }
 
-class Navigation{
-    getItems(callback : Function){
+export class Navigation{
+    getList(callback : Function){
         var items = [
             {
                 name: 'Пользователи',
@@ -41,5 +41,3 @@ class Navigation{
         callback(items);
     }
 }
-
-export default new Navigation;
