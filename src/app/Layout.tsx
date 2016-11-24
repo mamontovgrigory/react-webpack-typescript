@@ -7,6 +7,8 @@ import NavPanel from './components/NavPanel/NavPanel';
 import Authorization from './components/Authorization/Authorization';
 
 export interface LayoutProps {
+    routes: any;
+    params: any;
     location: {
         pathname: string
     }

@@ -1,23 +1,45 @@
 import * as React from 'react';
-import { Link } from 'react-router';
+import {Link} from 'react-router';
 
-export default class Main extends React.Component{
-    constructor(){
+import Navigation from '../../../modules/Navigation/Navigation'; //TODO: Delete
+
+interface MainProps {
+
+}
+
+interface Modules {
+    name: string;
+    icon: string;
+    path: string;
+    to: string;
+    src: string;
+    description: string;
+    roles: string[];
+}
+
+interface MainState {
+    modules: Modules[]
+}
+
+export default class Main extends React.Component<MainProps, MainState> {
+    constructor() {
         super();
 
         this.state = {
-            modules:[]
+            modules: []
         }
     }
-    componentWillMount(){
+
+    componentWillMount() {
         var self = this;
-        /*mediator.publish(channels.NAVIGATION_GET_ITEMS, null, function(response){
+        Navigation.getList(function (response: Modules[]) {
             self.setState({
                 modules: response
             });
-        });*/
+        });
     }
-    render(){
+
+    render() {
         return (
             <div className="section">
                 {
@@ -27,7 +49,7 @@ export default class Main extends React.Component{
                                 <div className="card-wrapper" key={index}>
                                     <div className="card sticky-action">
                                         <div className="card-image waves-effect waves-block waves-light">
-                                            <img className="activator" src={el.src} />
+                                            <img className="activator" src={el.src}/>
                                         </div>
                                         <div className="card-content">
                                             <span className="card-title activator grey-text text-darken-4">

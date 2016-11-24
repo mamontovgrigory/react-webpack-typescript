@@ -1,6 +1,7 @@
 {
   "globalDependencies": {
     "history": "registry:dt/history#1.8.0+20160316155526",
+    "i18next": "registry:dt/i18next#2.3.4+20161107200623",
     "jquery": "registry:dt/jquery#1.10.0+20160929162922",
     "lodash": "registry:dt/lodash#4.14.0+20161110215204",
     "materialize-css": "registry:dt/materialize-css#0.97.5+20161019124558",

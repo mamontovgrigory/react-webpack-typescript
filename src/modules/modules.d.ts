@@ -1,1 +1,3 @@
-//declare interface Navigation{}
+declare interface Navigation{
+    getList(): void;
+}

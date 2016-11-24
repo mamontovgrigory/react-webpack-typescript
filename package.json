@@ -23,6 +23,7 @@
     "file-loader": "^0.9.0",
     "history": "^4.4.0",
     "html-webpack-plugin": "^2.24.1",
+    "i18next": "^4.1.0",
     "jquery": "^2.2.4",
     "lodash": "^4.17.2",
     "materialize-css": "^0.97.8",

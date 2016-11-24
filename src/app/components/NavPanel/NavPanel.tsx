@@ -53,7 +53,7 @@ export default class NavPanel extends React.Component<{}, NavPanelState>{
         return (
             <nav>
                 <div className="nav-wrapper container">
-                    <a href="#" className="brand-logo right">Primatel 2.0</a>
+                    <Link to="/" className="brand-logo right">Primatel 2.0</Link>
                     <ul id="dropdown-user" className="dropdown-content">
                         <li><a onClick={this.logoutClickHandler.bind(this)}>Выйти</a></li>
                     </ul>

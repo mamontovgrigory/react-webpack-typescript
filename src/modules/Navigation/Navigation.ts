@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 
-interface Item{
+interface Item {
     name: string,
     icon: string,
     to: string,
@@ -9,8 +9,8 @@ interface Item{
     roles: string[]
 }
 
-export class Navigation{
-    getList(callback : Function){
+class Navigation {
+    getList(callback: Function) {
         var items = [
             {
                 name: 'Пользователи',
@@ -18,7 +18,7 @@ export class Navigation{
                 to: 'users',
                 src: require('./content/users.png'),
                 description: 'Создание, редактирование и удаление пользователей системы',
-                roles: [ 'admin' ]
+                roles: ['admin']
             },
             {
                 name: 'Телефония',
@@ -26,13 +26,13 @@ export class Navigation{
                 to: 'telephony',
                 src: require('./content/telephony.png'),
                 description: 'Просмотр статистики и прослушивание записей телефонии',
-                roles: [ 'admin', 'user' ]
+                roles: ['admin', 'user']
             }
         ];
 
-        items = _.filter(items, function(i){
+        items = _.filter(items, function (i) {
             var valid = false;
-            if(system.user){
+            if (system.user) {
                 valid = _.indexOf(i.roles, system.user.isAdmin ? 'admin' : 'user') !== -1;
             }
             return valid;
@@ -41,3 +41,5 @@ export class Navigation{
         callback(items);
     }
 }
+
+export default new Navigation();
