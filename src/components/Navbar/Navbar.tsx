@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { Link } from 'react-router';
+import {connect} from "react-redux";
 
 interface Props {
-
+    modules?:NavigationItem[];
 }
 
 interface State {
@@ -12,6 +13,15 @@ interface State {
 class Navbar extends React.Component<Props,State> {
     logoutClickHandler() {
 
+    }
+
+    componentDidMount() {
+        $(".side-nav-collapse").sideNav();
+        $(".dropdown-button").dropdown();
+
+        $('.side-nav-close').on('click', function () {
+            $('.side-nav').sideNav('hide');
+        });
     }
 
     render() {
@@ -36,7 +46,7 @@ class Navbar extends React.Component<Props,State> {
                     }
                     <ul className="left">
                         <li>
-                            <a data-activates="slide-out" className="side-nav-collapse" hidden={true}>
+                            <a data-activates="slide-out" className="side-nav-collapse">
                                 <i className="material-icons">menu</i>
                             </a>
                         </li>
@@ -50,7 +60,7 @@ class Navbar extends React.Component<Props,State> {
                         </Link>
                     </li>
                     {
-                        [].map((el, index) => {
+                        this.props.modules.map((el, index) => {
                             return (
                                 <li key={index}>
                                     <Link to={el.to} className="waves-effect side-nav-close">
@@ -71,4 +81,10 @@ class Navbar extends React.Component<Props,State> {
     }
 }
 
-export default Navbar;
+function mapStateToProps(state: any) {
+    const { modules } = state.navigation;
+
+    return { modules };
+}
+
+export default connect(mapStateToProps)(Navbar);

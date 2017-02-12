@@ -1,4 +1,5 @@
 var webpack = require('webpack');
+var packageJson = require("package.json");
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const NODE_ENV = process.env.NODE_ENV || 'production';
@@ -49,6 +50,16 @@ module.exports = {
         new HtmlWebpackPlugin({
             title: 'React webpack typescript',
             template: __dirname + '/index.html'
+        }),
+        new webpack.DefinePlugin({
+            PROJECT: JSON.stringify(packageJson.name),
+            VERSION: JSON.stringify(packageJson.version)
+        }),
+        new webpack.ProvidePlugin({
+            $: 'jquery',
+            jQuery: 'jquery',
+            "window.$": "jquery",
+            "window.jQuery": "jquery"
         })
     ],
     

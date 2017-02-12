@@ -1,11 +1,12 @@
+import * as i18next from 'i18next';
+
+i18next.init({ //TODO: declare global i18next
+    lng: 'ru',
+    resources: require('../../i18n.json')
+});
+
 interface State {
-    modules:{
-        path?:string;
-        name:string;
-        src?:string;
-        description?:string;
-        to:string;
-    }[];
+    modules:NavigationItem[];
 }
 
 interface Action {
@@ -15,18 +16,21 @@ interface Action {
 const initialState:State = {
     modules: [
         {
-            name: 'Users',//TODO: Use i18next
+            name: i18next.t('users'),
             to: 'users',
+            icon: 'perm_identity',
             src: require('./content/users.png')
         },
         {
-            name: 'Groups',
+            name: i18next.t('groups'),
             to: 'groups',
+            icon: 'supervisor_account',
             src: require('./content/groups.png')
         },
         {
-            name: 'Telephony',
+            name: i18next.t('telephony'),
             to: 'telephony',
+            icon: 'phone',
             src: require('./content/telephony.png')
         }
     ]
