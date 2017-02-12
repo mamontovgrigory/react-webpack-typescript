@@ -2,20 +2,20 @@
 @import "variables";
 @import "mixins";
 
-body{
+body {
   margin: 0;
   padding: 0;
 }
 
-nav{
+nav {
   background: $system-panel-color;
-  .brand-logo{
-    position: static!important;
+  .brand-logo {
+    position: static !important;
   }
 }
 
-table{
-  td, th{
+table {
+  td, th {
     padding: 0 5px;
     min-height: 37px;
   }
@@ -48,48 +48,85 @@ table{
   transition: opacity .5s ease-in;
 }
 
-.panel{
+.loader-wrapper {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  background: rgba(255,255,255,0.5);
+  display: none;
+  &.active{
+    display: block;
+  }
+  .loader {
+    border: 10px solid transparent;
+    border-top-color: $system-panel-color;
+    border-bottom-color: $system-panel-color;
+    border-radius: 50%;
+    width: $loader-size;
+    height: $loader-size;
+    animation: spin 1s linear infinite;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    margin-top: -$loader-size/2;
+    margin-left: -$loader-size/2;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.panel {
   background: $system-panel-color;
 }
 
-.pagination li.active{
+.pagination li.active {
   background-color: $system-panel-color;
 }
 
-.modal{
+.modal {
   max-width: 90%;
   max-height: 80%;
-  &.modal-fixed-footer{
+  &.modal-fixed-footer {
     width: 90%;
     height: 80%;
   }
 }
 
-.card-wrapper{
+.card-wrapper {
   width: 50%;
   float: left;
   padding-right: 20px;
-  .card{
-    .card-image{
+  .card {
+    .card-image {
       height: 200px;
     }
   }
 }
 
-.divider{
+.divider {
   clear: both;
 }
 
-.audioplayer{
+.audioplayer {
   box-shadow: none;
   border-color: transparent;
   @include linear-gradient(top, $system-panel-color, $system-panel-alternative-color);
 }
 
-.text-white{
+.text-white {
   color: $color-white;
 }
 
-.background-system{
+.background-system {
   background: $system-panel-color;
 }

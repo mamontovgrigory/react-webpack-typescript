@@ -33,6 +33,9 @@ class App extends React.Component<Props, State> {
                         </div>
                     </ReactCSSTransitionGroup>
                 </div>
+                <div className="loader-wrapper">
+                    <div className="loader"></div>
+                </div>
             </div>
         );
     }
