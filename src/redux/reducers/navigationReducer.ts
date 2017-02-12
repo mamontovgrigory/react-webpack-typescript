@@ -15,7 +15,7 @@ interface Action {
 const initialState:State = {
     modules: [
         {
-            name: 'Users',
+            name: 'Users',//TODO: Use i18next
             to: 'users',
             src: require('./content/users.png')
         },

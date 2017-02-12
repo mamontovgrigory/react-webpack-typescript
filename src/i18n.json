@@ -1,0 +1,18 @@
+{
+  "en": {
+    "translation": {
+      "users": "Users",
+      "groups": "Groups",
+      "telephony": "Telephony",
+      "go": "Go"
+    }
+  },
+  "ru": {
+    "translation": {
+      "users": "Пользователи",
+      "groups": "Группы",
+      "telephony": "Телефония",
+      "go": "Перейти"
+    }
+  }
+}
