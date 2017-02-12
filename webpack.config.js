@@ -4,7 +4,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 const NODE_ENV = process.env.NODE_ENV || 'production';
 
 module.exports = {
-    entry: "./src/index.ts",
+    entry: "./src/index.tsx",
     output: {
         path: __dirname + "/public",
         filename: '[hash].bundle.js'

@@ -5,6 +5,7 @@
     "jquery": "registry:dt/jquery#1.10.0+20160929162922",
     "lodash": "registry:dt/lodash#4.14.0+20161110215204",
     "materialize-css": "registry:dt/materialize-css#0.97.5+20161019124558",
+    "node": "registry:dt/node#7.0.0+20170204020307",
     "react": "registry:dt/react#0.14.0+20161117000655",
     "react-addons-css-transition-group": "registry:dt/react-addons-css-transition-group#0.14.0+20160316155526",
     "react-addons-transition-group": "registry:dt/react-addons-transition-group#0.14.0+20160701001352",
@@ -12,5 +13,9 @@
     "react-router": "registry:dt/react-router#2.0.0+20160928130202",
     "react-router/history": "registry:dt/react-router/history#2.0.0+20160830150755",
     "velocity-animate": "registry:dt/velocity-animate#1.2.2+20161016143552"
-  }
+  },
+  "dependencies": {
+    "react-redux": "registry:npm/react-redux#4.4.0+20160614222153"
+  },
+  "globalDevDependencies": {}
 }
