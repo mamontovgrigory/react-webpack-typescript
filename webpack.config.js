@@ -1,22 +1,22 @@
 var webpack = require('webpack');
-var packageJson = require("package.json");
+var packageJson = require('./package.json');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const NODE_ENV = process.env.NODE_ENV || 'production';
 
 module.exports = {
-    entry: "./src/index.tsx",
+    entry: './src/index.tsx',
     output: {
-        path: __dirname + "/public",
+        path: __dirname + '/public',
         filename: '[hash].bundle.js'
     },
 
     // Enable sourcemaps for debugging webpack's output.
-    devtool: "source-map",
+    devtool: 'source-map',
 
     resolve: {
         // Add '.ts' and '.tsx' as resolvable extensions.
-        extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
+        extensions: ['', '.webpack.js', '.web.js', '.ts', '.tsx', '.js']
     },
 
     module: {
@@ -24,25 +24,25 @@ module.exports = {
             // All files with a '.ts' or '.tsx' extension will be handled by 'ts-loader'.
             {
                 test: /\.tsx?$/,
-                loader: "ts-loader"
+                loader: 'ts-loader'
             },
             {
                 test: /\.json$/,
-                loader: "json-loader"
+                loader: 'json-loader'
             },
             {
                 test: /\.scss$/,
-                loaders: ["style-loader", "css-loader", "sass-loader"]
+                loaders: ['style-loader', 'css-loader', 'sass-loader']
             },
             {
                 test: /\.(png|jpg|gif|ico|svg|ttf|eot|woff|woff2|mp3)$/,
-                loader: "url-loader?limit=10000"
+                loader: 'url-loader?limit=10000'
             }
         ],
 
         preLoaders: [
             // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
-            {test: /\.js$/, loader: "source-map-loader"}
+            {test: /\.js$/, loader: 'source-map-loader'}
         ]
     },
 
@@ -58,14 +58,16 @@ module.exports = {
         new webpack.ProvidePlugin({
             $: 'jquery',
             jQuery: 'jquery',
-            "window.$": "jquery",
-            "window.jQuery": "jquery"
+            'window.$': 'jquery',
+            'window.jQuery': 'jquery',
+            'i18next': 'i18next',
+            'React': 'react'
         })
     ],
     
     devServer: {
-        contentBase: ".",
-        host: "localhost",
+        contentBase: '.',
+        host: 'localhost',
         port: 9000
     },
 

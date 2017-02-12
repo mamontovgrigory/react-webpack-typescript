@@ -1,18 +1,18 @@
-import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import {Router, browserHistory} from 'react-router';
 import {Provider} from 'react-redux';
-import * as i18next from 'i18next';
 
-import './libs';
-import './scss/app.scss';
-import routes from './routes';
-import configureStore from './redux/configureStore';
+console.log(PROJECT, VERSION);
 
 i18next.init({
     lng: 'ru',
     resources: require('./i18n.json')
 });
+
+import './libs';
+import './scss/app.scss';
+import routes from './routes';
+import configureStore from './redux/configureStore';
 
 const initialState = {};
 const store = configureStore(initialState);

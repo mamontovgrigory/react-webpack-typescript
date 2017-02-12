@@ -1,10 +1,3 @@
-import * as i18next from 'i18next';
-
-i18next.init({ //TODO: declare global i18next
-    lng: 'ru',
-    resources: require('../../i18n.json')
-});
-
 interface State {
     modules:NavigationItem[];
 }

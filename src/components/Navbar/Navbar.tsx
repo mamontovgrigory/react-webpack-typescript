@@ -30,7 +30,7 @@ class Navbar extends React.Component<Props,State> {
                 <div className="nav-wrapper container">
                     <Link to="/" className="brand-logo right">Primatel 2.0</Link>
                     <ul id="dropdown-user" className="dropdown-content">
-                        <li><a onClick={this.logoutClickHandler.bind(this)}>Выйти</a></li>
+                        <li><a onClick={this.logoutClickHandler.bind(this)}>{i18next.t('logout')}</a></li>
                     </ul>
                     {
                         <ul className="right">
@@ -74,7 +74,7 @@ class Navbar extends React.Component<Props,State> {
                     <li>
                         <div className="divider"></div>
                     </li>
-                    <li><a className="waves-effect side-nav-close">Закрыть</a></li>
+                    <li><a className="waves-effect side-nav-close">{i18next.t('close')}</a></li>
                 </ul>
             </nav>
         )

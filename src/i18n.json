@@ -4,7 +4,9 @@
       "users": "Users",
       "groups": "Groups",
       "telephony": "Telephony",
-      "go": "Go"
+      "go": "Go",
+      "close": "Close",
+      "logout": "Logout"
     }
   },
   "ru": {
@@ -12,7 +14,9 @@
       "users": "Пользователи",
       "groups": "Группы",
       "telephony": "Телефония",
-      "go": "Перейти"
+      "go": "Перейти",
+      "close": "Закрыть",
+      "logout": "Выйти"
     }
   }
 }
