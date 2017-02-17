@@ -1,7 +1,10 @@
 import * as React from 'react';
+import {connect} from 'react-redux';
+
+import {logIn} from '../../redux/actions/accountActions.ts';
 
 interface Props {
-
+    dispatch?: any
 }
 
 interface State {
@@ -9,6 +12,9 @@ interface State {
     login?:string;
     password?:string;
 }
+
+let loginInput:HTMLInputElement = null;
+let passportInput:HTMLInputElement = null;
 
 class LoginPage extends React.Component<Props, State> {
     constructor() {
@@ -28,7 +34,19 @@ class LoginPage extends React.Component<Props, State> {
     }
 
     login() {
-
+        if (this.state && this.state.login && this.state.password) {
+            this.props.dispatch(logIn({
+                login: this.state.login,
+                password: this.state.password
+            }));
+        } else {
+            if (this.state.login) {
+                passportInput.focus();
+            } else {
+                loginInput.focus();
+            }
+            this.setState({notification: i18next.t('inputLoginAndPassword')});
+        }
     }
 
     render() {
@@ -42,12 +60,14 @@ class LoginPage extends React.Component<Props, State> {
                                 <div className="input-field col s12">
                                     <i className="material-icons prefix">account_circle</i>
                                     <input id="login" name="login" type="text" className="validate"
+                                           ref={(input) => { loginInput = input; }}
                                            onChange={this.handleLoginChange.bind(this)}/>
                                     <label htmlFor="login" className="">{i18next.t('login')}</label>
                                 </div>
                                 <div className="input-field col s12">
                                     <i className="material-icons prefix">vpn_key</i>
                                     <input id="password" type="password" name="password" className="validate"
+                                           ref={(input) => { passportInput = input; }}
                                            onChange={this.handlePasswordChange.bind(this)}/>
                                     <label htmlFor="password" className="">{i18next.t('password')}</label>
                                 </div>
@@ -67,4 +87,10 @@ class LoginPage extends React.Component<Props, State> {
     }
 }
 
-export default LoginPage;
+function mapStateToProps(state:any) {
+    const {authorized} = state.account;
+
+    return {authorized};
+}
+
+export default connect(mapStateToProps)(LoginPage);

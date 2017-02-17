@@ -10,7 +10,8 @@
       "authorization": "Authorization",
       "login": "Login",
       "password": "Password",
-      "logIn": "Log in"
+      "logIn": "Log in",
+      "inputLoginAndPassword": "Input login and password"
     }
   },
   "ru": {
@@ -24,7 +25,8 @@
       "authorization": "Авторизация",
       "login": "Логин",
       "password": "Пароль",
-      "logIn": "Войти"
+      "logIn": "Войти",
+      "inputLoginAndPassword": "Введите логин и пароль"
     }
   }
 }

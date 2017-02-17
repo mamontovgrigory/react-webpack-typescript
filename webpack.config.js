@@ -56,12 +56,13 @@ module.exports = {
             VERSION: JSON.stringify(packageJson.version)
         }),
         new webpack.ProvidePlugin({
+            'React': 'react',
             $: 'jquery',
             jQuery: 'jquery',
             'window.$': 'jquery',
             'window.jQuery': 'jquery',
             'i18next': 'i18next',
-            'React': 'react'
+            '_': 'lodash'
         })
     ],
     

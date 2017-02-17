@@ -2,9 +2,12 @@ import * as React from 'react';
 import {Link} from 'react-router';
 import {connect} from 'react-redux';
 
+import {logOut} from '../../redux/actions/accountActions.ts';
+
 interface Props {
     userAuthorized?:boolean;
     modules?:NavigationItem[];
+    dispatch?:any;
 }
 
 interface State {
@@ -13,12 +16,12 @@ interface State {
 
 class Navbar extends React.Component<Props,State> {
     logoutClickHandler() {
-
+        this.props.dispatch(logOut());
     }
 
     componentDidMount() {
-        $(".side-nav-collapse").sideNav();
-        $(".dropdown-button").dropdown();
+        $('.side-nav-collapse').sideNav();
+        $('.dropdown-button').dropdown();
 
         $('.side-nav-close').on('click', function () {
             $('.side-nav').sideNav('hide');
@@ -33,54 +36,48 @@ class Navbar extends React.Component<Props,State> {
                     <ul id="dropdown-user" className="dropdown-content">
                         <li><a onClick={this.logoutClickHandler.bind(this)}>{i18next.t('logout')}</a></li>
                     </ul>
-                    {this.props.userAuthorized && (
-                        <ul className="right">
-                            <li>
-                                <a className="dropdown-button" data-activates="dropdown-user">
-                                    <div className="chip">
-                                        user
-                                    </div>
-                                    <i className="material-icons right">arrow_drop_down</i>
-                                </a>
-                            </li>
-                        </ul>
-                    )}
-                    {this.props.userAuthorized && (
-                        <ul className="left">
-                            <li>
-                                <a data-activates="slide-out" className="side-nav-collapse">
-                                    <i className="material-icons">menu</i>
-                                </a>
-                            </li>
-                        </ul>
-                    )}
+                    <ul className="right" hidden={!this.props.userAuthorized}>
+                        <li>
+                            <a className="dropdown-button" data-activates="dropdown-user">
+                                <div className="chip">
+                                    user
+                                </div>
+                                <i className="material-icons right">arrow_drop_down</i>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul className="left" hidden={!this.props.userAuthorized}>
+                        <li>
+                            <a data-activates="slide-out" className="side-nav-collapse">
+                                <i className="material-icons">menu</i>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
 
-                {this.props.userAuthorized && (
-                    <ul id="slide-out" className="side-nav">
-                        <li>
-                            <Link to="/" className="side-nav-close display-inline-block p-l-0">
-                                <img className="background" src={require('./content/crm.png')}/>
-                            </Link>
-                        </li>
-                        {
-                            this.props.modules.map((el, index) => {
-                                return (
-                                    <li key={index}>
-                                        <Link to={el.to} className="waves-effect side-nav-close">
-                                            <i className="material-icons">{el.icon}</i>
-                                            {el.name}
-                                        </Link>
-                                    </li>
-                                )
-                            })
-                        }
-                        <li>
-                            <div className="divider"></div>
-                        </li>
-                        <li><a className="waves-effect side-nav-close">{i18next.t('close')}</a></li>
-                    </ul>
-                )}
+                <ul id="slide-out" className="side-nav">
+                    <li>
+                        <Link to="/" className="side-nav-close display-inline-block p-l-0">
+                            <img className="background" src={require('./content/crm.png')}/>
+                        </Link>
+                    </li>
+                    {
+                        this.props.userAuthorized && this.props.modules.map((el, index) => {
+                            return (
+                                <li key={index}>
+                                    <Link to={el.to} className="waves-effect side-nav-close">
+                                        <i className="material-icons">{el.icon}</i>
+                                        {el.name}
+                                    </Link>
+                                </li>
+                            )
+                        })
+                    }
+                    <li>
+                        <div className="divider"></div>
+                    </li>
+                    <li><a className="waves-effect side-nav-close">{i18next.t('close')}</a></li>
+                </ul>
             </nav>
         )
     }

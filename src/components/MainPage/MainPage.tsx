@@ -17,7 +17,7 @@ class MainPage extends React.Component<Props, State> {
                 {
                     this.props.modules.map((el, index) => {
                         return (
-                            el.path !== 'index' ?
+                            el.path !== 'index' && (
                                 <div className="card-wrapper" key={index}>
                                     <div className="card sticky-action">
                                         <div className="card-image waves-effect waves-block waves-light">
@@ -41,8 +41,7 @@ class MainPage extends React.Component<Props, State> {
                                         </div>
                                     </div>
                                 </div>
-                                :
-                                null
+                            )
                         )
                     })
                 }
