@@ -3,9 +3,9 @@ import {IndexRoute, Route}  from 'react-router';
 
 import App from './components/App';
 import MainPage from './components/MainPage';
-import Users from './components/Users';
-import Telephony from './components/Telephony';
-import Groups from './components/Groups';
+import Users from './components/UsersPage';
+import Telephony from './components/TelephonyPage';
+import Groups from './components/GroupsPage';
 
 let store;
 

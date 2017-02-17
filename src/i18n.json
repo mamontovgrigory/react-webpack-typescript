@@ -6,7 +6,11 @@
       "telephony": "Telephony",
       "go": "Go",
       "close": "Close",
-      "logout": "Logout"
+      "logout": "Logout",
+      "authorization": "Authorization",
+      "login": "Login",
+      "password": "Password",
+      "logIn": "Log in"
     }
   },
   "ru": {
@@ -16,7 +20,11 @@
       "telephony": "Телефония",
       "go": "Перейти",
       "close": "Закрыть",
-      "logout": "Выйти"
+      "logout": "Выйти",
+      "authorization": "Авторизация",
+      "login": "Логин",
+      "password": "Пароль",
+      "logIn": "Войти"
     }
   }
 }

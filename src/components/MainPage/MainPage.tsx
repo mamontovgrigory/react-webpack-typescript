@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Link} from 'react-router';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 
 interface Props {
     modules:NavigationItem[];
@@ -51,10 +51,10 @@ class MainPage extends React.Component<Props, State> {
     }
 }
 
-function mapStateToProps(state: any) {
-    const { modules } = state.navigation;
+function mapStateToProps(state:any) {
+    const {modules} = state.navigation;
 
-    return { modules };
+    return {modules};
 }
 
 export default connect(mapStateToProps)(MainPage);
