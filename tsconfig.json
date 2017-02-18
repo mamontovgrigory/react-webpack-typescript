@@ -4,11 +4,14 @@
     "sourceMap": true,
     "noImplicitAny": false,
     "module": "commonjs",
-    "target": "es5",
+    "target": "es6",
     "jsx": "react"
   },
   "files": [
     "./typings/index.d.ts",
     "./src/global.d.ts"
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }

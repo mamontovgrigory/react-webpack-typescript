@@ -4,7 +4,8 @@ import {connect} from 'react-redux';
 import {logIn} from '../../redux/actions/accountActions.ts';
 
 interface Props {
-    dispatch?: any
+    message?:string;
+    dispatch?: any;
 }
 
 interface State {
@@ -38,7 +39,7 @@ class LoginPage extends React.Component<Props, State> {
             this.props.dispatch(logIn({
                 login: this.state.login,
                 password: this.state.password
-            }));
+            }, this.props.dispatch));
         } else {
             if (this.state.login) {
                 passportInput.focus();
@@ -73,7 +74,7 @@ class LoginPage extends React.Component<Props, State> {
                                 </div>
                             </div>
                             <div className="error">
-                                {this.state.notification}
+                                {this.props.message}
                             </div>
                             <div className="input-field col s12">
                                 <a className="waves-effect waves-light btn right"
@@ -88,9 +89,9 @@ class LoginPage extends React.Component<Props, State> {
 }
 
 function mapStateToProps(state:any) {
-    const {authorized} = state.account;
+    const {message} = state.account;
 
-    return {authorized};
+    return {message};
 }
 
 export default connect(mapStateToProps)(LoginPage);
