@@ -2,7 +2,7 @@ import * as React from 'react';
 import {Link} from 'react-router';
 import {connect} from 'react-redux';
 
-import {logOut} from '../../redux/actions/accountActions.ts';
+import {logout} from '../../redux/actions/accountActions.ts';
 
 interface Props {
     userAuthorized?:boolean;
@@ -16,7 +16,7 @@ interface State {
 
 class Navbar extends React.Component<Props,State> {
     logoutClickHandler() {
-        this.props.dispatch(logOut());
+        this.props.dispatch(logout());
     }
 
     componentDidMount() {

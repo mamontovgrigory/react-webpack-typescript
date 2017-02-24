@@ -60,7 +60,8 @@ module.exports = {
         }),
         new webpack.DefinePlugin({
             PROJECT: JSON.stringify(packageJson.name),
-            VERSION: JSON.stringify(packageJson.version)
+            VERSION: JSON.stringify(packageJson.version),
+            NODE_ENV: JSON.stringify(NODE_ENV)
         }),
         new webpack.ProvidePlugin({
             'React': 'react',

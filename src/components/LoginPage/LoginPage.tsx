@@ -1,15 +1,15 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 
-import {logIn} from '../../redux/actions/accountActions.ts';
+import {loginRequest} from '../../redux/actions/accountActions.ts';
 
 interface Props {
     message?:string;
-    dispatch?: any;
+    dispatch?:any;
 }
 
 interface State {
-    notification:string;
+    notification?:string;
     login?:string;
     password?:string;
 }
@@ -18,36 +18,22 @@ let loginInput:HTMLInputElement = null;
 let passportInput:HTMLInputElement = null;
 
 class LoginPage extends React.Component<Props, State> {
-    constructor() {
-        super();
-
-        this.state = {
-            notification: ''
-        };
-    }
-
     handleLoginChange(e) {
-        this.setState({login: e.target.value, notification: ''});
+        this.setState({login: e.target.value});
     }
 
     handlePasswordChange(e) {
-        this.setState({password: e.target.value, notification: ''});
+        this.setState({password: e.target.value});
     }
 
     login() {
-        if (this.state && this.state.login && this.state.password) {
-            this.props.dispatch(logIn({
-                login: this.state.login,
-                password: this.state.password
-            }, this.props.dispatch));
-        } else {
-            if (this.state.login) {
-                passportInput.focus();
-            } else {
-                loginInput.focus();
-            }
-            this.setState({notification: i18next.t('inputLoginAndPassword')});
-        }
+        this.props.dispatch(loginRequest({
+            login: this.state.login,
+            password: this.state.password
+        }));
+
+        if(!this.state.login) loginInput.focus();
+        if(!this.state.password) passportInput.focus();
     }
 
     render() {

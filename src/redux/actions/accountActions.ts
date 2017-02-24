@@ -1,5 +1,4 @@
-require('es6-promise').polyfill();
-import * as formData from 'form-urlencoded';
+import {request} from './requestActions';
 
 export const LOG_IN = 'LOG_IN';
 export const LOG_OUT = 'LOG_OUT';
@@ -9,26 +8,29 @@ interface logInProps {
     password:string;
 }
 
-export function logIn(properties:logInProps, dispatch) {
-    return fetch('http://ramazanavtsinov.myjino.ru/ajax/login.php', {
-        method: 'POST',
-        headers: {
-            'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8'
-        },
-        body: formData(properties)
-    })
-        .then(res => res.json())
-        .then(result => {
-            if (result) {
-                //return {type: LOG_IN};
-                dispatch({type: LOG_IN});
-            } else {
-                dispatch({type: LOG_OUT});
-                //return {type: LOG_OUT};
-            }
-        });
+export function login() {
+    return {type: LOG_IN};
 }
 
-export function logOut() {
-    return {type: LOG_OUT};
+export function authorization(result){
+    return(dispatch => {
+        dispatch(result ? login() : logout(i18next.t('wrongLoginOrPassword')));
+    })
+}
+
+export function loginRequest(properties:logInProps) {
+    return (dispatch => {
+        if (properties.login && properties.password) {
+            dispatch(request({
+                url: 'http://ramazanavtsinov.myjino.ru/ajax/login.php',
+                data: properties
+            }, authorization));
+        } else {
+            dispatch(logout(i18next.t('inputLoginAndPassword')));
+        }
+    });
+}
+
+export function logout(message?:string) {
+    return {type: LOG_OUT, message};
 }
