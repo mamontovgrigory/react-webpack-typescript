@@ -3,7 +3,7 @@ import {Link} from 'react-router';
 import {connect} from 'react-redux';
 
 interface Props {
-    modules:NavigationItem[];
+    modules:any[];
 }
 
 interface State {

@@ -1,5 +1,12 @@
 interface State {
-    modules:NavigationItem[];
+    modules:{
+        path?:string;
+        name:any;
+        src?:string;
+        icon?:string;
+        description?:string;
+        to:string;
+    }[];
 }
 
 interface Action {

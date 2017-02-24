@@ -6,7 +6,7 @@ import {logOut} from '../../redux/actions/accountActions.ts';
 
 interface Props {
     userAuthorized?:boolean;
-    modules?:NavigationItem[];
+    modules?:any[];
     dispatch?:any;
 }
 
@@ -32,7 +32,7 @@ class Navbar extends React.Component<Props,State> {
         return (
             <nav>
                 <div className="nav-wrapper container">
-                    <Link to="/" className="brand-logo right">Primatel 2.0</Link>
+                    <Link to="/" className="brand-logo right">{PROJECT + ' ' + VERSION}</Link>
                     <ul id="dropdown-user" className="dropdown-content">
                         <li><a onClick={this.logoutClickHandler.bind(this)}>{i18next.t('logout')}</a></li>
                     </ul>

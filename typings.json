@@ -3,6 +3,7 @@
     "history": "registry:dt/history#1.8.0+20160316155526",
     "i18next": "registry:dt/i18next#2.3.4+20161107200623",
     "isomorphic-fetch": "registry:dt/isomorphic-fetch#0.0.0+20170120045107",
+    "jqgrid": "registry:dt/jqgrid#1.3.0+20161128184045",
     "jquery": "registry:dt/jquery#1.10.0+20160929162922",
     "lodash": "registry:dt/lodash#4.14.0+20161110215204",
     "materialize-css": "registry:dt/materialize-css#0.97.5+20161019124558",

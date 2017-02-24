@@ -15,7 +15,6 @@ const initialState:State = {
 };
 
 export default function (state:State = initialState, action:Action) {
-    console.log(action);
     switch(action.type){
         case LOG_IN:
             return _.assign({}, state, {authorized: true});

@@ -1,6 +1,7 @@
 var webpack = require('webpack');
 var packageJson = require('./package.json');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+var path = require('path');
 
 const NODE_ENV = process.env.NODE_ENV || 'production';
 
@@ -15,6 +16,8 @@ module.exports = {
     devtool: 'source-map',
 
     resolve: {
+        root: path.join(__dirname, 'src'),
+        modulesDirectories: ['node_modules'],
         // Add '.ts' and '.tsx' as resolvable extensions.
         extensions: ['', '.webpack.js', '.web.js', '.ts', '.tsx', '.js']
     },
@@ -31,6 +34,10 @@ module.exports = {
                 loader: 'json-loader'
             },
             {
+                test: /\.css$/,
+                loaders: ['style-loader', 'css-loader']
+            },
+            {
                 test: /\.scss$/,
                 loaders: ['style-loader', 'css-loader', 'sass-loader']
             },
@@ -42,7 +49,7 @@ module.exports = {
 
         preLoaders: [
             // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
-            {test: /\.js$/, loader: 'source-map-loader'}
+            { test: /\.js$/, loader: 'source-map-loader' }
         ]
     },
 
@@ -65,7 +72,7 @@ module.exports = {
             '_': 'lodash'
         })
     ],
-    
+
     devServer: {
         contentBase: '.',
         host: 'localhost',

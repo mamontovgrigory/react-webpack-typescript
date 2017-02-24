@@ -2,8 +2,6 @@ import * as ReactDOM from 'react-dom';
 import {Router, browserHistory} from 'react-router';
 import {Provider} from 'react-redux';
 
-console.log(PROJECT, VERSION);
-
 i18next.init({
     lng: 'ru',
     resources: require('./i18n.json')

@@ -19,7 +19,6 @@ export function logIn(properties:logInProps, dispatch) {
     })
         .then(res => res.json())
         .then(result => {
-            console.log(result);
             if (result) {
                 //return {type: LOG_IN};
                 dispatch({type: LOG_IN});
