@@ -15,7 +15,7 @@ export function request(properties:RequestProps, action?:any) {
     return (dispatch => {
         dispatch(showLoader());
 
-        return fetch((NODE_ENV === 'development' ?
+        return fetch((NODE_ENV.trim() === 'development' ?
                 'http://ramazanavtsinov.myjino.ru' :
                 window.location.origin) + properties.url, { //TODO: Move to config
             method: properties.method ? properties.method : 'POST',
