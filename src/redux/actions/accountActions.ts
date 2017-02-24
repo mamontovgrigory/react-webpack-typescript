@@ -22,7 +22,7 @@ export function loginRequest(properties:logInProps) {
     return (dispatch => {
         if (properties.login && properties.password) {
             dispatch(request({
-                url: 'http://ramazanavtsinov.myjino.ru/ajax/login.php',
+                url: '/ajax/login.php',
                 data: properties
             }, authorization));
         } else {
