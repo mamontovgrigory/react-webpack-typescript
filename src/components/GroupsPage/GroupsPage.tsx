@@ -11,7 +11,7 @@ interface State {
 class Groups extends React.Component<Props, State> {
     render() {
         return (
-            <div>Groups</div>
+            <h4>{i18next.t('groups')}</h4>
         )
     }
 }

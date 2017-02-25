@@ -24,7 +24,7 @@ class UsersPage extends React.Component<Props, State> {
     render() {
         return (
             <div>
-                <h1>Users</h1>
+                <h4>{i18next.t('users')}</h4>
                 <div>
                     <table id="test"></table>
                 </div>
