@@ -1,13 +1,11 @@
 import * as React from 'react';
 import {connect} from "react-redux";
 
-import {usersRequest} from '../../redux/actions/usersActions';
-import {Grid} from '../../shell';
+import {usersRequest, initUsersGrid} from '../../redux/actions/usersActions';
 
 interface Props {
     dispatch?:any;
-    users?:any[]
-    loading?:boolean;
+    users?:any[];
 }
 
 interface State {
@@ -16,28 +14,7 @@ interface State {
 
 class UsersPage extends React.Component<Props, State> {
     componentDidUpdate() {
-        Grid.init({
-            gridId: 'test',
-            data: _.map(this.props.users, function (r) {
-                return {
-                    id: r.id,
-                    login: r.login,
-                    group: r.groupId
-                };
-            }),
-            colModel: [
-                {
-                    name: 'id',
-                    hidden: true
-                },
-                {
-                    name: 'login'
-                },
-                {
-                    name: 'group'
-                }
-            ]
-        });
+        initUsersGrid('test', this.props.users);
     }
 
     componentWillMount() {
@@ -45,8 +22,6 @@ class UsersPage extends React.Component<Props, State> {
     }
 
     render() {
-        const {loading, users} = this.props;
-
         return (
             <div>
                 <h1>Users</h1>
@@ -59,9 +34,9 @@ class UsersPage extends React.Component<Props, State> {
 }
 
 function mapStateToProps(state:any) {
-    const {users, loading} = state.users;
+    const {users} = state.users;
 
-    return {users, loading};
+    return {users};
 }
 
 export default connect(mapStateToProps)(UsersPage);

@@ -7,11 +7,9 @@ interface RequestProps{
     method?:string;
     contentType?:string;
     data?:any;
-    success?:Function;
-    error?:Function;
 }
 
-export function request(properties:RequestProps, action?:any) {
+export function sendRequest(properties:RequestProps, action?:any) {
     return (dispatch => {
         dispatch(showLoader());
 
@@ -28,11 +26,9 @@ export function request(properties:RequestProps, action?:any) {
             .then(result => {
                 dispatch(hideLoader());
                 if(action) dispatch(action(result));
-                if(properties.success) properties.success(result);
             })
             .catch(({errors}) => {
                 console.error(errors);
-                if(properties.error) properties.error(errors);
             });
     });
 }
