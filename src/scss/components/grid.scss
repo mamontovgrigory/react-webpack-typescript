@@ -1,0 +1,43 @@
+@import "../variables";
+
+.ui-jqgrid {
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+  border-radius: 0 !important;
+  .ui-corner-top {
+    border-radius: 0 !important;
+    border-color: $color-white;
+  }
+  .ui-corner-bottom {
+    border-radius: 0 !important;
+    border: none;
+  }
+  .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+    background: $color-main;
+    color: $color-white;
+  }
+  .ui-widget-content {
+    background: transparent;
+    border-color: $color-main;
+  }
+  .ui-state-hover {
+    background: rgba($color-main, 0.15);
+  }
+  .ui-state-highlight {
+    background: rgba($color-main, 0.4);
+  }
+  input {
+    &[type="checkbox"] {
+      position: static;
+      opacity: 1;
+    }
+    &[type=text] {
+      height: auto !important;
+      border-bottom: none !important;
+      font-size: inherit !important;
+      background: $color-white;
+    }
+  }
+  select {
+    background: $color-white !important;
+  }
+}

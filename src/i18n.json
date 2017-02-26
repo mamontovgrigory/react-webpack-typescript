@@ -12,7 +12,10 @@
       "password": "Password",
       "logIn": "Log in",
       "inputLoginAndPassword": "Input login and password",
-      "wrongLoginOrPassword": "Wrong login or password"
+      "wrongLoginOrPassword": "Wrong login or password",
+      "add": "Add",
+      "edit": "Edit",
+      "delete": "Delete"
     }
   },
   "ru": {
@@ -28,7 +31,10 @@
       "password": "Пароль",
       "logIn": "Войти",
       "inputLoginAndPassword": "Введите логин и пароль",
-      "wrongLoginOrPassword": "Неправильный логин или пароль"
+      "wrongLoginOrPassword": "Неправильный логин или пароль",
+      "add": "Добавить",
+      "edit": "Редактировать",
+      "delete": "Удалить"
     }
   }
 }

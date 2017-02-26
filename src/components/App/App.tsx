@@ -5,11 +5,11 @@ import * as  ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import Navbar from '../Navbar';
 import Breadcrumbs from '../Breadcrumbs';
 import LoginPage from '../LoginPage';
+import Loader from '../Loader';
 
 interface Props {
     location:any;
     userAuthorized:boolean;
-    loaderActive:boolean;
 }
 
 interface State {
@@ -37,20 +37,16 @@ class App extends React.Component<Props, State> {
                         </div>
                     </ReactCSSTransitionGroup>
                 </div>
-                <div className={'loader-wrapper ' + (this.props.loaderActive ? 'active' : '')}>
-                    <div className="loader"></div>
-                </div>
+                <Loader/>
             </div>
         );
     }
 }
 
 function mapStateToProps(state:any) {
-    const {active} = state.loader;
     const {authorized} = state.account;
 
     return {
-        loaderActive: active,
         userAuthorized: authorized
     };
 }

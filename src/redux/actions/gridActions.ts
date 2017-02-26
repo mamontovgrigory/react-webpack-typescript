@@ -56,11 +56,7 @@ export function initGrid(properties:GridProperties) {
 
     function setGridWidth() {
         var gridParentWidth = $('#gbox_' + properties.gridId).parent().width();
-        //$grid.setGridWidth(gridParentWidth - 2, $grid.width() < gridParentWidth);
-        $grid.setGridParam({
-            width: gridParentWidth - 2,
-            shrink: $grid.width() < gridParentWidth
-        });
+        $grid.jqGrid('setGridWidth', gridParentWidth - 2, $grid.width() < gridParentWidth);
     }
 
     $(window).bind('resize', function () {
@@ -82,7 +78,7 @@ export function initGrid(properties:GridProperties) {
         pager: '#' + pagerId,
         //height: properties.height ? properties.height : 300,
         //width: properties.width ? properties.width : null,
-        //autowidth: true,
+        autoWidth: true,
         shrinkToFit: false,
         sortname: properties.sortname ? properties.sortname : null,
         sortorder: properties.sortorder ? properties.sortorder : 'desc',
@@ -103,6 +99,7 @@ export function initGrid(properties:GridProperties) {
          //setHeight();
          },*/
         gridComplete: function () {
+            setGridWidth();
             if (properties.gridComplete) {
                 properties.gridComplete();
             }

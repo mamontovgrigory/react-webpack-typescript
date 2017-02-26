@@ -14,7 +14,7 @@ interface State {
 
 class UsersPage extends React.Component<Props, State> {
     componentDidUpdate() {
-        initUsersGrid('test', this.props.users);
+        initUsersGrid('test', this.props.users); //TODO: Generate unique id
     }
 
     componentWillMount() {
@@ -25,8 +25,19 @@ class UsersPage extends React.Component<Props, State> {
         return (
             <div>
                 <h4>{i18next.t('users')}</h4>
-                <div>
-                    <table id="test"></table>
+                <div className="row">
+                    <button className="btn waves-effect waves-light" title={i18next.t('add')}>
+                        <i className="material-icons">playlist_add</i>
+                    </button>
+                    <button className="waves-effect waves-light btn m-l-10" title={i18next.t('edit')}>
+                        <i className="material-icons">mode_edit</i>
+                    </button>
+                    <button className="waves-effect waves-light btn m-l-10" title={i18next.t('delete')}>
+                        <i className="material-icons">delete</i>
+                    </button>
+                </div>
+                <div className="row">
+                    <table id="test"/>
                 </div>
             </div>
         )

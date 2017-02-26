@@ -1,0 +1,26 @@
+@import "../variables";
+@import "../mixins";
+
+.loader-wrapper {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+  background: rgba($color-white, 0.5);
+  display: none;
+  opacity: 0;
+  @include transition(0.5s ease-out 0.5s opacity);
+  &.active {
+    display: block;
+    opacity: 1;
+  }
+  .preloader-wrapper {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    margin-top: -$loader-size/2;
+    margin-left: -$loader-size/2;
+  }
+}

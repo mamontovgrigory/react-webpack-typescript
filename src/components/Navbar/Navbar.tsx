@@ -15,17 +15,17 @@ interface State {
 }
 
 class Navbar extends React.Component<Props,State> {
+    componentDidMount() {
+        $('.side-nav-collapse').sideNav();
+        $('.dropdown-button').dropdown();
+    }
+
     logoutClickHandler() {
         this.props.dispatch(logout());
     }
 
-    componentDidMount() {
-        $('.side-nav-collapse').sideNav();
-        $('.dropdown-button').dropdown();
-
-        $('.side-nav-close').on('click', function () {
-            $('.side-nav').sideNav('hide');
-        });
+    closeNavClickHandler(){
+        $('.side-nav').sideNav('hide');
     }
 
     render() {
@@ -57,7 +57,7 @@ class Navbar extends React.Component<Props,State> {
 
                 <ul id="slide-out" className="side-nav">
                     <li>
-                        <Link to="/" className="side-nav-close display-inline-block p-l-0">
+                        <Link to="/" className="display-inline-block p-l-0" onClick={this.closeNavClickHandler.bind(this)}>
                             <img className="background" src={require('./content/crm.png')}/>
                         </Link>
                     </li>
@@ -65,7 +65,7 @@ class Navbar extends React.Component<Props,State> {
                         this.props.userAuthorized && this.props.modules.map((el, index) => {
                             return (
                                 <li key={index}>
-                                    <Link to={el.to} className="waves-effect side-nav-close">
+                                    <Link to={el.to} className="waves-effect" onClick={this.closeNavClickHandler.bind(this)}>
                                         <i className="material-icons">{el.icon}</i>
                                         {el.name}
                                     </Link>
@@ -76,7 +76,7 @@ class Navbar extends React.Component<Props,State> {
                     <li>
                         <div className="divider"></div>
                     </li>
-                    <li><a className="waves-effect side-nav-close">{i18next.t('close')}</a></li>
+                    <li><a className="waves-effect" onClick={this.closeNavClickHandler.bind(this)}>{i18next.t('close')}</a></li>
                 </ul>
             </nav>
         )
