@@ -25,6 +25,9 @@
   .ui-state-highlight {
     background: rgba($color-main, 0.4);
   }
+  td, th{
+    min-height: inherit;
+  }
   input {
     &[type="checkbox"] {
       position: static;

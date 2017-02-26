@@ -3,6 +3,7 @@ interface GridProperties {
     colModel:{
         name:string;
         hidden?:boolean;
+        label?:string;
     }[],
     url?:string;
     data?:any[],

@@ -1,5 +1,4 @@
 import {sendRequest} from './requestActions';
-import {initGrid} from './gridActions';
 
 export const USERS_REQUEST_FINISHED = 'USERS_REQUEST_FINISHED';
 
@@ -20,30 +19,5 @@ export function usersRequest() {
         })).then(function(result){
             dispatch(usersRequestFinished(result));
         });
-    });
-}
-
-export function initUsersGrid(gridId:string, users:User[]){
-    initGrid({
-        gridId: gridId,
-        data: _.map(users, function (r) {
-            return {
-                id: r.id,
-                login: r.login,
-                group: r.groupId
-            };
-        }),
-        colModel: [
-            {
-                name: 'id',
-                hidden: true
-            },
-            {
-                name: 'login'
-            },
-            {
-                name: 'group'
-            }
-        ]
     });
 }

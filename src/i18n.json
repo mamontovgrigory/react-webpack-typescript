@@ -10,12 +10,16 @@
       "authorization": "Authorization",
       "login": "Login",
       "password": "Password",
+      "group": "Group",
+      "withoutGroup": "Without group",
       "logIn": "Log in",
       "inputLoginAndPassword": "Input login and password",
       "wrongLoginOrPassword": "Wrong login or password",
       "add": "Add",
       "edit": "Edit",
-      "delete": "Delete"
+      "delete": "Delete",
+      "creatingNewUser": "Creating new user",
+      "newPassword": "New password"
     }
   },
   "ru": {
@@ -29,12 +33,16 @@
       "authorization": "Авторизация",
       "login": "Логин",
       "password": "Пароль",
+      "group": "Группа",
+      "withoutGroup": "Без группы",
       "logIn": "Войти",
       "inputLoginAndPassword": "Введите логин и пароль",
       "wrongLoginOrPassword": "Неправильный логин или пароль",
       "add": "Добавить",
       "edit": "Редактировать",
-      "delete": "Удалить"
+      "delete": "Удалить",
+      "creatingNewUser": "Создание нового пользователя",
+      "newPassword": "Новый пароль"
     }
   }
 }
