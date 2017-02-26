@@ -63,7 +63,7 @@ export function initGrid(properties:GridProperties) {
         setGridWidth();
     });
 
-    $grid.jqGrid({
+    $grid.jqGrid({ //TODO: Use localization
         colModel: properties.colModel,
         data: properties.data ? properties.data : null,
         datatype: properties.url ? 'json' : 'local',

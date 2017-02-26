@@ -17,7 +17,9 @@ export function usersRequest() {
     return (dispatch => {
         dispatch(sendRequest({
             url: '/ajax/get_users.php'
-        }, usersRequestFinished));
+        })).then(function(result){
+            dispatch(usersRequestFinished(result));
+        });
     });
 }
 

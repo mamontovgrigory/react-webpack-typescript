@@ -9,7 +9,7 @@ interface RequestProps{
     data?:any;
 }
 
-export function sendRequest(properties:RequestProps, action?:any) {
+export function sendRequest(properties:RequestProps) {
     return (dispatch => {
         dispatch(showLoader());
 
@@ -25,10 +25,11 @@ export function sendRequest(properties:RequestProps, action?:any) {
             .then(res => res.json())
             .then(result => {
                 dispatch(hideLoader());
-                if(action) dispatch(action(result));
+                return(result);
             })
             .catch(({errors}) => {
                 console.error(errors);
+                return(errors);
             });
     });
 }

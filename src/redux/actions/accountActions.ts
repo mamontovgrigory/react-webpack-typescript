@@ -14,7 +14,9 @@ export function loginRequest(properties:logInProps) {
             dispatch(sendRequest({
                 url: '/ajax/login.php',
                 data: properties
-            }, authorization));
+            })).then(function (result) {
+                dispatch(result ? login() : logout(i18next.t('wrongLoginOrPassword')));
+            });
         } else {
             dispatch(logout(i18next.t('inputLoginAndPassword')));
         }
