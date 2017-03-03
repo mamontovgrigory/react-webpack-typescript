@@ -2,7 +2,7 @@ import * as React from 'react';
 import {connect} from "react-redux";
 
 import {usersRequest} from '../../redux/actions/usersActions';
-import {generateId, initGrid} from '../../shell';
+import {generator, grid} from '../../shell';
 
 import UserItem from './UserItem';
 
@@ -22,11 +22,11 @@ class UsersPage extends React.Component<Props, State> {
         super();
 
         this.state = {
-            gridId: generateId()
+            gridId: generator.genId()
         }
     }
     componentDidUpdate() {
-        initGrid({
+        grid.init({
             gridId: this.state.gridId,
             data: _.map(this.props.users, function (r) {
                 return {
@@ -67,11 +67,16 @@ class UsersPage extends React.Component<Props, State> {
                             <button className="btn waves-effect waves-light" title={i18next.t('add')}>
                                 <i className="material-icons">playlist_add</i>
                             </button>
-                        }>
+                        }
+                        buttons={[
+                            {
+                                text: i18next.t('save')
+                            }
+                        ]}>
                         <UserItem/>
                     </Modal>
                     <Modal
-                        header={i18next.t('creatingNewUser')}
+                        header={i18next.t('editingUser')}
                         trigger={
                             <button className="waves-effect waves-light btn m-l-10" title={i18next.t('edit')}>
                                 <i className="material-icons">mode_edit</i>

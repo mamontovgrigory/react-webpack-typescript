@@ -26,103 +26,109 @@ interface GridProperties {
     onSelectRow?:Function;
 }
 
-export function initGrid(properties:GridProperties) {
-    var $grid = $('#' + properties.gridId),
-        pagerId = 'p-' + properties.gridId;
+class Grid{
+    init(properties:GridProperties){
+        var $grid = $('#' + properties.gridId),
+            pagerId = 'p-' + properties.gridId;
 
-    $grid.jqGrid('GridUnload');
+        $grid.jqGrid('GridUnload');
 
-    $grid.after($('<div>', {
-        'id': pagerId
-    }));
+        $grid.after($('<div>', {
+            'id': pagerId
+        }));
 
-    var gridRowHeight = 22,
-        scrollHeight = 20;
+        var gridRowHeight = 22,
+            scrollHeight = 20;
 
-    function setHeight() { //Высота по умолчанию = rowsCount * gridRowHeight, если есть измеритель - устанавливается его высота
-        if (!properties.height) {
-            var height;
-            var rowsCount = $grid.jqGrid('getGridParam', 'reccount'),
-                rowsShown = properties.rowsShown ? properties.rowsShown : 10;
-            if (rowsCount === 0) {
-                height = gridRowHeight * 3;
-            } else if (rowsCount <= rowsShown) {
-                height = (rowsCount * gridRowHeight) + scrollHeight;
-            } else {
-                height = gridRowHeight * rowsShown + scrollHeight;
+        function setHeight() { //Высота по умолчанию = rowsCount * gridRowHeight, если есть измеритель - устанавливается его высота
+            if (!properties.height) {
+                var height;
+                var rowsCount = $grid.jqGrid('getGridParam', 'reccount'),
+                    rowsShown = properties.rowsShown ? properties.rowsShown : 10;
+                if (rowsCount === 0) {
+                    height = gridRowHeight * 3;
+                } else if (rowsCount <= rowsShown) {
+                    height = (rowsCount * gridRowHeight) + scrollHeight;
+                } else {
+                    height = gridRowHeight * rowsShown + scrollHeight;
+                }
+                $grid.jqGrid('setGridHeight', height);
             }
-            $grid.jqGrid('setGridHeight', height);
         }
-    }
 
-    function setGridWidth() {
-        var gridParentWidth = $('#gbox_' + properties.gridId).parent().width();
-        $grid.jqGrid('setGridWidth', gridParentWidth - 2, $grid.width() < gridParentWidth);
-    }
+        function setGridWidth() {
+            var gridParentWidth = $('#gbox_' + properties.gridId).parent().width();
+            $grid.jqGrid('setGridWidth', gridParentWidth - 2, $grid.width() < gridParentWidth);
+        }
 
-    $(window).bind('resize', function () {
-        setGridWidth();
-    });
-
-    $grid.jqGrid({ //TODO: Use localization
-        colModel: properties.colModel,
-        data: properties.data ? properties.data : null,
-        datatype: properties.url ? 'json' : 'local',
-        //url: properties.url ? system.serverUrl + properties.url : false,
-        //ajaxGridOptions: system.ajaxOptions,
-        mtype: properties.url ? 'GET' : null,
-        multiselect: typeof (properties.multiselect) === 'boolean' ? properties.multiselect : true,
-        multiboxonly: typeof (properties.multiboxonly) === 'boolean' ? properties.multiboxonly : true,
-        viewrecords: true,
-        rowNum: properties.rowNum ? properties.rowNum : 30,
-        rowList: properties.rowList ? properties.rowList : [10, 20, 30, 50, 100, 200],
-        pager: '#' + pagerId,
-        //height: properties.height ? properties.height : 300,
-        //width: properties.width ? properties.width : null,
-        autoWidth: true,
-        shrinkToFit: false,
-        sortname: properties.sortname ? properties.sortname : null,
-        sortorder: properties.sortorder ? properties.sortorder : 'desc',
-        //scroll: properties.scroll ? properties.scroll : false,
-        //emptyrecords: i18next.t('ui.emptyrecords'),
-        jsonReader: properties.jsonReader ?
-            properties.jsonReader :
-        {
-            page: 'page',
-            total: 'total',
-            records: 'records',
-            root: 'rows',
-            repeatitems: false,
-            id: 'id'
-        },
-        /*loadComplete: function () {
-         setGridWidth();
-         //setHeight();
-         },*/
-        gridComplete: function () {
+        $(window).bind('resize', function () {
             setGridWidth();
-            if (properties.gridComplete) {
-                properties.gridComplete();
-            }
-        },
-        onSelectRow: function (rowId, status, e) {
-            if (properties.onSelectRow) {
-                properties.onSelectRow(rowId, status, e);
-            }
-        }
-    });
+        });
 
-    $grid.jqGrid('filterToolbar',
-        properties.filter !== false ? {
-            searchOnEnter: false,
-            stringResult: true,
-            defaultSearch: 'cn',
-            autoSearch: true,
-            beforeSearch: function () {
-                if (properties.beforeSearch) properties.beforeSearch();
+        $grid.jqGrid({ //TODO: Use localization
+            colModel: properties.colModel,
+            data: properties.data ? properties.data : null,
+            datatype: properties.url ? 'json' : 'local',
+            //url: properties.url ? system.serverUrl + properties.url : false,
+            //ajaxGridOptions: system.ajaxOptions,
+            mtype: properties.url ? 'GET' : null,
+            multiselect: typeof (properties.multiselect) === 'boolean' ? properties.multiselect : true,
+            multiboxonly: typeof (properties.multiboxonly) === 'boolean' ? properties.multiboxonly : true,
+            viewrecords: true,
+            rowNum: properties.rowNum ? properties.rowNum : 30,
+            rowList: properties.rowList ? properties.rowList : [10, 20, 30, 50, 100, 200],
+            pager: '#' + pagerId,
+            //height: properties.height ? properties.height : 300,
+            //width: properties.width ? properties.width : null,
+            autoWidth: true,
+            shrinkToFit: false,
+            sortname: properties.sortname ? properties.sortname : null,
+            sortorder: properties.sortorder ? properties.sortorder : 'desc',
+            //scroll: properties.scroll ? properties.scroll : false,
+            //emptyrecords: i18next.t('ui.emptyrecords'),
+            jsonReader: properties.jsonReader ?
+                properties.jsonReader :
+            {
+                page: 'page',
+                total: 'total',
+                records: 'records',
+                root: 'rows',
+                repeatitems: false,
+                id: 'id'
             },
-            afterSearch: function () {
-                if (properties.afterSearch) properties.afterSearch();
+            /*loadComplete: function () {
+             setGridWidth();
+             //setHeight();
+             },*/
+            gridComplete: function () {
+                setGridWidth();
+                if (properties.gridComplete) {
+                    properties.gridComplete();
+                }
+            },
+            onSelectRow: function (rowId, status, e) {
+                if (properties.onSelectRow) {
+                    properties.onSelectRow(rowId, status, e);
+                }
             }
-        } : false);
+        });
+
+        $grid.jqGrid('filterToolbar',
+            properties.filter !== false ? {
+                searchOnEnter: false,
+                stringResult: true,
+                defaultSearch: 'cn',
+                autoSearch: true,
+                beforeSearch: function () {
+                    if (properties.beforeSearch) properties.beforeSearch();
+                },
+                afterSearch: function () {
+                    if (properties.afterSearch) properties.afterSearch();
+                }
+            } : false);
+    }
 }
+
+const grid = new Grid();
+
+export {grid};

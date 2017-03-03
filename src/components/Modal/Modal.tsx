@@ -1,10 +1,13 @@
 import * as React from 'react';
 
-import {generateId} from '../../shell';
+import {generator} from '../../shell';
 
 interface Props {
     trigger?:any;
     header?:string;
+    buttons?:{
+        text:string;
+    }[];
     dispatch?:any;
 }
 
@@ -17,7 +20,7 @@ class Modal extends React.Component<Props, State> {
         super();
 
         this.state = {
-            modalId: generateId()
+            modalId: generator.genId()
         }
     }
 
@@ -46,9 +49,18 @@ class Modal extends React.Component<Props, State> {
                         </div>
                     </div>
                     <div className="modal-footer">
-                        <button className="modal-action modal-close waves-effect waves-green btn-flat ">
+                        <button className="modal-action modal-close waves-effect waves-green btn-flat">
                             {i18next.t('close')}
                         </button>
+                        {
+                            this.props.buttons && this.props.buttons.map((el, i) => {
+                                return (
+                                    <button className="modal-action modal-close waves-effect waves-green btn-flat" key={i}>
+                                        {el.text}
+                                    </button>
+                                );
+                            })
+                        }
                     </div>
                 </div>
             </div>

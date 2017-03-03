@@ -1,2 +1,2 @@
-export {generateId} from './generator';
-export {initGrid} from './grid';
+export {generator} from './generator';
+export {grid} from './grid';

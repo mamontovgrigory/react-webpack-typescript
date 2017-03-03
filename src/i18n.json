@@ -6,6 +6,7 @@
       "telephony": "Telephony",
       "go": "Go",
       "close": "Close",
+      "save": "Save",
       "logout": "Logout",
       "authorization": "Authorization",
       "login": "Login",
@@ -19,6 +20,7 @@
       "edit": "Edit",
       "delete": "Delete",
       "creatingNewUser": "Creating new user",
+      "editingUser": "Editing user",
       "newPassword": "New password"
     }
   },
@@ -29,6 +31,7 @@
       "telephony": "Телефония",
       "go": "Перейти",
       "close": "Закрыть",
+      "save": "Сохранить",
       "logout": "Выйти",
       "authorization": "Авторизация",
       "login": "Логин",
@@ -42,6 +45,7 @@
       "edit": "Редактировать",
       "delete": "Удалить",
       "creatingNewUser": "Создание нового пользователя",
+      "editingUser": "Редактирование пользователя",
       "newPassword": "Новый пароль"
     }
   }

@@ -1,15 +1,16 @@
 import * as React from 'react';
 
-import {generateId} from '../../shell';
+import {generator} from '../../shell';
 
-interface Props{
+interface Props {
     id?:number;
     login?:any;
     groupId?:any;
 }
 
-interface State{
+interface State {
     loginFieldId?:string;
+    passwordFieldId?:string;
     groupIdFieldId?:string;
 
     groupsList?:any[];
@@ -18,23 +19,25 @@ interface State{
     password?:number;
 }
 
-class UserItem extends React.Component<Props, State>{
-    constructor(){
+class UserItem extends React.Component<Props, State> {
+    constructor() {
         super();
 
         this.state = {
             groupsList: [],
-            loginFieldId: generateId(),
-            groupIdFieldId: generateId()
+            loginFieldId: generator.genId(),
+            passwordFieldId: generator.genId(),
+            groupIdFieldId: generator.genId()
         }
     }
+
     componentDidMount() {
         Materialize.updateTextFields();
         let $groupId = $('#' + this.state.groupIdFieldId);
         $groupId.material_select();
         $groupId.on('change', this.groupChangeHandler.bind(this));
     }
-    
+
     loginChangeHandler(e) {
         this.setState({
             login: e.target.value
@@ -53,8 +56,8 @@ class UserItem extends React.Component<Props, State>{
         });
     }
 
-    render(){
-        return(
+    render() {
+        return (
             <div>
                 <div className="row">
                     <div className="input-field col s6">
@@ -79,10 +82,10 @@ class UserItem extends React.Component<Props, State>{
                 </div>
                 <div className="row">
                     <div className="input-field col s6">
-                        <input id={'password-' + this.props.id} type="password"
+                        <input id={this.state.passwordFieldId} type="password"
                                onChange={this.passwordChangeHandler.bind(this)}/>
                         <label
-                            htmlFor={'password-' + this.props.id}>{this.props.id ?
+                            htmlFor={this.state.passwordFieldId}>{this.props.id ?
                             i18next.t('newPassword') :
                             i18next.t('password')}</label>
                     </div>

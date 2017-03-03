@@ -1,6 +1,8 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 
+import './style.scss';
+
 interface Props {
     active?:boolean;
 }

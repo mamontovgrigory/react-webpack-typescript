@@ -32,7 +32,9 @@ class Navbar extends React.Component<Props,State> {
         return (
             <nav>
                 <div className="nav-wrapper container">
-                    <Link to="/" className="brand-logo right">{PROJECT + ' ' + VERSION}</Link>
+                    <Link to="/" className="right" style={{height: '64px'}}>
+                        <img src={require('./content/logo.png')}/>
+                    </Link>
                     <ul id="dropdown-user" className="dropdown-content">
                         <li><a onClick={this.logoutClickHandler.bind(this)}>{i18next.t('logout')}</a></li>
                     </ul>
@@ -76,7 +78,9 @@ class Navbar extends React.Component<Props,State> {
                     <li>
                         <div className="divider"></div>
                     </li>
-                    <li><a className="waves-effect" onClick={this.closeNavClickHandler.bind(this)}>{i18next.t('close')}</a></li>
+                    <li>
+                        <a className="waves-effect" onClick={this.closeNavClickHandler.bind(this)}>{i18next.t('close')}</a>
+                    </li>
                 </ul>
             </nav>
         )
