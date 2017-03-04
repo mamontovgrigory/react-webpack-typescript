@@ -2,10 +2,10 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import * as  ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
-import Navbar from '../Navbar';
-import Breadcrumbs from '../Breadcrumbs';
+import Navbar from '../../components/Navbar';
+import Breadcrumbs from '../../components/Breadcrumbs';
 import LoginPage from '../LoginPage';
-import Loader from '../Loader';
+import Loader from '../../components/Loader';
 
 interface Props {
     location:any;

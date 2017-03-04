@@ -6,7 +6,7 @@ import {generator, grid} from '../../shell';
 
 import UserItem from './UserItem';
 
-import Modal from '../Modal';
+import Modal from '../../components/Modal';
 
 interface Props {
     dispatch?:any;

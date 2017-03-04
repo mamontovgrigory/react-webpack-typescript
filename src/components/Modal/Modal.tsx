@@ -55,7 +55,7 @@ class Modal extends React.Component<Props, State> {
                         {
                             this.props.buttons && this.props.buttons.map((el, i) => {
                                 return (
-                                    <button className="modal-action modal-close waves-effect waves-green btn-flat" key={i}>
+                                    <button className="waves-effect waves-green btn-flat" key={i}>
                                         {el.text}
                                     </button>
                                 );

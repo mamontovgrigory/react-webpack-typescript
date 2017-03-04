@@ -1,11 +1,11 @@
 import * as React from 'react';
 import {IndexRoute, Route}  from 'react-router';
 
-import App from './components/App';
-import MainPage from './components/MainPage';
-import Users from './components/UsersPage';
-import Telephony from './components/TelephonyPage';
-import Groups from './components/GroupsPage';
+import App from './containers/App';
+import MainPage from './containers/MainPage';
+import Users from './containers/UsersPage';
+import Telephony from './containers/TelephonyPage';
+import Groups from './containers/GroupsPage';
 
 let store;
 
