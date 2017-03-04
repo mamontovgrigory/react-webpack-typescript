@@ -1,4 +1,4 @@
-interface GridProperties {
+interface InitProps {
     gridId:string;
     colModel:{
         name:string;
@@ -26,8 +26,26 @@ interface GridProperties {
     onSelectRow?:Function;
 }
 
+interface ReloadProps{
+    gridId:string;
+}
+
+interface GetSelectedRowsProps{
+    gridId:string;
+}
+
+interface GetDataProps{
+    gridId:string;
+    rowId?:string;
+}
+
+interface UpdateDataProps{
+    gridId:string;
+    data:any;
+}
+
 class Grid{
-    init(properties:GridProperties){
+    init(properties:InitProps){
         var $grid = $('#' + properties.gridId),
             pagerId = 'p-' + properties.gridId;
 
@@ -126,6 +144,45 @@ class Grid{
                     if (properties.afterSearch) properties.afterSearch();
                 }
             } : false);
+    }
+
+    reload(properties:ReloadProps, callback: Function){
+        var $grid = $('#' + properties.gridId);
+        $grid.trigger('reloadGrid');
+        callback();
+    }
+
+    getSelectedRows(properties:GetSelectedRowsProps, callback: Function){
+        var $grid = $('#' + properties.gridId),
+            response = null,
+            isMultiselect = $grid.jqGrid('getGridParam', 'multiselect');
+        if (isMultiselect) {
+            response = $grid.jqGrid('getGridParam', 'selarrrow');
+        } else {
+            var rowId = $grid.jqGrid('getGridParam', 'selrow');
+            if (rowId)
+                response = [rowId];
+        }
+
+        callback(response);
+    }
+
+    getData(properties:GetDataProps, callback: Function){
+        var $grid = $('#' + properties.gridId);
+
+        var response = $grid.jqGrid('getRowData', properties && properties.rowId ? properties.rowId : null);
+
+        callback(response);
+    }
+
+    updateData(properties:UpdateDataProps, callback?:Function){
+        var $grid = $('#' + properties.gridId);
+
+        $grid.jqGrid('clearGridData')
+            .jqGrid('setGridParam', {data: properties.data})
+            .trigger('reloadGrid', [{page: 1}]);
+
+        if(callback) callback();
     }
 }
 

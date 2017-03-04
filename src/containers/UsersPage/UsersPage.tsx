@@ -2,29 +2,36 @@ import * as React from 'react';
 import {connect} from "react-redux";
 
 import {usersRequest} from '../../redux/actions/usersActions';
-import {generator, grid} from '../../shell';
+import {groupsRequest} from '../../redux/actions/groupsActions';
+import {dialog, generator, grid} from '../../shell';
 
 import UserItem from './UserItem';
-
 import Modal from '../../components/Modal';
+import Button from '../../components/Button';
 
 interface Props {
     dispatch?:any;
     users?:any[];
+    groups?:any[];
 }
 
 interface State {
     gridId?:string;
+    saveButtonId?:string;
+    editButtonId?:string;
 }
 
 class UsersPage extends React.Component<Props, State> {
-    constructor(){
+    constructor() {
         super();
 
         this.state = {
-            gridId: generator.genId()
+            gridId: generator.genId(),
+            saveButtonId: generator.genId(), //TODO: Remove. Catch onclick event inside UserItem component
+            editButtonId: generator.genId() //TODO: Remove. Catch onclick event inside UserItem component
         }
     }
+
     componentDidUpdate() {
         grid.init({
             gridId: this.state.gridId,
@@ -54,9 +61,30 @@ class UsersPage extends React.Component<Props, State> {
 
     componentWillMount() {
         this.props.dispatch(usersRequest());
+        this.props.dispatch(groupsRequest());
+    }
+
+    editClickHandler(){
+        dialog.modal();
     }
 
     render() {
+        let saveText = i18next.t('save');
+        let editText = i18next.t('edit');
+        let addFormButtons = [
+            {
+                title: saveText,
+                id: this.state.saveButtonId,
+                text: saveText
+            }
+        ];
+        let editFormButtons = [
+            {
+                title: editText,
+                id: this.state.editButtonId,
+                text: editText
+            }
+        ];
         return (
             <div>
                 <h4>{i18next.t('users')}</h4>
@@ -64,26 +92,25 @@ class UsersPage extends React.Component<Props, State> {
                     <Modal
                         header={i18next.t('creatingNewUser')}
                         trigger={
-                            <button className="btn waves-effect waves-light" title={i18next.t('add')}>
+                            <Button title={i18next.t('add')}>
                                 <i className="material-icons">playlist_add</i>
-                            </button>
+                            </Button>
                         }
-                        buttons={[
-                            {
-                                text: i18next.t('save')
-                            }
-                        ]}>
-                        <UserItem/>
+                        buttons={addFormButtons.map((el, i) => {
+                            return <Button
+                                title={el.title}
+                                key={i}
+                                id={el.id}>
+                                {el.text}
+                            </Button>
+                        })}>
+                        <UserItem saveButtonId={this.state.saveButtonId} groups={this.props.groups}/>
                     </Modal>
-                    <Modal
-                        header={i18next.t('editingUser')}
-                        trigger={
-                            <button className="waves-effect waves-light btn m-l-10" title={i18next.t('edit')}>
-                                <i className="material-icons">mode_edit</i>
-                            </button>
-                        }>
-                        <div>edit</div>
-                    </Modal>
+                    <button className="waves-effect waves-light btn m-l-10"
+                            title={i18next.t('edit')}
+                            onClick={this.editClickHandler.bind(this)}>
+                        <i className="material-icons">mode_edit</i>
+                    </button>
                     <button className="waves-effect waves-light btn m-l-10" title={i18next.t('delete')}>
                         <i className="material-icons">delete</i>
                     </button>
@@ -98,8 +125,9 @@ class UsersPage extends React.Component<Props, State> {
 
 function mapStateToProps(state:any) {
     const {users} = state.users;
+    const {groups} = state.groups;
 
-    return {users};
+    return {users, groups};
 }
 
 export default connect(mapStateToProps)(UsersPage);

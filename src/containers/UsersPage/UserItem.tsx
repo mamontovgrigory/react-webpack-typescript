@@ -6,6 +6,8 @@ interface Props {
     id?:number;
     login?:any;
     groupId?:any;
+    groups?:any[];
+    saveButtonId?:string;
 }
 
 interface State {
@@ -13,7 +15,7 @@ interface State {
     passwordFieldId?:string;
     groupIdFieldId?:string;
 
-    groupsList?:any[];
+    id?:number;
     login?:string;
     groupId?:number;
     password?:number;
@@ -24,7 +26,6 @@ class UserItem extends React.Component<Props, State> {
         super();
 
         this.state = {
-            groupsList: [],
             loginFieldId: generator.genId(),
             passwordFieldId: generator.genId(),
             groupIdFieldId: generator.genId()
@@ -34,8 +35,26 @@ class UserItem extends React.Component<Props, State> {
     componentDidMount() {
         Materialize.updateTextFields();
         let $groupId = $('#' + this.state.groupIdFieldId);
-        $groupId.material_select();
+
         $groupId.on('change', this.groupChangeHandler.bind(this));
+
+        let self = this;
+
+        $('#' + this.props.saveButtonId).on('click', function () {
+            console.log('save', {
+                id: self.state.id,
+                login: self.state.login,
+                groupId: self.state.groupId,
+                password: self.state.password
+            });
+        });
+    }
+
+    componentDidUpdate(){
+        let $groupId = $('#' + this.state.groupIdFieldId);
+
+        $groupId.material_select('destroy');
+        $groupId.material_select();
     }
 
     loginChangeHandler(e) {
@@ -70,7 +89,7 @@ class UserItem extends React.Component<Props, State> {
                         <select id={this.state.groupIdFieldId} value={this.props.groupId}>
                             <option value="">{i18next.t('withoutGroup')}</option>
                             {
-                                this.state.groupsList.map((el) => {
+                                this.props.groups && this.props.groups.map((el) => {
                                     return (
                                         <option value={el.id} key={el.id}>{el.name}</option>
                                     )
