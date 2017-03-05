@@ -1,12 +1,11 @@
 import * as React from 'react';
-import {connect} from "react-redux";
+import {connect} from 'react-redux';
 
-import {usersRequest} from '../../redux/actions/usersActions';
-import {groupsRequest} from '../../redux/actions/groupsActions';
+import {getUsers} from '../../redux/actions/usersActions';
+import {getGroups} from '../../redux/actions/groupsActions';
 import {dialog, generator, grid} from '../../shell';
 
 import UserItem from './UserItem';
-import Modal from '../../components/Modal';
 import Button from '../../components/Button';
 
 interface Props {
@@ -17,8 +16,6 @@ interface Props {
 
 interface State {
     gridId?:string;
-    saveButtonId?:string;
-    editButtonId?:string;
 }
 
 class UsersPage extends React.Component<Props, State> {
@@ -26,9 +23,7 @@ class UsersPage extends React.Component<Props, State> {
         super();
 
         this.state = {
-            gridId: generator.genId(),
-            saveButtonId: generator.genId(), //TODO: Remove. Catch onclick event inside UserItem component
-            editButtonId: generator.genId() //TODO: Remove. Catch onclick event inside UserItem component
+            gridId: generator.genId()
         }
     }
 
@@ -52,7 +47,7 @@ class UsersPage extends React.Component<Props, State> {
                     label: i18next.t('login')
                 },
                 {
-                    name: 'group',
+                    name: 'groupId',
                     label: i18next.t('group')
                 }
             ]
@@ -60,60 +55,95 @@ class UsersPage extends React.Component<Props, State> {
     }
 
     componentWillMount() {
-        this.props.dispatch(usersRequest());
-        this.props.dispatch(groupsRequest());
+        this.props.dispatch(getUsers());
+        this.props.dispatch(getGroups());
     }
 
-    editClickHandler(){
-        dialog.modal();
+    addClickHandler() {
+        let saveButtonId = generator.genId();
+        let buttonText = i18next.t('save');
+        let buttons = [
+            {
+                title: buttonText,
+                id: saveButtonId,
+                text: buttonText
+            }
+        ];
+        this.openUserItemModal(
+            i18next.t('creatingNewUser'),
+            <UserItem saveButtonId={saveButtonId}
+                      groups={this.props.groups}
+                      dispatch={this.props.dispatch}/>,
+            buttons);
+    }
+
+    editClickHandler() {
+        let userIds = grid.getSelectedRows({
+            gridId: this.state.gridId
+        });
+
+        if (userIds.length === 1) {
+            let userData = grid.getData({
+                gridId: this.state.gridId,
+                rowId: _.first(userIds)
+            });
+            console.log('gridData', userData);
+            let saveButtonId = generator.genId();
+            let editText = i18next.t('edit');
+            let buttons = [
+                {
+                    title: editText,
+                    id: saveButtonId,
+                    text: editText
+                }
+            ];
+            this.openUserItemModal(
+                i18next.t('creatingNewUser'),
+                <UserItem id={userData.id}
+                          login={userData.login}
+                          groupId={userData.groupId}
+                          saveButtonId={saveButtonId}
+                          groups={this.props.groups}
+                          dispatch={this.props.dispatch}/>,
+                buttons);
+        } else {
+            dialog.modal({
+                header: i18next.t('chooseOneRow'),
+                body: i18next.t('pleaseChooseOneUserForEdit')
+            });
+        }
+    }
+
+    openUserItemModal(header, body, buttons:{title:string,id:string,text:string}[]) {
+        dialog.modal({
+            header: header,
+            body: body,
+            buttons: buttons.map((el, i) => {
+                return <Button
+                    title={el.title}
+                    key={i}
+                    id={el.id}>
+                    {el.text}
+                </Button>
+            })
+        });
     }
 
     render() {
-        let saveText = i18next.t('save');
-        let editText = i18next.t('edit');
-        let addFormButtons = [
-            {
-                title: saveText,
-                id: this.state.saveButtonId,
-                text: saveText
-            }
-        ];
-        let editFormButtons = [
-            {
-                title: editText,
-                id: this.state.editButtonId,
-                text: editText
-            }
-        ];
         return (
             <div>
                 <h4>{i18next.t('users')}</h4>
                 <div className="row">
-                    <Modal
-                        header={i18next.t('creatingNewUser')}
-                        trigger={
-                            <Button title={i18next.t('add')}>
-                                <i className="material-icons">playlist_add</i>
-                            </Button>
-                        }
-                        buttons={addFormButtons.map((el, i) => {
-                            return <Button
-                                title={el.title}
-                                key={i}
-                                id={el.id}>
-                                {el.text}
-                            </Button>
-                        })}>
-                        <UserItem saveButtonId={this.state.saveButtonId} groups={this.props.groups}/>
-                    </Modal>
-                    <button className="waves-effect waves-light btn m-l-10"
-                            title={i18next.t('edit')}
+                    <Button title={i18next.t('add')} onClick={this.addClickHandler.bind(this)}>
+                        <i className="material-icons">playlist_add</i>
+                    </Button>
+                    <Button title={i18next.t('edit')}
                             onClick={this.editClickHandler.bind(this)}>
                         <i className="material-icons">mode_edit</i>
-                    </button>
-                    <button className="waves-effect waves-light btn m-l-10" title={i18next.t('delete')}>
+                    </Button>
+                    <Button title={i18next.t('delete')}>
                         <i className="material-icons">delete</i>
-                    </button>
+                    </Button>
                 </div>
                 <div className="row">
                     <table id={this.state.gridId}/>

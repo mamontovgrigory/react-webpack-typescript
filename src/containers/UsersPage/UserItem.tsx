@@ -1,9 +1,14 @@
 import * as React from 'react';
+import {connect} from 'react-redux';
+
+import {saveUser} from '../../redux/actions/usersActions';
 
 import {generator} from '../../shell';
 
 interface Props {
-    id?:number;
+    dispatch?:any;
+    
+    id?:any;
     login?:any;
     groupId?:any;
     groups?:any[];
@@ -15,17 +20,21 @@ interface State {
     passwordFieldId?:string;
     groupIdFieldId?:string;
 
-    id?:number;
+    id?:string;
     login?:string;
-    groupId?:number;
-    password?:number;
+    groupId?:string;
+    password?:string;
 }
 
 class UserItem extends React.Component<Props, State> {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
+            id: props.id,
+            login: props.login,
+            groupId: props.groupId,
+
             loginFieldId: generator.genId(),
             passwordFieldId: generator.genId(),
             groupIdFieldId: generator.genId()
@@ -47,10 +56,16 @@ class UserItem extends React.Component<Props, State> {
                 groupId: self.state.groupId,
                 password: self.state.password
             });
+            self.props.dispatch(saveUser({
+                id: self.state.id,
+                login: self.state.login,
+                groupId: self.state.groupId,
+                password: self.state.password
+            }));
         });
     }
 
-    componentDidUpdate(){
+    componentDidUpdate() {
         let $groupId = $('#' + this.state.groupIdFieldId);
 
         $groupId.material_select('destroy');

@@ -1,20 +1,25 @@
+import * as ReactDOM from 'react-dom';
+
+import {generator} from './index.ts';
+
+interface ModalProps {
+    header?:string;
+    body:any,
+    buttons?:any[];
+}
+
 class Dialog {
-    modal() {
-        console.log('modal');
+    modal(properties:ModalProps):string {
+        let dialogId = generator.genId();
         var modal = document.createElement('div');
         document.body.appendChild(modal);
-        
-        $('#modal').modal();
-        $('#modal').modal();
-    }
 
-    renderOverlay(){
-        return(
-            <div id={'modal'} className="modal modal-fixed-footer">
+        ReactDOM.render(
+            <div id={dialogId} className={'modal modal-fixed-footer'}>
                 <div className="modal-content">
-                    <h4>{'header'}</h4>
+                    <h4>{properties.header}</h4>
                     <div>
-                        {'children'}
+                        {properties.body}
                     </div>
                 </div>
                 <div className="modal-footer">
@@ -22,11 +27,18 @@ class Dialog {
                         {i18next.t('close')}
                     </button>
                     {
-                        'buttons'
+                        properties.buttons && properties.buttons.map((button) => {
+                            return button;
+                        })
                     }
                 </div>
-            </div>
-        )
+            </div>,
+            modal);
+
+        $('#' + dialogId).modal();
+        $('#' + dialogId).modal('open');
+
+        return dialogId;
     }
 }
 

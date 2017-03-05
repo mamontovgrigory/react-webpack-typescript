@@ -6,7 +6,7 @@ function groupsRequestFinished(groups) {
     return {type: GROUPS_REQUEST_FINISHED, groups};
 }
 
-export function groupsRequest() {
+export function getGroups() {
     return (dispatch => {
         dispatch(sendRequest({
             url: '/ajax/get_groups.php'

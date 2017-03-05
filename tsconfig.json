@@ -11,6 +11,7 @@
     "./typings/index.d.ts",
     "./src/global.d.ts"
   ],
+  "typeRoots": [ "node_modules/@types" ],
   "exclude": [
     "node_modules"
   ]

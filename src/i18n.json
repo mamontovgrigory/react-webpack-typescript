@@ -21,7 +21,10 @@
       "delete": "Delete",
       "creatingNewUser": "Creating new user",
       "editingUser": "Editing user",
-      "newPassword": "New password"
+      "newPassword": "New password",
+      "dataDidNotChosen": "Data did not chosen",
+      "chooseOneRow": "Choose one row",
+      "pleaseChooseOneUserForEdit": "Please choose one user for edit"
     }
   },
   "ru": {
@@ -46,7 +49,10 @@
       "delete": "Удалить",
       "creatingNewUser": "Создание нового пользователя",
       "editingUser": "Редактирование пользователя",
-      "newPassword": "Новый пароль"
+      "newPassword": "Новый пароль",
+      "dataDidNotChosen": "Данные не выбраны",
+      "chooseOneRow": "Выберите одну строку",
+      "pleaseChooseOneUserForEdit": "Пожалуйста, выберите одну строку для редактирования"
     }
   }
 }

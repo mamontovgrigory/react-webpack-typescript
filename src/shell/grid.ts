@@ -152,7 +152,7 @@ class Grid{
         callback();
     }
 
-    getSelectedRows(properties:GetSelectedRowsProps, callback: Function){
+    getSelectedRows(properties:GetSelectedRowsProps):string[]{
         var $grid = $('#' + properties.gridId),
             response = null,
             isMultiselect = $grid.jqGrid('getGridParam', 'multiselect');
@@ -164,25 +164,23 @@ class Grid{
                 response = [rowId];
         }
 
-        callback(response);
+        return(response);
     }
 
-    getData(properties:GetDataProps, callback: Function){
+    getData(properties:GetDataProps){
         var $grid = $('#' + properties.gridId);
 
         var response = $grid.jqGrid('getRowData', properties && properties.rowId ? properties.rowId : null);
 
-        callback(response);
+        return(response);
     }
 
-    updateData(properties:UpdateDataProps, callback?:Function){
+    updateData(properties:UpdateDataProps){
         var $grid = $('#' + properties.gridId);
 
         $grid.jqGrid('clearGridData')
             .jqGrid('setGridParam', {data: properties.data})
             .trigger('reloadGrid', [{page: 1}]);
-
-        if(callback) callback();
     }
 }
 
