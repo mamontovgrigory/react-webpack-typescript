@@ -1,17 +1,27 @@
 {
   "compilerOptions": {
-    "outDir": "./dist/",
+    "baseUrl": ".",
+    "paths": {
+      "*": [
+        "src/*",
+        "src/redux/*"
+      ]
+    },
+    "outDir": "build",
     "sourceMap": true,
     "noImplicitAny": false,
     "module": "commonjs",
     "target": "es6",
-    "jsx": "react"
+    "jsx": "react",
+    "moduleResolution": "node"
   },
   "files": [
     "./typings/index.d.ts",
     "./src/global.d.ts"
   ],
-  "typeRoots": [ "node_modules/@types" ],
+  "typeRoots": [
+    "node_modules/@types"
+  ],
   "exclude": [
     "node_modules"
   ]

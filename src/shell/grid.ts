@@ -30,10 +30,6 @@ interface ReloadProps{
     gridId:string;
 }
 
-interface GetSelectedRowsProps{
-    gridId:string;
-}
-
 interface GetDataProps{
     gridId:string;
     rowId?:string;
@@ -152,8 +148,8 @@ class Grid{
         callback();
     }
 
-    getSelectedRows(properties:GetSelectedRowsProps):string[]{
-        var $grid = $('#' + properties.gridId),
+    getSelectedRows(gridId: string):string[]{
+        var $grid = $('#' + gridId),
             response = null,
             isMultiselect = $grid.jqGrid('getGridParam', 'multiselect');
         if (isMultiselect) {

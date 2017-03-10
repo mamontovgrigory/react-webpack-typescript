@@ -1,12 +1,12 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 
-import {getUsers} from '../../redux/actions/usersActions';
-import {getGroups} from '../../redux/actions/groupsActions';
-import {dialog, generator, grid} from '../../shell';
+import {getUsers, deleteUsers} from 'redux/actions/usersActions';
+import {getGroups} from 'redux/actions/groupsActions';
+import {dialog, generator, grid} from 'shell/index';
 
+import Button from 'components/Button/Button';
 import UserItem from './UserItem';
-import Button from '../../components/Button';
 
 interface Props {
     dispatch?:any;
@@ -34,7 +34,8 @@ class UsersPage extends React.Component<Props, State> {
                 return {
                     id: r.id,
                     login: r.login,
-                    group: r.groupId
+                    groupId: r.groupId,
+                    groupName: r.groupName
                 };
             }),
             colModel: [
@@ -43,11 +44,15 @@ class UsersPage extends React.Component<Props, State> {
                     hidden: true
                 },
                 {
+                    name: 'groupId',
+                    hidden: true
+                },
+                {
                     name: 'login',
                     label: i18next.t('login')
                 },
                 {
-                    name: 'groupId',
+                    name: 'groupName',
                     label: i18next.t('group')
                 }
             ]
@@ -70,7 +75,7 @@ class UsersPage extends React.Component<Props, State> {
             }
         ];
         this.openUserItemModal(
-            i18next.t('creatingNewUser'),
+            i18next.t('creatingUser'),
             <UserItem saveButtonId={saveButtonId}
                       groups={this.props.groups}
                       dispatch={this.props.dispatch}/>,
@@ -78,16 +83,13 @@ class UsersPage extends React.Component<Props, State> {
     }
 
     editClickHandler() {
-        let userIds = grid.getSelectedRows({
-            gridId: this.state.gridId
-        });
+        let rowsIds = grid.getSelectedRows(this.state.gridId);
 
-        if (userIds.length === 1) {
+        if (rowsIds.length === 1) {
             let userData = grid.getData({
                 gridId: this.state.gridId,
-                rowId: _.first(userIds)
+                rowId: _.first(rowsIds)
             });
-            console.log('gridData', userData);
             let saveButtonId = generator.genId();
             let editText = i18next.t('edit');
             let buttons = [
@@ -98,7 +100,7 @@ class UsersPage extends React.Component<Props, State> {
                 }
             ];
             this.openUserItemModal(
-                i18next.t('creatingNewUser'),
+                i18next.t('editingUser'),
                 <UserItem id={userData.id}
                           login={userData.login}
                           groupId={userData.groupId}
@@ -109,13 +111,34 @@ class UsersPage extends React.Component<Props, State> {
         } else {
             dialog.modal({
                 header: i18next.t('chooseOneRow'),
-                body: i18next.t('pleaseChooseOneUserForEdit')
+                body: i18next.t('pleaseChooseOneRowToEdit')
+            });
+        }
+    }
+
+    deleteClickHandler() {
+        let rowsIds = grid.getSelectedRows(this.state.gridId);
+        if (rowsIds && rowsIds.length > 0) {
+            let dispatch = this.props.dispatch;
+            dialog.confirm({
+                header: i18next.t('confirmAction'),
+                text: i18next.t('deleteChosenData') + '?',
+                confirmCallback: function () {
+                    dispatch(deleteUsers({
+                        ids: rowsIds
+                    }));
+                }
+            });
+        } else {
+            dialog.modal({
+                header: i18next.t('noOneRowChosen'),
+                body: i18next.t('pleaseChooseRowsToDelete')
             });
         }
     }
 
     openUserItemModal(header, body, buttons:{title:string,id:string,text:string}[]) {
-        dialog.modal({
+        return dialog.modal({
             header: header,
             body: body,
             buttons: buttons.map((el, i) => {
@@ -134,14 +157,16 @@ class UsersPage extends React.Component<Props, State> {
             <div>
                 <h4>{i18next.t('users')}</h4>
                 <div className="row">
-                    <Button title={i18next.t('add')} onClick={this.addClickHandler.bind(this)}>
+                    <Button title={i18next.t('add')}
+                            onClick={this.addClickHandler.bind(this)}>
                         <i className="material-icons">playlist_add</i>
                     </Button>
                     <Button title={i18next.t('edit')}
                             onClick={this.editClickHandler.bind(this)}>
                         <i className="material-icons">mode_edit</i>
                     </Button>
-                    <Button title={i18next.t('delete')}>
+                    <Button title={i18next.t('delete')}
+                            onClick={this.deleteClickHandler.bind(this)}>
                         <i className="material-icons">delete</i>
                     </Button>
                 </div>

@@ -1,7 +1,7 @@
 let id = 0;
 let idPrefix = 'ui-id-';
 
-class Generator{
+class Generator {
     genId() {
         let oldId = id;
         id += 1;

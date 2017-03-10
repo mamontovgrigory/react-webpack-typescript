@@ -1,13 +1,12 @@
 import * as React from 'react';
-import {connect} from 'react-redux';
 
-import {saveUser} from '../../redux/actions/usersActions';
+import {saveUser} from 'redux/actions/usersActions';
 
-import {generator} from '../../shell';
+import {generator, dialog} from 'shell/index';
 
 interface Props {
     dispatch?:any;
-    
+
     id?:any;
     login?:any;
     groupId?:any;
@@ -41,27 +40,23 @@ class UserItem extends React.Component<Props, State> {
         }
     }
 
+    loginInput:HTMLInputElement;
+    passwordInput:HTMLInputElement;
+
     componentDidMount() {
         Materialize.updateTextFields();
         let $groupId = $('#' + this.state.groupIdFieldId);
+        $groupId.material_select();
 
-        $groupId.on('change', this.groupChangeHandler.bind(this));
+        $groupId.on('change', this.groupChangeHandler.bind(this)); //TODO: Needs react realization
 
         let self = this;
 
-        $('#' + this.props.saveButtonId).on('click', function () {
-            console.log('save', {
-                id: self.state.id,
-                login: self.state.login,
-                groupId: self.state.groupId,
-                password: self.state.password
+        $('#' + this.props.saveButtonId).on('click', function () { //TODO: Needs react realization
+            let dialogId = $(this).closest('.modal').attr('id');
+            self.save(function(){
+                dialog.close(dialogId);
             });
-            self.props.dispatch(saveUser({
-                id: self.state.id,
-                login: self.state.login,
-                groupId: self.state.groupId,
-                password: self.state.password
-            }));
         });
     }
 
@@ -90,6 +85,24 @@ class UserItem extends React.Component<Props, State> {
         });
     }
 
+    save(callback) {
+        if (!this.state.login) {
+            this.loginInput.focus();
+            return;
+        }
+        if (!this.state.id && !this.state.password) {
+            this.passwordInput.focus();
+            return;
+        }
+        this.props.dispatch(saveUser({
+            id: this.state.id,
+            login: this.state.login,
+            groupId: this.state.groupId,
+            password: this.state.password
+        }));
+        callback();
+    }
+
     render() {
         return (
             <div>
@@ -97,11 +110,14 @@ class UserItem extends React.Component<Props, State> {
                     <div className="input-field col s6">
                         <input id={this.state.loginFieldId} type="text"
                                defaultValue={this.props.login}
+                               ref={(input) => { this.loginInput = input; }}
                                onChange={this.loginChangeHandler.bind(this)}/>
                         <label htmlFor={this.state.loginFieldId}>{i18next.t('login')}</label>
                     </div>
                     <div className="input-field col s6">
-                        <select id={this.state.groupIdFieldId} value={this.props.groupId}>
+                        <select id={this.state.groupIdFieldId}
+                                value={this.props.groupId}
+                                onChange={this.groupChangeHandler.bind(this)}>
                             <option value="">{i18next.t('withoutGroup')}</option>
                             {
                                 this.props.groups && this.props.groups.map((el) => {
@@ -116,7 +132,9 @@ class UserItem extends React.Component<Props, State> {
                 </div>
                 <div className="row">
                     <div className="input-field col s6">
-                        <input id={this.state.passwordFieldId} type="password"
+                        <input id={this.state.passwordFieldId}
+                               type="password"
+                               ref={(input) => { this.passwordInput = input; }}
                                onChange={this.passwordChangeHandler.bind(this)}/>
                         <label
                             htmlFor={this.state.passwordFieldId}>{this.props.id ?

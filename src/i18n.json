@@ -19,12 +19,20 @@
       "add": "Add",
       "edit": "Edit",
       "delete": "Delete",
-      "creatingNewUser": "Creating new user",
+      "creatingUser": "Creating new user",
       "editingUser": "Editing user",
       "newPassword": "New password",
       "dataDidNotChosen": "Data did not chosen",
       "chooseOneRow": "Choose one row",
-      "pleaseChooseOneUserForEdit": "Please choose one user for edit"
+      "pleaseChooseOneRowToEdit": "Please choose one row to edit",
+      "noOneRowChosen": "No one row chosen",
+      "pleaseChooseRowsToDelete": "Please choose rows to delete",
+      "confirmAction": "Confirm action",
+      "deleteChosenData": "Delete chosen data",
+      "ok": "Ok",
+      "cancel": "Cancel",
+      "creatingGroup": "Creating new group",
+      "editingGroup": "Editing group"
     }
   },
   "ru": {
@@ -47,12 +55,20 @@
       "add": "Добавить",
       "edit": "Редактировать",
       "delete": "Удалить",
-      "creatingNewUser": "Создание нового пользователя",
+      "creatingUser": "Создание нового пользователя",
       "editingUser": "Редактирование пользователя",
       "newPassword": "Новый пароль",
       "dataDidNotChosen": "Данные не выбраны",
       "chooseOneRow": "Выберите одну строку",
-      "pleaseChooseOneUserForEdit": "Пожалуйста, выберите одну строку для редактирования"
+      "pleaseChooseOneRowToEdit": "Пожалуйста, выберите одну строку для редактирования",
+      "noOneRowChosen": "Не выбрано ни одной строки",
+      "pleaseChooseRowsToDelete": "Пожалуйста выберите строки для удаления",
+      "confirmAction": "Подтвердите действие",
+      "deleteChosenData": "Удалить выбранные данные",
+      "ok": "Ок",
+      "cancel": "Отмена",
+      "creatingGroup": "Создание группы",
+      "editingGroup": "Редактирование группы"
     }
   }
 }

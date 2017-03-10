@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 
-import {loginRequest} from '../../redux/actions/accountActions.ts';
+import {loginRequest} from 'redux/actions/accountActions';
 
 interface Props {
     message?:string;
@@ -14,10 +14,10 @@ interface State {
     password?:string;
 }
 
-let loginInput:HTMLInputElement = null;
-let passportInput:HTMLInputElement = null;
-
 class LoginPage extends React.Component<Props, State> {
+    loginInput:HTMLInputElement;
+    passportInput:HTMLInputElement;
+
     handleLoginChange(e) {
         this.setState({login: e.target.value});
     }
@@ -32,8 +32,8 @@ class LoginPage extends React.Component<Props, State> {
             password: this.state.password
         }));
 
-        if(!this.state.login) loginInput.focus();
-        if(!this.state.password) passportInput.focus();
+        if (!this.state.login) this.loginInput.focus();
+        if (!this.state.password) this.passportInput.focus();
     }
 
     render() {
@@ -47,14 +47,14 @@ class LoginPage extends React.Component<Props, State> {
                                 <div className="input-field col s12">
                                     <i className="material-icons prefix">account_circle</i>
                                     <input id="login" name="login" type="text" className="validate"
-                                           ref={(input) => { loginInput = input; }}
+                                           ref={(input) => { this.loginInput = input; }}
                                            onChange={this.handleLoginChange.bind(this)}/>
                                     <label htmlFor="login" className="">{i18next.t('login')}</label>
                                 </div>
                                 <div className="input-field col s12">
                                     <i className="material-icons prefix">vpn_key</i>
                                     <input id="password" type="password" name="password" className="validate"
-                                           ref={(input) => { passportInput = input; }}
+                                           ref={(input) => { this.passportInput = input; }}
                                            onChange={this.handlePasswordChange.bind(this)}/>
                                     <label htmlFor="password" className="">{i18next.t('password')}</label>
                                 </div>

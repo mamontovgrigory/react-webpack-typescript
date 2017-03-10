@@ -1,17 +1,26 @@
 import * as ReactDOM from 'react-dom';
 
-import {generator} from './index.ts';
+import {generator} from 'shell/index';
+import Button from 'components/Button/Button';
 
 interface ModalProps {
     header?:string;
     body:any,
     buttons?:any[];
+    hideDefaultButton?:boolean;
+}
+
+interface ConfirmProps {
+    header?:string;
+    text:string;
+    confirmCallback:Function;
+    closeCallback?:Function;
 }
 
 class Dialog {
     modal(properties:ModalProps):string {
         let dialogId = generator.genId();
-        var modal = document.createElement('div');
+        let modal = document.createElement('div');
         document.body.appendChild(modal);
 
         ReactDOM.render(
@@ -23,9 +32,10 @@ class Dialog {
                     </div>
                 </div>
                 <div className="modal-footer">
+                    {!properties.hideDefaultButton &&
                     <button className="modal-action modal-close waves-effect waves-green btn-flat">
                         {i18next.t('close')}
-                    </button>
+                    </button>}
                     {
                         properties.buttons && properties.buttons.map((button) => {
                             return button;
@@ -35,10 +45,47 @@ class Dialog {
             </div>,
             modal);
 
-        $('#' + dialogId).modal();
-        $('#' + dialogId).modal('open');
+        let $dialog = $('#' + dialogId);
+        $dialog.modal();
+        $dialog.modal('open');
 
         return dialogId;
+    }
+
+    close(dialogId:string):void {
+        $('#' + dialogId).modal('close');
+    }
+
+    confirm(properties:ConfirmProps):void {
+        let buttons = [
+            {
+                text: i18next.t('cancel'),
+                onClick: function () {
+                    if (properties.closeCallback)properties.closeCallback();
+                }
+            },
+            {
+                text: i18next.t('ok'),
+                onClick: function () {
+                    properties.confirmCallback();
+                }
+            }
+        ];
+
+        dialog.modal({
+            header: properties.header,
+            body: properties.text,
+            hideDefaultButton: true,
+            buttons: buttons.map((el, i) => {
+                return <Button
+                    title={el.text}
+                    className="modal-action modal-close"
+                    onClick={el.onClick}
+                    key={i}>
+                    {el.text}
+                </Button>
+            })
+        });
     }
 }
 

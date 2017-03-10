@@ -9,6 +9,10 @@ interface User {
     password?:string;
 }
 
+interface DeleteUsersProps{
+    ids:string[];
+}
+
 function usersRequestFinished(users:User[]) {
     return {type: USERS_REQUEST_FINISHED, users};
 }
@@ -30,6 +34,21 @@ export function saveUser(properties: User){
             data: properties
         })).then(function () {
             dispatch(getUsers());
+        });
+    });
+}
+
+export function deleteUsers(properties:DeleteUsersProps){
+    return (dispatch => {
+        _.forEach(properties.ids, function(id){ //TODO: send ids array
+            dispatch(sendRequest({
+                url: '/ajax/user_delete.php',
+                data: {
+                    id: id
+                }
+            })).then(function () {
+                dispatch(getUsers());
+            });
         });
     });
 }

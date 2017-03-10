@@ -7,10 +7,10 @@ i18next.init({
     resources: require('./i18n.json')
 });
 
-import './libs';
-import './scss/app.scss';
-import routes from './routes';
-import configureStore from './redux/configureStore';
+import 'libs';
+import 'scss/app.scss';
+import routes from 'routes';
+import configureStore from 'redux/configureStore';
 
 const initialState = {};
 const store = configureStore(initialState);
