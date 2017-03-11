@@ -86,12 +86,12 @@ class UsersPage extends React.Component<Props, State> {
         let rowsIds = grid.getSelectedRows(this.state.gridId);
 
         if (rowsIds.length === 1) {
-            let userData = grid.getData({
-                gridId: this.state.gridId,
-                rowId: _.first(rowsIds)
+            let userId = _.first(rowsIds);
+            let userData =  _.find(this.props.users, function(u){
+                return u.id === userId;
             });
             let saveButtonId = generator.genId();
-            let editText = i18next.t('edit');
+            let editText = i18next.t('save');
             let buttons = [
                 {
                     title: editText,

@@ -32,7 +32,10 @@
       "ok": "Ok",
       "cancel": "Cancel",
       "creatingGroup": "Creating new group",
-      "editingGroup": "Editing group"
+      "editingGroup": "Editing group",
+      "selectAll": "Select all",
+      "groupName": "Group name",
+      "permissions": "Permissions"
     }
   },
   "ru": {
@@ -68,7 +71,10 @@
       "ok": "Ок",
       "cancel": "Отмена",
       "creatingGroup": "Создание группы",
-      "editingGroup": "Редактирование группы"
+      "editingGroup": "Редактирование группы",
+      "selectAll": "Выбрать все",
+      "groupName": "Имя группы",
+      "permissions": "Права"
     }
   }
 }

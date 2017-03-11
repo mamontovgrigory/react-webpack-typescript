@@ -3,7 +3,7 @@ import {sendRequest} from './requestActions';
 export const USERS_REQUEST_FINISHED = 'USERS_REQUEST_FINISHED';
 
 interface User {
-    id:string;
+    id?:string;
     login:string;
     groupId:string;
     password?:string;
