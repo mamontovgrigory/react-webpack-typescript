@@ -99,6 +99,10 @@ export default class GroupItem extends React.Component<Props, State> {
     }
 
     save(callback){
+        if(!this.state.name){
+            this.nameInput.focus();
+            return;
+        }
         this.props.dispatch(saveGroup({
             id: this.props.id,
             name: this.state.name,
