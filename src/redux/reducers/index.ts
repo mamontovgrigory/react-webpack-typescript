@@ -5,8 +5,9 @@ import breadcrumbsReducer from './breadcrumbsReducer';
 import groupsReducer from './groupsReducer';
 import loaderReducer from './loaderReducer';
 import navigationReducer from './navigationReducer';
-import usersReducer from './usersReducer';
 import permissionsReducer from './permissionsReducer';
+import telephonyReducer from './telephonyReducer';
+import usersReducer from './usersReducer';
 
 export default combineReducers({
     account: accountReducer,
@@ -15,5 +16,6 @@ export default combineReducers({
     loader: loaderReducer,
     navigation: navigationReducer,
     permissions: permissionsReducer,
+    telephony: telephonyReducer,
     users: usersReducer
 });

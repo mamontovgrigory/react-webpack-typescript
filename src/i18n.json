@@ -35,7 +35,17 @@
       "editingGroup": "Editing group",
       "selectAll": "Select all",
       "groupName": "Group name",
-      "permissions": "Permissions"
+      "permissions": "Permissions",
+      "clients": "Clients",
+      "official": "Official",
+      "unofficial": "Unofficial",
+      "periodFrom": "Period from",
+      "periodTo": "Period to",
+      "durationInSeconds": "Duration in seconds",
+      "updated": "Updated",
+      "search": "Search",
+      "report": "Report",
+      "total": "Total"
     }
   },
   "ru": {
@@ -74,7 +84,17 @@
       "editingGroup": "Редактирование группы",
       "selectAll": "Выбрать все",
       "groupName": "Имя группы",
-      "permissions": "Права"
+      "permissions": "Права",
+      "clients": "Клиенты",
+      "official": "Официальные",
+      "unofficial": "Неофициальные",
+      "periodFrom": "Перид с",
+      "periodTo": "Период по",
+      "durationInSeconds": "Длительность, сек",
+      "updated": "Обновлено",
+      "search": "Поиск",
+      "report": "Отчет",
+      "total": "Всего"
     }
   }
 }
