@@ -46,7 +46,11 @@ class Dialog {
             modal);
 
         let $dialog = $('#' + dialogId);
-        $dialog.modal();
+        $dialog.modal({
+            ready: function(){
+                $(window).trigger('resize');
+            }
+        });
         $dialog.modal('open');
 
         return dialogId;

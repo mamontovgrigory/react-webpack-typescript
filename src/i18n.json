@@ -45,7 +45,14 @@
       "updated": "Updated",
       "search": "Search",
       "report": "Report",
-      "total": "Total"
+      "total": "Total",
+      "dateAndTime": "Date and time",
+      "outgoing": "Outgoing",
+      "incoming": "Incoming",
+      "duration": "Duration",
+      "record": "Record",
+      "load": "Load",
+      "download": "Download"
     }
   },
   "ru": {
@@ -94,7 +101,14 @@
       "updated": "Обновлено",
       "search": "Поиск",
       "report": "Отчет",
-      "total": "Всего"
+      "total": "Всего",
+      "dateAndTime": "Дата и время",
+      "outgoing": "Исходящий",
+      "incoming": "Входящий",
+      "duration": "Длительность",
+      "record": "Запись",
+      "load": "Загрузить",
+      "download": "Скачать"
     }
   }
 }

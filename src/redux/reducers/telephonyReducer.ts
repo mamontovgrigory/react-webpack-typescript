@@ -4,7 +4,8 @@ import {
     UPDATE_DATE_REQUEST_FINISHED,
     CLIENTS_REQUEST_FINISHED,
     CHECKED_CLIENTS,
-    CALLS_TOTALS
+    CALLS_TOTALS,
+    CALLS_DETAILS
 } from 'redux/actions/telephonyActions';
 
 interface Client {
@@ -21,7 +22,8 @@ interface State {
     updateDate:string;
     clients:Client[];
     checkedClientsIds:string[];
-    callsTotals:CallsTotals
+    callsTotals:CallsTotals;
+    callsDetails:any[];
 }
 
 interface Action {
@@ -29,7 +31,8 @@ interface Action {
     updateDate?:string;
     clients?:Client[];
     checkedClientsIds?:string[];
-    callsTotals?:CallsTotals
+    callsTotals?:CallsTotals;
+    callsDetails:any[];
 }
 
 const initialState:State = {
@@ -39,7 +42,8 @@ const initialState:State = {
     callsTotals: {
         dates: [],
         data: []
-    }
+    },
+    callsDetails: []
 };
 
 export default function (state:State = initialState, action:Action):State {
@@ -62,6 +66,10 @@ export default function (state:State = initialState, action:Action):State {
         case CALLS_TOTALS:
             return _.assign({}, state, {
                 callsTotals: action.callsTotals
+            });
+        case CALLS_DETAILS:
+            return _.assign({}, state, {
+                callsDetails: action.callsDetails
             });
         default:
             return state;

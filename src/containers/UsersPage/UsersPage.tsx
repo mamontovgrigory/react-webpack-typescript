@@ -15,21 +15,15 @@ interface Props {
 }
 
 interface State {
-    gridId?:string;
+
 }
 
 class UsersPage extends React.Component<Props, State> {
-    constructor() {
-        super();
-
-        this.state = {
-            gridId: generator.genId()
-        }
-    }
+    gridId:string = generator.genId();
 
     componentDidUpdate() {
         grid.init({
-            gridId: this.state.gridId,
+            gridId: this.gridId,
             data: _.map(this.props.users, function (r) {
                 return {
                     id: r.id,
@@ -83,7 +77,7 @@ class UsersPage extends React.Component<Props, State> {
     }
 
     editClickHandler() {
-        let rowsIds = grid.getSelectedRows(this.state.gridId);
+        let rowsIds = grid.getSelectedRows(this.gridId);
 
         if (rowsIds.length === 1) {
             let userId = _.first(rowsIds);
@@ -117,7 +111,7 @@ class UsersPage extends React.Component<Props, State> {
     }
 
     deleteClickHandler() {
-        let rowsIds = grid.getSelectedRows(this.state.gridId);
+        let rowsIds = grid.getSelectedRows(this.gridId);
         if (rowsIds && rowsIds.length > 0) {
             let dispatch = this.props.dispatch;
             dialog.confirm({
@@ -171,7 +165,7 @@ class UsersPage extends React.Component<Props, State> {
                     </Button>
                 </div>
                 <div className="row">
-                    <table id={this.state.gridId}/>
+                    <table id={this.gridId}/>
                 </div>
             </div>
         )

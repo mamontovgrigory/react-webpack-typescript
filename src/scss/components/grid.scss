@@ -27,6 +27,13 @@
   .ui-widget-content {
     background: transparent;
     border-color: $color-main;
+    a {
+      color: $color-highlight;
+      cursor: pointer;
+      &:hover{
+        text-decoration: underline;
+      }
+    }
   }
   .ui-state-hover {
     background: rgba($color-main, 0.15);

@@ -3,7 +3,14 @@ import * as moment from 'moment';
 import {connect} from 'react-redux';
 
 import {generator, dialog} from 'shell/index';
-import {getUpdateDate, getClients, setCheckedClients, getCallsTotals} from 'redux/actions/telephonyActions';
+import {
+    getUpdateDate,
+    getClients,
+    setCheckedClients,
+    getCallsTotals,
+    getCallsDetails
+} from 'redux/actions/telephonyActions';
+import CallsDetails from './CallsDetails';
 
 const style = require('./telephonyPage.scss'); //TODO: use classes as variables
 
@@ -68,10 +75,6 @@ class Telephony extends React.Component<Props, State> {
             Materialize.updateTextFields();
     }
 
-    componentDidUpdate() {
-
-    }
-
     durationChangeHandler(e) {
         this.setState({
             duration: e.target.value
@@ -96,7 +99,7 @@ class Telephony extends React.Component<Props, State> {
         this.props.dispatch(setCheckedClients(checkedClientsIds)); //TODO: Fix selection bug
     }
 
-    getFilters(){
+    getFilters() {
         return {
             from: this.state.from,
             to: this.state.to,
@@ -112,9 +115,9 @@ class Telephony extends React.Component<Props, State> {
 
     reportClickHandler() {
         let serverUrl = (NODE_ENV.trim() === 'development' ?
-                'http://ramazanavtsinov.myjino.ru' :
-                window.location.origin); //TODO: Move to config
-        
+            'http://ramazanavtsinov.myjino.ru' :
+            window.location.origin); //TODO: Move to config
+
         window.location.href = serverUrl + '/ajax/get_report.php?' + $.param(this.getFilters());
     }
 
@@ -124,7 +127,22 @@ class Telephony extends React.Component<Props, State> {
 
 
     infoCellClickHandler(login, date, duration) {
-        console.log(login, date, duration);
+        var clientObj = _.find(this.props.clients, function (c) {
+            return c.login === login;
+        });
+
+        let dateFormat = this.dateFormat;
+        let dispatch = this.props.dispatch;
+        this.props.dispatch(getCallsDetails({
+            loginId: clientObj.id,
+            date: date,
+            duration: duration
+        }, function (result){
+            dialog.modal({
+                header: login + ' ' + moment(date).format(dateFormat),
+                body: <CallsDetails callsDetails={result} dispatch={dispatch} login={login}/>
+            });
+        }));
     }
 
     render() {
@@ -272,9 +290,9 @@ class Telephony extends React.Component<Props, State> {
 }
 
 function mapStateToProps(state:any) {
-    const {updateDate, clients, checkedClientsIds, callsTotals} = state.telephony;
+    const {updateDate, clients, checkedClientsIds, callsTotals, callsDetails} = state.telephony;
 
-    return {updateDate, clients, checkedClientsIds, callsTotals};
+    return {updateDate, clients, checkedClientsIds, callsTotals, callsDetails};
 }
 
 export default connect(mapStateToProps)(Telephony);

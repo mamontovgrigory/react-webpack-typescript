@@ -9,7 +9,7 @@ interface RequestProps{
     data?:any;
 }
 
-export function sendRequest(properties:RequestProps) {
+export function sendRequest(properties:RequestProps, callback?:Function) {
     return (dispatch => {
         dispatch(showLoader());
 

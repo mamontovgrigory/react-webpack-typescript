@@ -4,6 +4,8 @@ interface InitProps {
         name:string;
         hidden?:boolean;
         label?:string;
+        classes?:string;
+        formatter?:any;
     }[],
     url?:string;
     data?:any[],
@@ -89,7 +91,7 @@ class Grid{
             multiselect: typeof (properties.multiselect) === 'boolean' ? properties.multiselect : true,
             multiboxonly: typeof (properties.multiboxonly) === 'boolean' ? properties.multiboxonly : true,
             viewrecords: true,
-            rowNum: properties.rowNum ? properties.rowNum : 30,
+            rowNum: properties.rowNum ? properties.rowNum : 10,
             rowList: properties.rowList ? properties.rowList : [10, 20, 30, 50, 100, 200],
             pager: '#' + pagerId,
             //height: properties.height ? properties.height : 300,
