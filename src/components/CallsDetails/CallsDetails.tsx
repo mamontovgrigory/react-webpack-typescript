@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import {dialog, generator, grid} from 'shell/index';
 import {getRecord} from 'redux/actions/telephonyActions';
-import Record from './Record';
+import Record from '../Record';
 
 interface Props {
     callsDetails?:any;
@@ -84,6 +84,7 @@ export default class CallsDetails extends React.Component<Props, State> {
     loadRecord(callid, time) {
         let recordName = this.props.login + ' ' + time;
         this.props.dispatch(getRecord({
+            login: this.props.login,
             callid
         }, function (result) {
             let src = (NODE_ENV.trim() === 'development' ?

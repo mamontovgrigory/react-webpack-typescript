@@ -6,18 +6,18 @@ import {generator, dialog} from 'shell/index';
 import {
     getUpdateDate,
     getClients,
-    setCheckedClients,
+    setClients,
     getCallsTotals,
     getCallsDetails
 } from 'redux/actions/telephonyActions';
-import CallsDetails from './CallsDetails';
+import CallsDetails from 'components/CallsDetails/index';
 
 const style = require('./telephonyPage.scss'); //TODO: use classes as variables
 
 interface Props {
     updateDate?:string;
     clients?:any[];
-    checkedClientsIds?:any[];
+    groups?:any[];
     callsTotals:any;
 
     dispatch?:any;
@@ -71,8 +71,11 @@ class Telephony extends React.Component<Props, State> {
                 });
             }
         });
-        if (Materialize.updateTextFields && typeof(Materialize.updateTextFields) === 'function')
-            Materialize.updateTextFields();
+        Materialize.updateTextFields();
+    }
+
+    componentDidUpdate() {
+        Materialize.updateTextFields();
     }
 
     durationChangeHandler(e) {
@@ -82,35 +85,46 @@ class Telephony extends React.Component<Props, State> {
     }
 
     selectAllClickHandler(e) {
-        let checkedClientsIds = e.target.checked ? this.props.clients.map((client) => {
-            return client.id;
-        }) : [];
-        this.props.dispatch(setCheckedClients(checkedClientsIds));
+        let clients = this.props.clients.map((el) => {
+            el.checked = e.target.checked;
+            return el;
+        });
+        this.props.dispatch(setClients(clients));
+    }
+
+    groupClickHandler(ids, e) {
+        let clients = this.props.clients.map((el) => {
+            el.checked = ids.indexOf(el.id) !== -1 ? e.target.checked : el.checked;
+            return el;
+        });
+        this.props.dispatch(setClients(clients));
     }
 
     clientCheckboxChangeHandler(e) {
         let id = e.target.value;
-        let checkedClientsIds = this.props.checkedClientsIds;
-        if (e.target.checked) {
-            checkedClientsIds.push(id);
-        } else {
-            checkedClientsIds = _.without(checkedClientsIds, id);
-        }
-        this.props.dispatch(setCheckedClients(checkedClientsIds)); //TODO: Fix selection bug
+        let clients = this.props.clients.map((el) => {
+            el.checked = el.id === id ? e.target.checked : el.checked;
+            return el;
+        });
+        this.props.dispatch(setClients(clients));
     }
 
-    getFilters() {
+    getRequestParams() {
         return {
             from: this.state.from,
             to: this.state.to,
-            loginIds: this.props.checkedClientsIds,
+            loginIds: this.props.clients.filter((client) => {
+                return client.checked;
+            }).map((client) => {
+                return client.id;
+            }),
             duration: this.state.duration
         };
     }
 
     searchClickHandler() {
         $('#' + this.divClientsListId).slideUp();
-        this.props.dispatch(getCallsTotals(this.getFilters()));
+        this.props.dispatch(getCallsTotals(this.getRequestParams()));
     }
 
     reportClickHandler() {
@@ -118,7 +132,7 @@ class Telephony extends React.Component<Props, State> {
             'http://ramazanavtsinov.myjino.ru' :
             window.location.origin); //TODO: Move to config
 
-        window.location.href = serverUrl + '/ajax/get_report.php?' + $.param(this.getFilters());
+        window.location.href = serverUrl + '/ajax/get_report.php?' + $.param(this.getRequestParams());
     }
 
     slideClickHandler() {
@@ -137,27 +151,31 @@ class Telephony extends React.Component<Props, State> {
             loginId: clientObj.id,
             date: date,
             duration: duration
-        }, function (result){
+        }, function (result) {
             dialog.modal({
                 header: login + ' ' + moment(date).format(dateFormat),
-                body: <CallsDetails callsDetails={result} dispatch={dispatch} login={login}/>
+                body: <CallsDetails callsDetails={result} dispatch={dispatch} login={login}/>,
+                large: true
             });
         }));
     }
 
     render() {
         let daysTotals = [];
+        let selectAllChecked = this.props.clients.length === this.props.clients.filter((client) => {
+                return client.checked;
+            }).length;
         return (
             <div className={'telephony'}>
                 <div className="row">
                     <div className="input-field col s3">
                         <input type="date" id={this.inputFromId} className="datepicker"
-                               defaultValue={this.state.from}/>
+                               value={this.state.from}/>
                         <label htmlFor="date-from" className="active">{i18next.t('periodFrom')}</label>
                     </div>
                     <div className="input-field col s3">
                         <input type="date" id={this.inputToId} className="datepicker"
-                               defaultValue={this.state.to}/>
+                               value={this.state.to}/>
                         <label htmlFor="date-to" className="active">{i18next.t('periodTo')}</label>
                     </div>
                     <div className="input-field col s3">
@@ -171,43 +189,50 @@ class Telephony extends React.Component<Props, State> {
                 </div>
                 <div id={this.divClientsListId}>
                     <div className="row">
-                        <div className="divider"></div>
-                        <h4>{i18next.t('clients')}</h4>
+                        <div className="col a12">
+                            <div className="divider"></div>
+                            <h4>{i18next.t('clients')}</h4>
+                        </div>
                     </div>
                     <div className="row">
                         <div className="input-field col s3">
                             <input type="checkbox" id={"select-all"}
-                                   checked={this.props.checkedClientsIds &&
-                                   this.props.clients.length === this.props.checkedClientsIds.length}
+                                   checked={selectAllChecked}
                                    onClick={this.selectAllClickHandler.bind(this)}/>
                             <label htmlFor={"select-all"}>{i18next.t('selectAll')}</label>
                         </div>
                     </div>
-                    {/*<div className="row">
-                     <div className="input-field col s3">
-                     <input type="checkbox" id={"select-official"}
-                     checked={this.state.official && !this.state.unofficial}
-                     onClick={this.selectGroupOfficialClickHandler.bind(this)}/>
-                     <label htmlFor={"select-official"}>Официальные</label>
-                     </div>
-                     <div className="input-field col s3">
-                     <input type="checkbox" id={"select-unofficial"}
-                     checked={this.state.unofficial && !this.state.official}
-                     onClick={this.selectGroupUnofficialClickHandler.bind(this)}/>
-                     <label htmlFor={"select-unofficial"}>Неофициальные</label>
-                     </div>
-                     </div>*/}
+                    <div className="row">
+                        {
+                            this.props.groups.map((group) => {
+                                let checkboxId = generator.getHash(group.name);
+                                let checked = _.intersection(group.ids, this.props.clients.filter((client) => {
+                                        return client.checked;
+                                    }).map((client) => {
+                                        return client.id;
+                                    })).length === group.ids.length;
+                                return (
+                                    <div className="input-field col s3" key={checkboxId}>
+                                        <input type="checkbox" id={checkboxId}
+                                               checked={checked}
+                                               onClick={this.groupClickHandler.bind(this, group.ids)}/>
+                                        <label htmlFor={checkboxId}>{group.name}</label>
+                                    </div>
+                                )
+                            })
+                        }
+                    </div>
                     <div className="row">
                         {
                             this.props.clients && this.props.clients.map((client) => {
-                                //let checkboxId = generator.genId();
+                                let checkboxId = generator.getHash(client.id);
                                 return (
-                                    <div className="input-field col s3" key={client.id}>
-                                        <input type="checkbox" id={"login" + client.id}
+                                    <div className="input-field col s3" key={checkboxId}>
+                                        <input type="checkbox" id={checkboxId}
                                                value={client.id}
-                                               checked={_.indexOf(this.props.checkedClientsIds, client.id) !== -1}
+                                               checked={client.checked}
                                                onChange={this.clientCheckboxChangeHandler.bind(this)}/>
-                                        <label htmlFor={"login" + client.id}>{client.login}</label>
+                                        <label htmlFor={checkboxId}>{client.login}</label>
                                     </div>
                                 )
                             })
@@ -225,7 +250,7 @@ class Telephony extends React.Component<Props, State> {
                     </a>
                 </div>
                 <div className="overflow-auto clear-both p-t-10">
-                    <table className={this.props.callsTotals.dates.length === 0 ? "hide" : "bordered"}>
+                    <table hidden={this.props.callsTotals.dates.length === 0} className="bordered">
                         <tbody>
                         <tr>
                             <th>{i18next.t('clients')}</th>
@@ -290,9 +315,9 @@ class Telephony extends React.Component<Props, State> {
 }
 
 function mapStateToProps(state:any) {
-    const {updateDate, clients, checkedClientsIds, callsTotals, callsDetails} = state.telephony;
+    const {updateDate, clients, groups, loginIds, callsTotals, callsDetails} = state.telephony;
 
-    return {updateDate, clients, checkedClientsIds, callsTotals, callsDetails};
+    return {updateDate, clients, groups, loginIds, callsTotals, callsDetails};
 }
 
 export default connect(mapStateToProps)(Telephony);

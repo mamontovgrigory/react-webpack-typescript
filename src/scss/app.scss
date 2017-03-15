@@ -70,7 +70,11 @@ table {
 .modal {
   max-width: 90%;
   max-height: 80%;
-  &.modal-fixed-footer {
+  &.modal-small {
+    width: 50%;
+    height: 50%;
+  }
+  &.modal-large {
     width: 90%;
     height: 80%;
   }

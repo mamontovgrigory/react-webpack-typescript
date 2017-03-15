@@ -1,16 +1,18 @@
 import * as ReactDOM from 'react-dom';
+import * as cx from 'classnames';
 
 import {generator} from 'shell/index';
 import Button from 'components/Button/Button';
 
-interface ModalProps {
+interface IModalProps {
     header?:string;
     body:any,
     buttons?:any[];
     hideDefaultButton?:boolean;
+    large?:boolean
 }
 
-interface ConfirmProps {
+interface IConfirmProps {
     header?:string;
     text:string;
     confirmCallback:Function;
@@ -18,13 +20,19 @@ interface ConfirmProps {
 }
 
 class Dialog {
-    modal(properties:ModalProps):string {
+    modal(properties:IModalProps):string {
         let dialogId = generator.genId();
         let modal = document.createElement('div');
         document.body.appendChild(modal);
 
+        const classes = cx({
+            'modal': true,
+            'modal-fixed-footer': true,
+            'modal-large': properties.large
+        });
+
         ReactDOM.render(
-            <div id={dialogId} className={'modal modal-fixed-footer'}>
+            <div id={dialogId} className={classes}>
                 <div className="modal-content">
                     <h4>{properties.header}</h4>
                     <div>
@@ -47,7 +55,7 @@ class Dialog {
 
         let $dialog = $('#' + dialogId);
         $dialog.modal({
-            ready: function(){
+            ready: function () {
                 $(window).trigger('resize');
             }
         });
@@ -60,7 +68,7 @@ class Dialog {
         $('#' + dialogId).modal('close');
     }
 
-    confirm(properties:ConfirmProps):void {
+    confirm(properties:IConfirmProps):void {
         let buttons = [
             {
                 text: i18next.t('cancel'),

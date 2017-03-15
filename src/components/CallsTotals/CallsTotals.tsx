@@ -16,7 +16,7 @@ interface State {
     duration?:number;
 }
 
-class CallsTotals extends React.Component<Props, State> {
+export default class CallsTotals extends React.Component<Props, State> {
     dateFormat = 'DD.MM.YYYY';
 
     infoCellClickHandler(login, date, duration) {
@@ -24,11 +24,11 @@ class CallsTotals extends React.Component<Props, State> {
             return c.login === login;
         });
 
-        this.props.dispatch(getCallsDetails({
+        /*this.props.dispatch(getCallsDetails({
             loginId: clientObj.id,
             date: date,
             duration: duration
-        }));
+        }));*/
     }
 
 

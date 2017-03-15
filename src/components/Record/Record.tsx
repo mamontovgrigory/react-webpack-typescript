@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import {generator} from 'shell/index';
+import {generator} from '../../shell/index';
 
 interface Props {
     src:string;

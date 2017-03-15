@@ -2,7 +2,7 @@ import * as React from 'react';
 import {Link} from 'react-router';
 import {connect} from 'react-redux';
 
-import {logout} from '../../redux/actions/accountActions.ts';
+import {logout} from 'redux/actions/accountActions.ts';
 
 interface Props {
     userAuthorized?:boolean;

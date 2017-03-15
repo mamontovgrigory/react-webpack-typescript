@@ -1,10 +1,13 @@
 import {sendRequest} from './requestActions';
 
-export const UPDATE_DATE_REQUEST_FINISHED = 'UPDATE_DATE_REQUEST_FINISHED';
-export const CLIENTS_REQUEST_FINISHED = 'CLIENTS_REQUEST_FINISHED';
-export const CHECKED_CLIENTS = 'CHECKED_CLIENTS';
-export const CALLS_TOTALS = 'CALLS_TOTALS';
-export const CALLS_DETAILS = 'CALLS_DETAILS';
+export const UPDATE_DATE_REQUEST_FINISHED: string = 'telephony/UPDATE_DATE_REQUEST_FINISHED';
+export const CLIENTS_REQUEST_FINISHED: string = 'telephony/CLIENTS_REQUEST_FINISHED';
+export const LOGIN_IDS: string = 'telephony/LOGIN_IDS';
+export const CALLS_TOTALS: string = 'telephony/CALLS_TOTALS';
+export const CALLS_DETAILS: string = 'telephony/CALLS_DETAILS';
+export const FROM: string = 'telephony/FROM';
+export const TO: string = 'telephony/TO';
+export const DURATION: string = 'telephony/DURATION';
 
 function updateDateRequestFinished(updateDate) {
     return {type: UPDATE_DATE_REQUEST_FINISHED, updateDate};
@@ -14,8 +17,8 @@ function clientsRequestFinished(clients) {
     return {type: CLIENTS_REQUEST_FINISHED, clients};
 }
 
-function checkedClients(checkedClientsIds) {
-    return {type: CHECKED_CLIENTS, checkedClientsIds};
+function checkedClients(loginIds) {
+    return {type: LOGIN_IDS, loginIds};
 }
 
 function callsTotals(callsTotals) {
@@ -25,6 +28,8 @@ function callsTotals(callsTotals) {
 function callsDetails(callsDetails) {
     return {type: CALLS_DETAILS, callsDetails};
 }
+
+
 
 export function getUpdateDate() {
     return (dispatch => {
@@ -41,14 +46,19 @@ export function getClients() {
         dispatch(sendRequest({
             url: '/ajax/get_list_users.php'
         })).then(function (result) {
-            dispatch(clientsRequestFinished(result));
+            let clients = result.map((client) => {
+                return _.assign(client, {
+                    checked: true
+                });
+            });
+            dispatch(clientsRequestFinished(clients));
         });
     });
 }
 
-export function setCheckedClients(checkedClientsIds) {
+export function setClients(clients){
     return (dispatch => {
-        dispatch(checkedClients(checkedClientsIds));
+        dispatch(clientsRequestFinished(clients));
     });
 }
 
@@ -89,6 +99,7 @@ export function getCallsDetails(data:GetCallsDetailsProps, callback:Function) {/
 }
 
 interface GetRecordProps{
+    login:string;
     callid:string;
 }
 

@@ -3,7 +3,6 @@ import * as moment from 'moment';
 import {
     UPDATE_DATE_REQUEST_FINISHED,
     CLIENTS_REQUEST_FINISHED,
-    CHECKED_CLIENTS,
     CALLS_TOTALS,
     CALLS_DETAILS
 } from 'redux/actions/telephonyActions';
@@ -11,6 +10,7 @@ import {
 interface Client {
     id:string;
     login:string;
+    checked?:boolean;
 }
 
 interface CallsTotals {
@@ -21,16 +21,18 @@ interface CallsTotals {
 interface State {
     updateDate:string;
     clients:Client[];
-    checkedClientsIds:string[];
     callsTotals:CallsTotals;
     callsDetails:any[];
+    groups:{
+        name:string;
+        ids:string[]
+    }[]
 }
 
 interface Action {
     type:string;
     updateDate?:string;
-    clients?:Client[];
-    checkedClientsIds?:string[];
+    clients:Client[];
     callsTotals?:CallsTotals;
     callsDetails:any[];
 }
@@ -38,12 +40,12 @@ interface Action {
 const initialState:State = {
     updateDate: '',
     clients: [],
-    checkedClientsIds: [],
     callsTotals: {
         dates: [],
         data: []
     },
-    callsDetails: []
+    callsDetails: [],
+    groups: []
 };
 
 export default function (state:State = initialState, action:Action):State {
@@ -53,15 +55,27 @@ export default function (state:State = initialState, action:Action):State {
                 updateDate: moment(action.updateDate).format('HH:mm:ss DD.MM.YYYY') //TODO: Move to config
             });
         case CLIENTS_REQUEST_FINISHED:
+            let  officials = ['1', '20', '9', '60033', '11', '14', '15', '16', '19', '21', '91501']; //TODO: Move to new module
             return _.assign({}, state, {
                 clients: action.clients,
-                checkedClientsIds: action.clients.map((client) => {
-                    return client.id;
-                })
-            });
-        case CHECKED_CLIENTS:
-            return _.assign({}, state, {
-                checkedClientsIds: action.checkedClientsIds
+                groups: [
+                    {
+                        name: i18next.t('official'),
+                        ids: action.clients.filter((client) => {
+                            return officials.indexOf(client.id) !== -1;
+                        }).map((client) => {
+                            return client.id;
+                        })
+                    },
+                    {
+                        name: i18next.t('unofficial'),
+                        ids: action.clients.filter((client) => {
+                            return officials.indexOf(client.id) === -1;
+                        }).map((client) => {
+                            return client.id;
+                        })
+                    }
+                ]
             });
         case CALLS_TOTALS:
             return _.assign({}, state, {
