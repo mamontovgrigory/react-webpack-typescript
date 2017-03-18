@@ -5,8 +5,7 @@ export const CLIENTS_REQUEST_FINISHED: string = 'telephony/CLIENTS_REQUEST_FINIS
 export const LOGIN_IDS: string = 'telephony/LOGIN_IDS';
 export const CALLS_TOTALS: string = 'telephony/CALLS_TOTALS';
 export const CALLS_DETAILS: string = 'telephony/CALLS_DETAILS';
-export const FROM: string = 'telephony/FROM';
-export const TO: string = 'telephony/TO';
+export const PERIOD: string = 'telephony/PERIOD';
 export const DURATION: string = 'telephony/DURATION';
 
 function updateDateRequestFinished(updateDate) {
@@ -27,6 +26,14 @@ function callsTotals(callsTotals) {
 
 function callsDetails(callsDetails) {
     return {type: CALLS_DETAILS, callsDetails};
+}
+
+function period(from, to){
+    return {type: PERIOD, from, to};
+}
+
+function duration(duration){
+    return {type: DURATION, duration};
 }
 
 
@@ -53,6 +60,18 @@ export function getClients() {
             });
             dispatch(clientsRequestFinished(clients));
         });
+    });
+}
+
+export function setPeriod(from:string, to:string){
+    return (dispatch => {
+        dispatch(period(from, to));
+    });
+}
+
+export function setDuration(result:number){
+    return (dispatch => {
+        dispatch(duration(result));
     });
 }
 

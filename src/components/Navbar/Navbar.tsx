@@ -2,12 +2,14 @@ import * as React from 'react';
 import {Link} from 'react-router';
 import {connect} from 'react-redux';
 
-import {logout} from 'redux/actions/accountActions.ts';
+import {logout} from 'redux/actions/accountActions';
 
 interface Props {
-    userAuthorized?:boolean;
-    modules?:any[];
     dispatch?:any;
+
+    userAuthorized?:boolean;
+    account?:any;
+    modules?:any[];
 }
 
 interface State {
@@ -24,7 +26,7 @@ class Navbar extends React.Component<Props,State> {
         this.props.dispatch(logout());
     }
 
-    closeNavClickHandler(){
+    closeNavClickHandler() {
         $('.side-nav').sideNav('hide');
     }
 
@@ -42,7 +44,7 @@ class Navbar extends React.Component<Props,State> {
                         <li>
                             <a className="dropdown-button" data-activates="dropdown-user">
                                 <div className="chip">
-                                    user
+                                    {this.props.account.login}
                                 </div>
                                 <i className="material-icons right">arrow_drop_down</i>
                             </a>
@@ -59,7 +61,8 @@ class Navbar extends React.Component<Props,State> {
 
                 <ul id="slide-out" className="side-nav">
                     <li>
-                        <Link to="/" className="display-inline-block p-l-0" onClick={this.closeNavClickHandler.bind(this)}>
+                        <Link to="/" className="display-inline-block p-l-0"
+                              onClick={this.closeNavClickHandler.bind(this)}>
                             <img className="background" src={require('./content/crm.png')}/>
                         </Link>
                     </li>
@@ -67,7 +70,8 @@ class Navbar extends React.Component<Props,State> {
                         this.props.userAuthorized && this.props.modules.map((el, index) => {
                             return (
                                 <li key={index}>
-                                    <Link to={el.to} className="waves-effect" onClick={this.closeNavClickHandler.bind(this)}>
+                                    <Link to={el.to} className="waves-effect"
+                                          onClick={this.closeNavClickHandler.bind(this)}>
                                         <i className="material-icons">{el.icon}</i>
                                         {el.name}
                                     </Link>
@@ -79,7 +83,8 @@ class Navbar extends React.Component<Props,State> {
                         <div className="divider"></div>
                     </li>
                     <li>
-                        <a className="waves-effect" onClick={this.closeNavClickHandler.bind(this)}>{i18next.t('close')}</a>
+                        <a className="waves-effect"
+                           onClick={this.closeNavClickHandler.bind(this)}>{i18next.t('close')}</a>
                     </li>
                 </ul>
             </nav>
@@ -89,11 +94,12 @@ class Navbar extends React.Component<Props,State> {
 
 function mapStateToProps(state:any) {
     const {modules} = state.navigation;
-    const {authorized} = state.account;
+    const {authorized, account} = state.account;
 
     return {
         modules,
-        userAuthorized: authorized
+        userAuthorized: authorized,
+        account
     };
 }
 

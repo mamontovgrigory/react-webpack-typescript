@@ -62,11 +62,20 @@ export default class CallsDetails extends React.Component<Props, State> {
                     name: 'record',
                     label: i18next.t('record'),
                     classes: 'record-link',
+                    width: 400,
                     formatter: function (cellvalue, options, rowObject) {
-                        return '<a data-callid="' + rowObject.id + '" data-time="' + rowObject.time + '">' +
-                            i18next.t('load') +
-                            '</a>';
+                        if (rowObject.id) {
+                            return '<a data-callid="' + rowObject.id + '" data-time="' + rowObject.time + '">' +
+                                i18next.t('load') +
+                                '</a>';
+                        } else {
+                             return i18next.t('noRecord');
+                        }
                     }
+                },
+                {
+                    name: 'download',
+                    classes: 'download'
                 }
             ],
             multiselect: false
@@ -90,10 +99,27 @@ export default class CallsDetails extends React.Component<Props, State> {
             let src = (NODE_ENV.trim() === 'development' ?
                     'http://ramazanavtsinov.myjino.ru' :
                     window.location.origin) + '/ajax' + result.src; //TODO: Move to config
-            dialog.modal({
-                header: recordName,
-                body: <Record src={src} recordName={recordName}/>
-            })
+
+            let $element = $('[data-callid="' + callid + '"]');
+            let audioId = generator.genId();
+
+
+            $element.replaceWith($('<audio>', {//TODO: needs optimization
+                'id': audioId,
+                'src': src
+            }));
+
+            $('#' + callid).find('.download').append($('<a>', {
+                download: recordName, //TODO: use record name as filename
+                href: src,
+                html: i18next.t('download')
+            }));
+
+            $('#' + audioId).audioPlayer();
+            /*dialog.modal({
+             header: recordName,
+             body: <Record src={src} recordName={recordName}/>
+             })*/
         }));
     }
 

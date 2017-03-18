@@ -52,7 +52,8 @@
       "duration": "Duration",
       "record": "Record",
       "load": "Load",
-      "download": "Download"
+      "download": "Download",
+      "noRecord": "No record"
     }
   },
   "ru": {
@@ -108,7 +109,8 @@
       "duration": "Длительность",
       "record": "Запись",
       "load": "Загрузить",
-      "download": "Скачать"
+      "download": "Скачать",
+      "noRecord": "Нет записи"
     }
   }
 }

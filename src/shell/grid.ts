@@ -6,6 +6,7 @@ interface InitProps {
         label?:string;
         classes?:string;
         formatter?:any;
+        width?:number;
     }[],
     url?:string;
     data?:any[],

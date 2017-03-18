@@ -48,7 +48,6 @@
     "url-loader": "^0.5.7"
   },
   "devDependencies": {
-    "@types/react-dom": "^0.14.23",
     "node-sass": "^3.11.3",
     "sass-loader": "^4.0.2",
     "source-map-loader": "^0.1.5",

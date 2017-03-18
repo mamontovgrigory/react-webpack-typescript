@@ -2,6 +2,8 @@ import * as moment from 'moment';
 
 import {
     UPDATE_DATE_REQUEST_FINISHED,
+    PERIOD,
+    DURATION,
     CLIENTS_REQUEST_FINISHED,
     CALLS_TOTALS,
     CALLS_DETAILS
@@ -19,6 +21,9 @@ interface CallsTotals {
 }
 
 interface State {
+    from:string;
+    to:string;
+    duration?:number;
     updateDate:string;
     clients:Client[];
     callsTotals:CallsTotals;
@@ -31,13 +36,20 @@ interface State {
 
 interface Action {
     type:string;
+    
+    from:string;
+    to:string;
+    duration?:number;
     updateDate?:string;
     clients:Client[];
     callsTotals?:CallsTotals;
     callsDetails:any[];
 }
 
+const dateFormat = 'DD.MM.YYYY'; //TODO: Move to config
 const initialState:State = {
+    from: moment().add(-7, 'days').format(dateFormat),
+    to: moment().format(dateFormat),
     updateDate: '',
     clients: [],
     callsTotals: {
@@ -54,8 +66,17 @@ export default function (state:State = initialState, action:Action):State {
             return _.assign({}, state, {
                 updateDate: moment(action.updateDate).format('HH:mm:ss DD.MM.YYYY') //TODO: Move to config
             });
+        case PERIOD:
+            return _.assign({}, state, {
+                from: action.from,
+                to: action.to
+            });
+        case DURATION:
+            return _.assign({}, state, {
+                duration: action.duration
+            });
         case CLIENTS_REQUEST_FINISHED:
-            let  officials = ['1', '20', '9', '60033', '11', '14', '15', '16', '19', '21', '91501']; //TODO: Move to new module
+            let officials = ['1', '20', '9', '60033', '11', '14', '15', '16', '19', '21', '91501']; //TODO: Move to new module
             return _.assign({}, state, {
                 clients: action.clients,
                 groups: [

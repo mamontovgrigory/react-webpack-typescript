@@ -24,7 +24,7 @@ interface Props {
 }
 
 interface State {
-    from?:string;
+    from?:string; //TODO: Move all state parameters to redux
     to?:string;
     duration?:number;
 }
@@ -43,7 +43,7 @@ class Telephony extends React.Component<Props, State> {
     inputToId = generator.genId();
     inputDurationId = generator.genId();
     divClientsListId = generator.genId();
-    dateFormat = 'DD.MM.YYYY';
+    dateFormat = 'DD.MM.YYYY'; //TODO: Move to config
 
     componentWillMount() {
         this.props.dispatch(getUpdateDate());

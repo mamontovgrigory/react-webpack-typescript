@@ -30,7 +30,7 @@ class MainPage extends React.Component<Props, State> {
                                             </span>
                                         </div>
                                         <div className="card-action">
-                                            <Link to={el.to}>Перейти</Link>
+                                            <Link to={el.to}>{i18next.t('go')}</Link>
                                         </div>
                                         <div className="card-reveal">
                                             <span className="card-title grey-text text-darken-4">
