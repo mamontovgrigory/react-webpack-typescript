@@ -2,7 +2,7 @@ import * as React from 'react';
 import {Link} from 'react-router';
 import {connect} from 'react-redux';
 
-import {logout} from 'redux/actions/accountActions';
+import {logoutRequest} from 'redux/actions/accountActions';
 
 interface Props {
     dispatch?:any;
@@ -23,7 +23,7 @@ class Navbar extends React.Component<Props,State> {
     }
 
     logoutClickHandler() {
-        this.props.dispatch(logout());
+        this.props.dispatch(logoutRequest());
     }
 
     closeNavClickHandler() {

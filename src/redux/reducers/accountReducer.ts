@@ -17,7 +17,7 @@ interface Action {
 }
 
 const initialState:State = {
-    authorized: false.valueOf(),
+    authorized: false,
     account: {}
 };
 

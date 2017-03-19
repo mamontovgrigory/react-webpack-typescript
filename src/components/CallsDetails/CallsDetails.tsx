@@ -1,8 +1,7 @@
 import * as React from 'react';
 
-import {dialog, generator, grid} from 'shell/index';
+import {generator, grid} from 'shell/index';
 import {getRecord} from 'redux/actions/telephonyActions';
-import Record from '../Record';
 
 interface Props {
     callsDetails?:any;
@@ -69,12 +68,13 @@ export default class CallsDetails extends React.Component<Props, State> {
                                 i18next.t('load') +
                                 '</a>';
                         } else {
-                             return i18next.t('noRecord');
+                            return i18next.t('noRecord');
                         }
                     }
                 },
                 {
                     name: 'download',
+                    label: i18next.t('download'),
                     classes: 'download'
                 }
             ],
@@ -110,16 +110,12 @@ export default class CallsDetails extends React.Component<Props, State> {
             }));
 
             $('#' + callid).find('.download').append($('<a>', {
-                download: recordName, //TODO: use record name as filename
+                download: recordName,
                 href: src,
                 html: i18next.t('download')
             }));
 
             $('#' + audioId).audioPlayer();
-            /*dialog.modal({
-             header: recordName,
-             body: <Record src={src} recordName={recordName}/>
-             })*/
         }));
     }
 

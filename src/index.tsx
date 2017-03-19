@@ -1,5 +1,5 @@
 import * as ReactDOM from 'react-dom';
-import {Router, browserHistory} from 'react-router';
+import {Router, hashHistory} from 'react-router';
 import {Provider} from 'react-redux';
 
 i18next.init({
@@ -17,7 +17,7 @@ const store = configureStore(initialState);
 
 const component = (
     <Provider store={store}>
-        <Router history={browserHistory}>
+        <Router history={hashHistory}>
             {routes(store)}
         </Router>
     </Provider>
