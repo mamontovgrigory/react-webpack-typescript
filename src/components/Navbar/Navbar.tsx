@@ -8,7 +8,7 @@ interface Props {
     dispatch?:any;
 
     userAuthorized?:boolean;
-    account?:any;
+    user?:any;
     modules?:any[];
 }
 
@@ -44,7 +44,7 @@ class Navbar extends React.Component<Props,State> {
                         <li>
                             <a className="dropdown-button" data-activates="dropdown-user">
                                 <div className="chip">
-                                    {this.props.account.login}
+                                    {this.props.user.login}
                                 </div>
                                 <i className="material-icons right">arrow_drop_down</i>
                             </a>
@@ -94,12 +94,12 @@ class Navbar extends React.Component<Props,State> {
 
 function mapStateToProps(state:any) {
     const {modules} = state.navigation;
-    const {authorized, account} = state.account;
+    const {authorized, user} = state.account;
 
     return {
         modules,
         userAuthorized: authorized,
-        account
+        user
     };
 }
 

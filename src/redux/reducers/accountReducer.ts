@@ -1,24 +1,32 @@
-import {LOG_IN, LOG_OUT} from '../actions/accountActions';
+import {LOG_IN, LOG_OUT, PERMISSIONS} from '../actions/accountActions';
 
 interface IUser {
+    id?:number;
     login?:string;
+    permissions?:any;
 }
 
 interface State {
     authorized:boolean;
     message?:string;
-    account:IUser
+    user:IUser
 }
 
 interface Action {
     type:string;
     message?:string;
-    account?:IUser
+    user?:IUser;
+    permissions?:{
+        alias:string;
+        name:string;
+        type:string;
+        value:any;
+    }[];
 }
 
 const initialState:State = {
     authorized: false,
-    account: {}
+    user: {}
 };
 
 export default function (state:State = initialState, action:Action) {
@@ -26,10 +34,19 @@ export default function (state:State = initialState, action:Action) {
         case LOG_IN:
             return _.assign({}, state, {
                 authorized: true,
-                account: action.account
+                user: action.user
             });
         case LOG_OUT:
-            return _.assign({}, state, {authorized: false, message: action.message});
+            return _.assign({}, state, {authorized: false, user: {}, message: action.message});
+        case PERMISSIONS:
+            let user = state.user;
+            user.permissions = {};
+            action.permissions.map((p) => {
+                user.permissions[p.alias] = p.value;
+            });
+            return _.assign({}, state, {
+                user: user
+            });
         default:
             return state;
     }

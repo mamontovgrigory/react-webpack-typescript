@@ -17,10 +17,8 @@ export function sendRequest(properties:RequestProps, callback?:Function) {
         return fetch((NODE_ENV.trim() === 'development' ?
                 'http://ramazanavtsinov.myjino.ru' :
                 window.location.origin) + properties.url, { //TODO: Move to config
-            mode: 'cors',
-            credentials: properties.credentials ? properties.credentials : null,
-            cache: 'no-cache',
             method: properties.method ? properties.method : 'POST',
+            credentials: 'include',
             headers: {
                 'Content-type': properties.contentType ? properties.contentType : 'application/x-www-form-urlencoded; charset=UTF-8'
             },

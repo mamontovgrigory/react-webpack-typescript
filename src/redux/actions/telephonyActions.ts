@@ -16,10 +16,6 @@ function clientsRequestFinished(clients) {
     return {type: CLIENTS_REQUEST_FINISHED, clients};
 }
 
-function checkedClients(loginIds) {
-    return {type: LOGIN_IDS, loginIds};
-}
-
 function callsTotals(callsTotals) {
     return {type: CALLS_TOTALS, callsTotals};
 }

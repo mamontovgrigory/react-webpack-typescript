@@ -2,6 +2,7 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import * as  ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
+import {generator} from 'shell/index';
 import {checkSession} from 'redux/actions/accountActions';
 import Navbar from '../../components/Navbar';
 import Breadcrumbs from '../../components/Breadcrumbs';
@@ -21,11 +22,11 @@ interface State {
 
 class App extends React.Component<Props, State> {
     componentWillMount() {
-        this.props.dispatch(checkSession());
+        //this.props.dispatch(checkSession());
     }
 
     render() {
-        const key = this.props.location.pathname;
+        const key = generator.getHash(this.props.location.pathname.replace(/\//, ''));
         return (
             <div>
                 <Navbar/>

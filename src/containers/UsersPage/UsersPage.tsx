@@ -81,7 +81,7 @@ class UsersPage extends React.Component<Props, State> {
 
         if (rowsIds.length === 1) {
             let userId = _.first(rowsIds);
-            let userData =  _.find(this.props.users, function(u){
+            let userData = _.find(this.props.users, function (u) {
                 return u.id === userId;
             });
             let saveButtonId = generator.genId();

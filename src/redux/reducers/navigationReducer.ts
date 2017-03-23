@@ -1,43 +1,34 @@
+import {MODULES} from "../actions/navigationActions";
+
+interface IModule {
+    path?:string;
+    name:any;
+    src?:string;
+    icon?:string;
+    description?:string;
+    to:string;
+    rule?:string;
+}
+
 interface State {
-    modules:{
-        path?:string;
-        name:any;
-        src?:string;
-        icon?:string;
-        description?:string;
-        to:string;
-    }[];
+    modules:IModule[];
 }
 
 interface Action {
     type:string;
+    modules:IModule[];
 }
 
 const initialState:State = {
-    modules: [
-        {
-            name: i18next.t('users'),
-            to: 'users',
-            icon: 'perm_identity',
-            src: require('./content/users.png')
-        },
-        {
-            name: i18next.t('groups'),
-            to: 'groups',
-            icon: 'supervisor_account',
-            src: require('./content/groups.png')
-        },
-        {
-            name: i18next.t('telephony'),
-            to: 'telephony',
-            icon: 'phone',
-            src: require('./content/telephony.png')
-        }
-    ]
+    modules: []
 };
 
 export default function (state:State = initialState, action:Action):State {
     switch (action.type) {
+        case MODULES:
+            return _.assign({}, state, {
+                modules: action.modules
+            });
         default:
             return state;
     }
