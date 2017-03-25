@@ -9,24 +9,19 @@ import Groups from './containers/GroupsPage';
 
 let store;
 
-function checkPermission(pathname, state){ //TODO: Make universal role model
-    let modulesMapping = {
-        users: 'users_manage',
-        groups: 'groups_manage'
-    };
-    let moduleName = modulesMapping[pathname.replace(/\//, '')];
-    let permissions = state.account.user.permissions;
-    return moduleName && permissions && permissions[moduleName];
+function checkPermission(pathname, state){
+    let moduleItem = _.find(state.navigation.modules, function(m){
+        return m.to === pathname;
+    });
+    return moduleItem && moduleItem.enabled;
 }
 
-function requirePermissions(nextState, transition, cb) {
-    setTimeout(() => {
-        let state = store.getState();
-        if(!checkPermission(nextState.location.pathname, state)){
-            transition('/');
-        }
-        cb();
-    }, 0);
+function requirePermission(nextState, transition, cb) {
+    let state = store.getState();
+    if(!checkPermission(nextState.location.pathname, state)){
+        transition('/');
+    }
+    cb();
 }
 
 export default function routes(storeRef:Object) {
@@ -35,8 +30,8 @@ export default function routes(storeRef:Object) {
     return (
         <Route component={App} path='/'>
             <IndexRoute component={MainPage}/>
-            <Route component={Users} path="/users" onEnter={requirePermissions}/>
-            <Route component={Groups} path="/groups" onEnter={requirePermissions}/>
+            <Route component={Users} path="/users" onEnter={requirePermission}/>
+            <Route component={Groups} path="/groups" onEnter={requirePermission}/>
             <Route component={Telephony} path="/telephony"/>
         </Route>
     );

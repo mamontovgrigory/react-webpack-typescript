@@ -26,7 +26,7 @@ class App extends React.Component<Props, State> {
     }
 
     render() {
-        const key = generator.getHash(this.props.location.pathname.replace(/\//, ''));
+        const key = generator.getHash(this.props.location.pathname);
         return (
             <div>
                 <Navbar/>

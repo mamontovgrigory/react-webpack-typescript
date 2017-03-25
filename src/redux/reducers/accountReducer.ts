@@ -1,32 +1,29 @@
-import {LOG_IN, LOG_OUT, PERMISSIONS} from '../actions/accountActions';
-
-interface IUser {
-    id?:number;
-    login?:string;
-    permissions?:any;
-}
+import {LOG_IN, LOG_OUT, PERMISSIONS} from 'redux/actions/accountActions';
+import {IUser, IUserPermissions} from "models/account";
 
 interface State {
     authorized:boolean;
     message?:string;
-    user:IUser
+    user:IUser;
+    permissions:IUserPermissions;
 }
 
 interface Action {
     type:string;
     message?:string;
     user?:IUser;
-    permissions?:{
-        alias:string;
-        name:string;
-        type:string;
-        value:any;
-    }[];
+    permissions?:IUserPermissions;
 }
 
 const initialState:State = {
     authorized: false,
-    user: {}
+    user: {},
+    permissions: {
+        usersManage: false,
+        groupsManage: false,
+        telephonyManage: false,
+        telephonyClients: []
+    }
 };
 
 export default function (state:State = initialState, action:Action) {
@@ -40,10 +37,11 @@ export default function (state:State = initialState, action:Action) {
             return _.assign({}, state, {authorized: false, user: {}, message: action.message});
         case PERMISSIONS:
             let user = state.user;
-            user.permissions = {};
-            action.permissions.map((p) => {
-                user.permissions[p.alias] = p.value;
-            });
+            user.permissions = action.permissions;
+            /*user.permissions = {};
+             action.permissions.map((p) => {
+             user.permissions[p.alias] = p.value;
+             });*/
             return _.assign({}, state, {
                 user: user
             });

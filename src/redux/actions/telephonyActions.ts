@@ -1,8 +1,8 @@
+import {IUserPermissions} from "models/account";
 import {sendRequest} from './requestActions';
 
 export const UPDATE_DATE_REQUEST_FINISHED: string = 'telephony/UPDATE_DATE_REQUEST_FINISHED';
 export const CLIENTS_REQUEST_FINISHED: string = 'telephony/CLIENTS_REQUEST_FINISHED';
-export const LOGIN_IDS: string = 'telephony/LOGIN_IDS';
 export const CALLS_TOTALS: string = 'telephony/CALLS_TOTALS';
 export const CALLS_DETAILS: string = 'telephony/CALLS_DETAILS';
 export const PERIOD: string = 'telephony/PERIOD';
@@ -44,12 +44,15 @@ export function getUpdateDate() {
     });
 }
 
-export function getClients() {
+export function getClients(permissions:IUserPermissions) {
     return (dispatch => {
         dispatch(sendRequest({
             url: '/ajax/get_list_users.php'
         })).then(function (result) {
-            let clients = result.map((client) => {
+            let enabledClients:string[] = permissions ? permissions.telephonyClients : [];
+            let clients = result.filter((client) => {
+                return enabledClients.indexOf(client.id) !== -1;
+            }).map((client) => {
                 return _.assign(client, {
                     checked: true
                 });
@@ -92,6 +95,15 @@ export function getCallsTotals(data:GetCallsTotalsProps) {
         })).then(function (result) {
             dispatch(callsTotals(result));
         });
+    });
+}
+
+export function resetCallsTotals() {
+    return (dispatch => {
+        dispatch(callsTotals({
+            dates: [],
+            data: []
+        }));
     });
 }
 

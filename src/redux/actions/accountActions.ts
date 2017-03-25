@@ -1,11 +1,13 @@
+import {IUser, IUserPermissions} from "models/account";
 import {sendRequest} from './requestActions';
 import {getModules} from './navigationActions';
+import {getClients, resetCallsTotals} from './telephonyActions';
 
 export const LOG_IN = 'account/LOG_IN';
 export const LOG_OUT = 'account/LOG_OUT';
 export const PERMISSIONS = 'account/PERMISSIONS';
 
-export function login(user) {
+export function login(user:IUser) {
     return {type: LOG_IN, user};
 }
 
@@ -13,7 +15,7 @@ export function logout(message?:string) {
     return {type: LOG_OUT, message};
 }
 
-export function permissions(permissions) {
+export function permissions(permissions:IUserPermissions) {
     return {type: PERMISSIONS, permissions};
 }
 
@@ -49,7 +51,7 @@ export function logoutRequest() {
             credentials: 'include'
         })).then(function () {
             dispatch(logout());
-            dispatch(getModules());
+            dispatch(getAccountPermissions());
         });
     });
 }
@@ -68,15 +70,39 @@ export function checkSession() {
     });
 }
 
+let permissionsMapping = {
+    usersManage: 'users_manage',
+    groupsManage: 'groups_manage',
+    telephonyManage: 'telephony_manage',
+    telephonyClients: 'list_users',
+};
+
 export function getAccountPermissions() {
     return (dispatch => {
         dispatch(sendRequest({
             url: '/ajax/get_account.php'
-        })).then(function (result) {
-            if (result){
-                dispatch(permissions(result));
-                dispatch(getModules(result));
+        })).then(function (response) {
+            let result:IUserPermissions = {
+                usersManage: false,
+                groupsManage: false,
+                telephonyManage: false,
+                telephonyClients: []
+            };
+            if (response) {
+                _.forEach(result, function (value, key) {
+                    let alias = permissionsMapping[key];
+                    if(alias){
+                        let permission = response.find((p) => {
+                            return p.alias === alias;
+                        });
+                        result[key] = permission ? permission.value : false;
+                    }
+                });
             }
+            dispatch(permissions(result));
+            dispatch(getModules(result));//TODO: Update data outside account actions
+            dispatch(getClients(result));
+            dispatch(resetCallsTotals());
         });
     });
 }

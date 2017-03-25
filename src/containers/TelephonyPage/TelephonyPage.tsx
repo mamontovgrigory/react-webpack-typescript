@@ -5,7 +5,6 @@ import {connect} from 'react-redux';
 import {generator, dialog} from 'shell/index';
 import {
     getUpdateDate,
-    getClients,
     setClients,
     getCallsTotals,
     getCallsDetails
@@ -47,7 +46,6 @@ class Telephony extends React.Component<Props, State> {
 
     componentWillMount() {
         this.props.dispatch(getUpdateDate());
-        if (this.props.clients.length === 0) this.props.dispatch(getClients());
     }
 
     componentDidMount() {
