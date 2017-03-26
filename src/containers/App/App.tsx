@@ -4,8 +4,8 @@ import * as  ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import {generator} from 'shell/index';
 import {checkSession} from 'redux/actions/accountActions';
-import Navbar from '../../components/Navbar';
-import Breadcrumbs from '../../components/Breadcrumbs';
+import Navbar from '../Navbar';
+import Breadcrumbs from '../Breadcrumbs';
 import LoginPage from '../LoginPage';
 import Loader from '../../components/Loader';
 

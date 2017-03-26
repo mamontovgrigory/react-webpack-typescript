@@ -9,7 +9,7 @@ import {
     getCallsTotals,
     getCallsDetails
 } from 'redux/actions/telephonyActions';
-import CallsDetails from 'components/CallsDetails/index';
+import CallsDetails from './CallsDetails';
 
 const style = require('./telephonyPage.scss'); //TODO: use classes as variables
 
@@ -82,7 +82,7 @@ class Telephony extends React.Component<Props, State> {
         });
     }
 
-    selectAllClickHandler(e) {
+    selectAllChangeHandler(e) {
         let clients = this.props.clients.map((el) => {
             el.checked = e.target.checked;
             return el;
@@ -90,7 +90,7 @@ class Telephony extends React.Component<Props, State> {
         this.props.dispatch(setClients(clients));
     }
 
-    groupClickHandler(ids, e) {
+    groupChangeHandler(ids, e) {
         let clients = this.props.clients.map((el) => {
             el.checked = ids.indexOf(el.id) !== -1 ? e.target.checked : el.checked;
             return el;
@@ -137,7 +137,6 @@ class Telephony extends React.Component<Props, State> {
         $('#' + this.divClientsListId).slideToggle();
     }
 
-
     infoCellClickHandler(login, date, duration) {
         var clientObj = _.find(this.props.clients, function (c) {
             return c.login === login;
@@ -145,14 +144,18 @@ class Telephony extends React.Component<Props, State> {
 
         let dateFormat = this.dateFormat;
         let dispatch = this.props.dispatch;
-        this.props.dispatch(getCallsDetails({
+        let callsDetailsProps = {
             loginId: clientObj.id,
             date: date,
             duration: duration
-        }, function (result) {
+        };
+        this.props.dispatch(getCallsDetails(callsDetailsProps, function (result) {
             dialog.modal({
                 header: login + ' ' + moment(date).format(dateFormat),
-                body: <CallsDetails callsDetails={result} dispatch={dispatch} login={login}/>,
+                body: <CallsDetails callsDetails={result}
+                                    dispatch={dispatch}
+                                    login={login}
+                                    callsDetailsProps={callsDetailsProps}/>,
                 large: true
             });
         }));
@@ -196,7 +199,7 @@ class Telephony extends React.Component<Props, State> {
                         <div className="input-field col s3">
                             <input type="checkbox" id={"select-all"}
                                    checked={selectAllChecked}
-                                   onClick={this.selectAllClickHandler.bind(this)}/>
+                                   onChange={this.selectAllChangeHandler.bind(this)}/>
                             <label htmlFor={"select-all"}>{i18next.t('selectAll')}</label>
                         </div>
                     </div>
@@ -213,7 +216,7 @@ class Telephony extends React.Component<Props, State> {
                                     <div className="input-field col s3" key={checkboxId}>
                                         <input type="checkbox" id={checkboxId}
                                                checked={checked}
-                                               onClick={this.groupClickHandler.bind(this, group.ids)}/>
+                                               onChange={this.groupChangeHandler.bind(this, group.ids)}/>
                                         <label htmlFor={checkboxId}>{group.name}</label>
                                     </div>
                                 )

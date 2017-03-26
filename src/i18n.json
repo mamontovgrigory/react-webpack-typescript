@@ -53,7 +53,11 @@
       "record": "Record",
       "load": "Load",
       "download": "Download",
-      "noRecord": "No record"
+      "noRecord": "No record",
+      "mark": "Mark",
+      "model": "Model",
+      "comment": "Comment",
+      "useful": "Useful"
     }
   },
   "ru": {
@@ -110,7 +114,11 @@
       "record": "Запись",
       "load": "Загрузить",
       "download": "Скачать",
-      "noRecord": "Нет записи"
+      "noRecord": "Нет записи",
+      "mark": "Марка",
+      "model": "Модель",
+      "comment": "Комментарий",
+      "useful": "Полезный"
     }
   }
 }

@@ -1,12 +1,12 @@
 import {IUserPermissions} from "models/account";
 import {sendRequest} from './requestActions';
 
-export const UPDATE_DATE_REQUEST_FINISHED: string = 'telephony/UPDATE_DATE_REQUEST_FINISHED';
-export const CLIENTS_REQUEST_FINISHED: string = 'telephony/CLIENTS_REQUEST_FINISHED';
-export const CALLS_TOTALS: string = 'telephony/CALLS_TOTALS';
-export const CALLS_DETAILS: string = 'telephony/CALLS_DETAILS';
-export const PERIOD: string = 'telephony/PERIOD';
-export const DURATION: string = 'telephony/DURATION';
+export const UPDATE_DATE_REQUEST_FINISHED:string = 'telephony/UPDATE_DATE_REQUEST_FINISHED';
+export const CLIENTS_REQUEST_FINISHED:string = 'telephony/CLIENTS_REQUEST_FINISHED';
+export const CALLS_TOTALS:string = 'telephony/CALLS_TOTALS';
+export const CALLS_DETAILS:string = 'telephony/CALLS_DETAILS';
+export const PERIOD:string = 'telephony/PERIOD';
+export const DURATION:string = 'telephony/DURATION';
 
 function updateDateRequestFinished(updateDate) {
     return {type: UPDATE_DATE_REQUEST_FINISHED, updateDate};
@@ -24,14 +24,13 @@ function callsDetails(callsDetails) {
     return {type: CALLS_DETAILS, callsDetails};
 }
 
-function period(from, to){
+function period(from, to) {
     return {type: PERIOD, from, to};
 }
 
-function duration(duration){
+function duration(duration) {
     return {type: DURATION, duration};
 }
-
 
 
 export function getUpdateDate() {
@@ -62,19 +61,19 @@ export function getClients(permissions:IUserPermissions) {
     });
 }
 
-export function setPeriod(from:string, to:string){
+export function setPeriod(from:string, to:string) {
     return (dispatch => {
         dispatch(period(from, to));
     });
 }
 
-export function setDuration(result:number){
+export function setDuration(result:number) {
     return (dispatch => {
         dispatch(duration(result));
     });
 }
 
-export function setClients(clients){
+export function setClients(clients) {
     return (dispatch => {
         dispatch(clientsRequestFinished(clients));
     });
@@ -107,7 +106,7 @@ export function resetCallsTotals() {
     });
 }
 
-interface GetCallsDetailsProps{
+interface GetCallsDetailsProps {
     loginId:string;
     date:string;
     duration?:number;
@@ -125,12 +124,12 @@ export function getCallsDetails(data:GetCallsDetailsProps, callback:Function) {/
     });
 }
 
-interface GetRecordProps{
+interface GetRecordProps {
     login:string;
     callid:string;
 }
 
-export function getRecord(data:GetRecordProps, callback:Function){//TODO: escape using callback
+export function getRecord(data:GetRecordProps, callback:Function) {//TODO: escape using callback
     return (dispatch => {
         dispatch(sendRequest({
             url: '/ajax/get_call_record.php',
@@ -140,4 +139,16 @@ export function getRecord(data:GetRecordProps, callback:Function){//TODO: escape
             //dispatch(callsDetails(result));
         });
     });
+}
+
+export function saveComments(data, callback?:Function) {
+    return (dispatch => {
+        dispatch(sendRequest({
+            url: '/ajax/comments_save.php',
+            data
+        })).then(function () {
+            callback();
+            //dispatch(callsDetails(result));
+        });
+    })
 }

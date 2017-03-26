@@ -44,7 +44,7 @@ export function loginRequest(properties:ILogIn) {
     });
 }
 
-export function logoutRequest() {
+export function logoutRequest() { //TODO: Change route to /
     return (dispatch => {
         dispatch(sendRequest({
             url: '/ajax/logout.php',

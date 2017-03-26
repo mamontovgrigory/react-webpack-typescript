@@ -1,5 +1,7 @@
 import * as moment from 'moment';
 
+import {IClient, ICallsTotals, ICallDetails} from 'models/telephony';
+
 import {
     UPDATE_DATE_REQUEST_FINISHED,
     PERIOD,
@@ -9,24 +11,13 @@ import {
     CALLS_DETAILS
 } from 'redux/actions/telephonyActions';
 
-interface Client {
-    id:string;
-    login:string;
-    checked?:boolean;
-}
-
-interface CallsTotals {
-    dates:any[],
-    data:any[]
-}
-
 interface State {
     from:string;
     to:string;
     duration?:number;
     updateDate:string;
-    clients:Client[];
-    callsTotals:CallsTotals;
+    clients:IClient[];
+    callsTotals:ICallsTotals;
     callsDetails:any[];
     groups:{
         name:string;
@@ -36,14 +27,14 @@ interface State {
 
 interface Action {
     type:string;
-    
+
     from:string;
     to:string;
     duration?:number;
     updateDate?:string;
-    clients:Client[];
-    callsTotals?:CallsTotals;
-    callsDetails:any[];
+    clients:IClient[];
+    callsTotals?:ICallsTotals;
+    callsDetails:ICallDetails[];
 }
 
 const dateFormat = 'DD.MM.YYYY'; //TODO: Move to config

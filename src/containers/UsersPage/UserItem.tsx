@@ -54,7 +54,7 @@ class UserItem extends React.Component<Props, State> {
 
         $('#' + this.props.saveButtonId).on('click', function () { //TODO: Needs react realization
             let dialogId = $(this).closest('.modal').attr('id');
-            self.save(function(){
+            self.save(function () {
                 dialog.close(dialogId);
             });
         });
@@ -68,8 +68,16 @@ class UserItem extends React.Component<Props, State> {
     }
 
     loginChangeHandler(e) {
+        function loginFormat(login) {
+            function upperToHyphenLower(match) {
+                return match.toLowerCase();
+            }
+
+            return login.replace(/[A-Z]/g, upperToHyphenLower).replace(/[^a-z0-9@._]/g, '');
+        }
+
         this.setState({
-            login: e.target.value
+            login: loginFormat(e.target.value)
         });
     }
 
@@ -109,7 +117,7 @@ class UserItem extends React.Component<Props, State> {
                 <div className="row">
                     <div className="input-field col s6">
                         <input id={this.state.loginFieldId} type="text"
-                               defaultValue={this.props.login}
+                               value={this.state.login}
                                ref={(input) => { this.loginInput = input; }}
                                onChange={this.loginChangeHandler.bind(this)}/>
                         <label htmlFor={this.state.loginFieldId}>{i18next.t('login')}</label>

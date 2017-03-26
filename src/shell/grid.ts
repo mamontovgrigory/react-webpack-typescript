@@ -2,11 +2,14 @@ interface InitProps {
     gridId:string;
     colModel:{
         name:string;
+        key?:boolean;
         hidden?:boolean;
         label?:string;
         classes?:string;
         formatter?:any;
         width?:number;
+        editable?:boolean;
+        edittype?:any;
     }[],
     url?:string;
     data?:any[],
@@ -29,22 +32,27 @@ interface InitProps {
     onSelectRow?:Function;
 }
 
-interface ReloadProps{
+interface ReloadProps {
     gridId:string;
 }
 
-interface GetDataProps{
+interface GetDataProps {
     gridId:string;
     rowId?:string;
 }
 
-interface UpdateDataProps{
+interface UpdateDataProps {
     gridId:string;
     data:any;
 }
 
-class Grid{
-    init(properties:InitProps){
+interface EditRowProps {
+    gridId:string;
+    rowId:string;
+}
+
+class Grid {
+    init(properties:InitProps) {
         var $grid = $('#' + properties.gridId),
             pagerId = 'p-' + properties.gridId;
 
@@ -145,15 +153,15 @@ class Grid{
             } : false);
     }
 
-    reload(properties:ReloadProps, callback: Function){
+    reload(properties:ReloadProps, callback:Function) {
         var $grid = $('#' + properties.gridId);
         $grid.trigger('reloadGrid');
         callback();
     }
 
-    getSelectedRows(gridId: string):string[]{
+    getSelectedRows(gridId:string):string[] {
         var $grid = $('#' + gridId),
-            response = null,
+            response = [],
             isMultiselect = $grid.jqGrid('getGridParam', 'multiselect');
         if (isMultiselect) {
             response = $grid.jqGrid('getGridParam', 'selarrrow');
@@ -163,23 +171,33 @@ class Grid{
                 response = [rowId];
         }
 
-        return(response);
+        return (response ? response : []);
     }
 
-    getData(properties:GetDataProps){
+    getData(properties:GetDataProps) {
         var $grid = $('#' + properties.gridId);
 
         var response = $grid.jqGrid('getRowData', properties && properties.rowId ? properties.rowId : null);
 
-        return(response);
+        return (response);
     }
 
-    updateData(properties:UpdateDataProps){
+    updateData(properties:UpdateDataProps) {
         var $grid = $('#' + properties.gridId);
 
         $grid.jqGrid('clearGridData')
             .jqGrid('setGridParam', {data: properties.data})
             .trigger('reloadGrid', [{page: 1}]);
+    }
+
+    edittingRowId;
+
+    editRow(properties:EditRowProps) {
+        var $grid = $('#' + properties.gridId);
+
+        if (this.edittingRowId)$grid.jqGrid('restoreRow', this.edittingRowId);
+        this.edittingRowId = properties.rowId;
+        $grid.jqGrid('editRow', properties.rowId, true);
     }
 }
 
