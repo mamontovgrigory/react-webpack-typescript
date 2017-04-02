@@ -7,6 +7,7 @@ export interface IUser {
 export interface IUserPermissions {
     usersManage:boolean;
     groupsManage:boolean;
-    telephonyManage:boolean;
+    telephonyCommentsManage:boolean;
+    telephonyCommentsView:boolean;
     telephonyClients:string[]
 }

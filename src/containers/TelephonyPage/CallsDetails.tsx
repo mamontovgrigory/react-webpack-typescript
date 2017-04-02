@@ -1,12 +1,14 @@
 import * as React from 'react';
 import * as moment from 'moment';
 
+import {IUserPermissions} from 'models/account';
 import {dialog, generator, grid} from 'shell/index';
 import {getCallsDetails, getRecord, saveComments} from 'redux/actions/telephonyActions';
 import Button from 'components/Button/Button';
 import RecordItem from './RecordItem';
 
 interface Props {
+    userPermissions:IUserPermissions;
     callsDetails?:any;
     callsDetailsProps:any;
     login:string;
@@ -59,6 +61,7 @@ export default class CallsDetails extends React.Component<Props, State> {
         const objectiveOptions = this.objectiveOptions.map((o) => {
             return o.value;
         });
+        const telephonyCommentsManage = this.props.userPermissions.telephonyCommentsManage;
         grid.init({
             gridId: gridId,
             data: this.state.callsDetails,
@@ -94,24 +97,28 @@ export default class CallsDetails extends React.Component<Props, State> {
                 {
                     name: 'mark',
                     label: i18next.t('mark'),
-                    editable: true
+                    editable: true,
+                    hidden: !this.props.userPermissions.telephonyCommentsView
                 },
                 {
                     name: 'model',
                     label: i18next.t('model'),
-                    editable: true
+                    editable: true,
+                    hidden: !this.props.userPermissions.telephonyCommentsView
                 },
                 {
                     name: 'comment',
                     label: i18next.t('comment'),
-                    editable: true
+                    editable: true,
+                    hidden: !this.props.userPermissions.telephonyCommentsView
                 },
                 {
                     name: 'objective',
                     label: i18next.t('objective'),
                     editable: true,
                     edittype: 'select',
-                    editoptions: {value: objectiveOptions}
+                    editoptions: {value: objectiveOptions},
+                    hidden: !this.props.userPermissions.telephonyCommentsView
                 },
                 {
                     name: 'record',
@@ -120,7 +127,7 @@ export default class CallsDetails extends React.Component<Props, State> {
                     width: 400,
                     formatter: function (cellvalue, options, rowObject) {
                         if (parseInt(rowObject.duration) > 0) {
-                            return '<a data-callid="' + rowObject.id + '" data-time="' + rowObject.time + '">' +
+                            return '<a data-callid="' + rowObject.callid + '" data-time="' + rowObject.time + '">' +
                                 i18next.t('load') +
                                 '</a>';
                         } else {
@@ -135,8 +142,8 @@ export default class CallsDetails extends React.Component<Props, State> {
                 }
             ],
             multiselect: false,
-            ondblClickRow: function (rowId, status, e) {
-                if (rowId) {
+            ondblClickRow: function (rowId) {
+                if (telephonyCommentsManage) {
                     let editingRowIdData = 'editing-row-id';
                     let editingRowId = $grid.data(editingRowIdData);
                     grid.restoreRow({
@@ -243,12 +250,13 @@ export default class CallsDetails extends React.Component<Props, State> {
     render() {
         return (
             <div>
+                {this.props.userPermissions.telephonyCommentsManage &&
                 <div className="row">
                     <Button title={i18next.t('edit')}
                             onClick={this.editClickHandler.bind(this)}>
                         <i className="material-icons">mode_edit</i>
                     </Button>
-                </div>
+                </div>}
                 <div className="row">
                     <table id={this.gridId}/>
                 </div>

@@ -21,7 +21,8 @@ const initialState:State = {
     permissions: {
         usersManage: false,
         groupsManage: false,
-        telephonyManage: false,
+        telephonyCommentsManage: false,
+        telephonyCommentsView: false,
         telephonyClients: []
     }
 };
@@ -38,10 +39,6 @@ export default function (state:State = initialState, action:Action) {
         case PERMISSIONS:
             let user = state.user;
             user.permissions = action.permissions;
-            /*user.permissions = {};
-             action.permissions.map((p) => {
-             user.permissions[p.alias] = p.value;
-             });*/
             return _.assign({}, state, {
                 user: user
             });

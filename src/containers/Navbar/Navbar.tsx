@@ -2,13 +2,14 @@ import * as React from 'react';
 import {Link} from 'react-router';
 import {connect} from 'react-redux';
 
-import {logoutRequest} from '../../redux/actions/accountActions';
+import {IUser} from 'models/account';
+import {logoutRequest} from 'redux/actions/accountActions';
 
 interface Props {
     dispatch?:any;
 
     userAuthorized?:boolean;
-    user?:any;
+    user?:IUser;
     modules?:any[];
 }
 

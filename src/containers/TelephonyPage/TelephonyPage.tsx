@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as moment from 'moment';
 import {connect} from 'react-redux';
 
+import {IUserPermissions} from 'models/account';
 import {generator, dialog} from 'shell/index';
 import {
     getUpdateDate,
@@ -14,6 +15,7 @@ import CallsDetails from './CallsDetails';
 const style = require('./telephonyPage.scss'); //TODO: use classes as variables
 
 interface Props {
+    userPermissions?:IUserPermissions;
     updateDate?:string;
     clients?:any[];
     groups?:any[];
@@ -142,6 +144,7 @@ class Telephony extends React.Component<Props, State> {
             return c.login === login;
         });
 
+        let userPermissions = this.props.userPermissions;
         let dateFormat = this.dateFormat;
         let dispatch = this.props.dispatch;
         let callsDetailsProps = {
@@ -153,6 +156,7 @@ class Telephony extends React.Component<Props, State> {
             dialog.modal({
                 header: login + ' ' + moment(date).format(dateFormat),
                 body: <CallsDetails callsDetails={result}
+                                    userPermissions={userPermissions}
                                     dispatch={dispatch}
                                     login={login}
                                     callsDetailsProps={callsDetailsProps}/>,
@@ -316,9 +320,10 @@ class Telephony extends React.Component<Props, State> {
 }
 
 function mapStateToProps(state:any) {
+    const {user:{permissions}} = state.account;
     const {updateDate, clients, groups, loginIds, callsTotals, callsDetails} = state.telephony;
 
-    return {updateDate, clients, groups, loginIds, callsTotals, callsDetails};
+    return {userPermissions: permissions, updateDate, clients, groups, loginIds, callsTotals, callsDetails};
 }
 
 export default connect(mapStateToProps)(Telephony);
