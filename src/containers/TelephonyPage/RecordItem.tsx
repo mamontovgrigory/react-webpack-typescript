@@ -19,7 +19,6 @@ interface IProps {
 }
 
 interface IState {
-    id?:string;
     callid?:string;
     duration?:string;
     mark?:string;
@@ -33,9 +32,8 @@ class RecordItem extends React.Component<IProps, IState> {
     constructor(props) {
         super();
 
-        console.log(props);
+        console.log('constructor', props);
         this.state = {
-            id: props.callDetails.id,
             callid: props.callDetails.callid,
             duration: props.callDetails.duration,
             mark: props.callDetails.mark,
@@ -96,7 +94,7 @@ class RecordItem extends React.Component<IProps, IState> {
     save(callback) {
         let updateCallsDetailsGrid = this.props.updateCallsDetailsGrid;
         this.props.dispatch(saveComments({
-            id: this.state.id,
+            id: this.state.callid,
             mark: this.state.mark,
             model: this.state.model,
             comment: this.state.comment,

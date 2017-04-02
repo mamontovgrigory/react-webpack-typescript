@@ -147,7 +147,7 @@ export function getRecord(data:GetRecordProps, callback:Function) {//TODO: escap
 }
 
 
-export function saveComments(data:{id?:string,mark?:string,model?:string, comment?:string, objective?:string}, callback?:Function) {
+export function saveComments(data:{id:string,mark?:string,model?:string, comment?:string, objective?:string}, callback?:Function) {
     return (dispatch => {
         dispatch(sendRequest({
             url: '/ajax/comments_save.php',

@@ -158,7 +158,7 @@ export default class CallsDetails extends React.Component<Props, State> {
                                 keys: true,
                                 aftersavefunc: function (r, s, rowData) {
                                     dispatch(saveComments({
-                                        id: rowData.id,
+                                        id: rowData.callid,
                                         mark: rowData.mark,
                                         model: rowData.model,
                                         comment: rowData.comment,
@@ -198,22 +198,24 @@ export default class CallsDetails extends React.Component<Props, State> {
         let rowsIds = grid.getSelectedRows(this.gridId);
 
         if (rowsIds.length === 1) {
-            let callDetails = _.find(this.props.callsDetails, function(c){
+            let callDetails = _.find(this.state.callsDetails, function(c){
                 return c.callid === _.first(rowsIds);
             });
             let saveButtonId = generator.genId();
-            dialog.modal({
-                header: this.props.login + callDetails.time,
-                body: <RecordItem callDetails={callDetails}
-                                  login={this.props.login}
-                                  objectiveOptions={this.objectiveOptions}
-                                  updateCallsDetailsGrid={this.updateCallsDetailsGrid.bind(this)}
-                                  saveButtonId={saveButtonId}
-                                  dispatch={this.props.dispatch}/>,
-                buttons: [
-                    <Button id={saveButtonId}>{i18next.t('save')}</Button>
-                ]
-            });
+            if(callDetails){
+                dialog.modal({
+                    header: this.props.login + callDetails.time,
+                    body: <RecordItem callDetails={callDetails}
+                                      login={this.props.login}
+                                      objectiveOptions={this.objectiveOptions}
+                                      updateCallsDetailsGrid={this.updateCallsDetailsGrid.bind(this)}
+                                      saveButtonId={saveButtonId}
+                                      dispatch={this.props.dispatch}/>,
+                    buttons: [
+                        <Button id={saveButtonId}>{i18next.t('save')}</Button>
+                    ]
+                });
+            }
         } else {
             dialog.modal({
                 header: i18next.t('chooseOneRow'),
