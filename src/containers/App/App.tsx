@@ -7,7 +7,7 @@ import {checkSession} from 'redux/actions/accountActions';
 import Navbar from '../Navbar';
 import Breadcrumbs from '../Breadcrumbs';
 import LoginPage from '../LoginPage';
-import Loader from '../../components/Loader';
+import Loader from 'components/Loader/Loader';
 
 interface Props {
     dispatch?:any;
@@ -22,7 +22,7 @@ interface State {
 
 class App extends React.Component<Props, State> {
     componentWillMount() {
-        //this.props.dispatch(checkSession());
+        this.props.dispatch(checkSession());
     }
 
     render() {

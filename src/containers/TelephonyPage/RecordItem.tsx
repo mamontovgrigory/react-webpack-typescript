@@ -32,7 +32,6 @@ class RecordItem extends React.Component<IProps, IState> {
     constructor(props) {
         super();
 
-        console.log('constructor', props);
         this.state = {
             callid: props.callDetails.callid,
             duration: props.callDetails.duration,

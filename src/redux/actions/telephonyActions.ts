@@ -48,7 +48,7 @@ export function getClients(permissions:IUserPermissions) {
         dispatch(sendRequest({
             url: '/ajax/get_list_users.php'
         })).then(function (result) {
-            let enabledClients:string[] = permissions ? permissions.telephonyClients : [];
+            let enabledClients:string[] = permissions && permissions.telephonyClients ? permissions.telephonyClients : [];
             let clients = result.filter((client) => {
                 return enabledClients.indexOf(client.id) !== -1;
             }).map((client) => {
