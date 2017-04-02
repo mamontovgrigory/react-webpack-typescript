@@ -8,6 +8,12 @@
     padding-top: 10px;
     padding-bottom: 10px;
   }
+  .ui-jqgrid-bdiv{
+    select{
+      display: block;
+      height: auto;
+    }
+  }
   .ui-jqgrid-view {
     font-size: 12px;
     font-family: Roboto, sans-serif;

@@ -1,7 +1,8 @@
 import * as React from 'react';
+import * as moment from 'moment';
 
 import {dialog, generator, grid} from 'shell/index';
-import {getCallsDetails,getRecord} from 'redux/actions/telephonyActions';
+import {getCallsDetails, getRecord, saveComments} from 'redux/actions/telephonyActions';
 import Button from 'components/Button/Button';
 import RecordItem from './RecordItem';
 
@@ -18,14 +19,27 @@ interface State {
 }
 
 export default class CallsDetails extends React.Component<Props, State> {
-    constructor(props){
+    constructor(props) {
         super();
 
         this.state = {
             callsDetails: props.callsDetails
         };
     }
+
     gridId:string = generator.genId();
+
+    objectiveOptions = [
+        {
+            value: ''
+        },
+        {
+            value: i18next.t('yes')
+        },
+        {
+            value: i18next.t('no')
+        }
+    ];
 
     componentDidMount() {
         let initGrid = this.initGrid.bind(this);
@@ -34,22 +48,27 @@ export default class CallsDetails extends React.Component<Props, State> {
         }, 200);
     }
 
-    componentDidUpdate(){
+    componentDidUpdate() {
         let initGrid = this.initGrid.bind(this);
         initGrid();
     }
 
     initGrid() {
-        console.log('initGrid', this.state.callsDetails);
+        const gridId = this.gridId;
+        const dispatch = this.props.dispatch;
+        const objectiveOptions = this.objectiveOptions.map((o) => {
+            return o.value;
+        });
         grid.init({
-            gridId: this.gridId,
-            data: this.state.callsDetails.map((r) => {
-                r.id = r.callid;
-                return r;
-            }),
+            gridId: gridId,
+            data: this.state.callsDetails,
             colModel: [
                 {
                     name: 'id',
+                    hidden: true
+                },
+                {
+                    name: 'callid',
                     hidden: true,
                     key: true
                 },
@@ -67,7 +86,10 @@ export default class CallsDetails extends React.Component<Props, State> {
                 },
                 {
                     name: 'duration',
-                    label: i18next.t('duration')
+                    label: i18next.t('duration'),
+                    formatter: function (cellvalue, options, rowObject) {
+                        return moment(parseInt(cellvalue) * 1000).utc().format('HH:mm:ss');
+                    }
                 },
                 {
                     name: 'mark',
@@ -85,23 +107,11 @@ export default class CallsDetails extends React.Component<Props, State> {
                     editable: true
                 },
                 {
-                    name: 'useful',
-                    hidden: true
-                },
-                {
-                    name: 'useful-icon',
-                    label: i18next.t('useful'),
-                    edittype: "checkbox",
-                    formatter: function (cellvalue, options, rowObject) {
-                        let useful = rowObject.useful;
-                        if (useful) {
-                            let iconType = useful === 'true' ? 'done' : 'not_interested';
-                            return '<i class="material-icons">' + iconType + '</i>'
-                        } else {
-                            return '';
-                        }
-                    },
-                    editable: true
+                    name: 'objective',
+                    label: i18next.t('objective'),
+                    editable: true,
+                    edittype: 'select',
+                    editoptions: {value: objectiveOptions}
                 },
                 {
                     name: 'record',
@@ -109,7 +119,7 @@ export default class CallsDetails extends React.Component<Props, State> {
                     classes: 'record-link',
                     width: 400,
                     formatter: function (cellvalue, options, rowObject) {
-                        if (rowObject.id) {
+                        if (parseInt(rowObject.duration) > 0) {
                             return '<a data-callid="' + rowObject.id + '" data-time="' + rowObject.time + '">' +
                                 i18next.t('load') +
                                 '</a>';
@@ -124,7 +134,38 @@ export default class CallsDetails extends React.Component<Props, State> {
                     classes: 'download'
                 }
             ],
-            multiselect: false
+            multiselect: false,
+            ondblClickRow: function (rowId, status, e) {
+                if (rowId) {
+                    let editingRowIdData = 'editing-row-id';
+                    let editingRowId = $grid.data(editingRowIdData);
+                    grid.restoreRow({
+                        gridId: gridId,
+                        rowId: editingRowId
+                    });
+                    if (rowId !== editingRowId) {
+                        grid.editRow({
+                            gridId: gridId,
+                            rowId: rowId,
+                            parameters: {
+                                keys: true,
+                                aftersavefunc: function (r, s, rowData) {
+                                    dispatch(saveComments({
+                                        id: rowData.id,
+                                        mark: rowData.mark,
+                                        model: rowData.model,
+                                        comment: rowData.comment,
+                                        objective: rowData.objective
+                                    }));
+                                }
+                            }
+                        });
+                        $grid.data(editingRowIdData, rowId);
+                    } else {
+                        $grid.data(editingRowIdData, null);
+                    }
+                }
+            }
         });
 
         let $grid = $('#' + this.gridId);
@@ -136,10 +177,10 @@ export default class CallsDetails extends React.Component<Props, State> {
         });
     }
 
-    updateCallsDetailsGrid(){//TODO: Escape code doubling
+    updateCallsDetailsGrid() {//TODO: Escape code doubling
         let self = this;
         let callsDetailsProps = this.props.callsDetailsProps;
-        this.props.dispatch(getCallsDetails(callsDetailsProps, function(callsDetails){
+        this.props.dispatch(getCallsDetails(callsDetailsProps, function (callsDetails) {
             self.setState({
                 callsDetails: callsDetails
             })
@@ -158,6 +199,8 @@ export default class CallsDetails extends React.Component<Props, State> {
             dialog.modal({
                 header: this.props.login + callDetails.time,
                 body: <RecordItem callDetails={callDetails}
+                                  login={this.props.login}
+                                  objectiveOptions={this.objectiveOptions}
                                   updateCallsDetailsGrid={this.updateCallsDetailsGrid.bind(this)}
                                   saveButtonId={saveButtonId}
                                   dispatch={this.props.dispatch}/>,
@@ -178,23 +221,18 @@ export default class CallsDetails extends React.Component<Props, State> {
         this.props.dispatch(getRecord({
             login: this.props.login,
             callid
-        }, function (result) {
-            let src = (NODE_ENV.trim() === 'development' ?
-                    'http://ramazanavtsinov.myjino.ru' :
-                    window.location.origin) + '/ajax' + result.src; //TODO: Move to config
-
+        }, function (record) {
             let $element = $('[data-callid="' + callid + '"]');
             let audioId = generator.genId();
 
-
             $element.replaceWith($('<audio>', {//TODO: needs optimization
                 'id': audioId,
-                'src': src
+                'src': record.src
             }));
 
             $('#' + callid).find('.download').append($('<a>', {
                 download: recordName,
-                href: src,
+                href: record.src,
                 html: i18next.t('download')
             }));
 

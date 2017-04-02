@@ -11,6 +11,7 @@ export interface ICallsTotals {
 
 export interface ICallDetails {
     id:string;
+    callid:string;
     time:string;
     numfrom:string;
     numto:string;
@@ -18,5 +19,5 @@ export interface ICallDetails {
     mark?:string;
     model?:string;
     comment?:string;
-    useful?:boolean;
+    objective?:boolean;
 }

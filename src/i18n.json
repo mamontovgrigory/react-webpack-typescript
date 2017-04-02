@@ -1,6 +1,8 @@
 {
   "en": {
     "translation": {
+      "yes": "Yes",
+      "no": "No",
       "users": "Users",
       "groups": "Groups",
       "telephony": "Telephony",
@@ -57,11 +59,13 @@
       "mark": "Mark",
       "model": "Model",
       "comment": "Comment",
-      "useful": "Useful"
+      "objective": "objective"
     }
   },
   "ru": {
     "translation": {
+      "yes": "Да",
+      "no": "Нет",
       "users": "Пользователи",
       "groups": "Группы",
       "telephony": "Телефония",
@@ -118,7 +122,7 @@
       "mark": "Марка",
       "model": "Модель",
       "comment": "Комментарий",
-      "useful": "Полезный"
+      "objective": "Целевой"
     }
   }
 }

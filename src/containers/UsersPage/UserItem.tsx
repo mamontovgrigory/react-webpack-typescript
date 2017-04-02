@@ -1,8 +1,8 @@
 import * as React from 'react';
 
 import {saveUser} from 'redux/actions/usersActions';
-
 import {generator, dialog} from 'shell/index';
+import Select from 'components/Select/Select';
 
 interface Props {
     dispatch?:any;
@@ -10,7 +10,7 @@ interface Props {
     id?:any;
     login?:any;
     groupId?:any;
-    groups?:any[];
+    groups:any[];
     saveButtonId?:string;
 }
 
@@ -112,6 +112,15 @@ class UserItem extends React.Component<Props, State> {
     }
 
     render() {
+        let groupOptions = this.props.groups.map((group) => {
+            return {
+                value: group.id,
+                name: group.name,
+            };
+        }).concat([{
+            value: '',
+            name: i18next.t('withoutGroup')
+        }]);
         return (
             <div>
                 <div className="row">
@@ -122,21 +131,11 @@ class UserItem extends React.Component<Props, State> {
                                onChange={this.loginChangeHandler.bind(this)}/>
                         <label htmlFor={this.state.loginFieldId}>{i18next.t('login')}</label>
                     </div>
-                    <div className="input-field col s6">
-                        <select id={this.state.groupIdFieldId}
-                                value={this.props.groupId}
-                                onChange={this.groupChangeHandler.bind(this)}>
-                            <option value="">{i18next.t('withoutGroup')}</option>
-                            {
-                                this.props.groups && this.props.groups.map((el) => {
-                                    return (
-                                        <option value={el.id} key={el.id}>{el.name}</option>
-                                    )
-                                })
-                            }
-                        </select>
-                        <label>{i18next.t('group')}</label>
-                    </div>
+                    <Select label={i18next.t('group')}
+                            s={6}
+                            value={this.state.groupId}
+                            onChange={this.groupChangeHandler.bind(this)}
+                            options={groupOptions}/>
                 </div>
                 <div className="row">
                     <div className="input-field col s6">

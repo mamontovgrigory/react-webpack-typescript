@@ -135,20 +135,26 @@ export function getRecord(data:GetRecordProps, callback:Function) {//TODO: escap
             url: '/ajax/get_call_record.php',
             data
         })).then(function (result) {
-            callback(result);
+            let src = (NODE_ENV.trim() === 'development' ?
+                    'http://ramazanavtsinov.myjino.ru' :
+                    window.location.origin) + '/ajax' + result.src; //TODO: Move to config
+            callback({
+                src
+            });
             //dispatch(callsDetails(result));
         });
     });
 }
 
-export function saveComments(data, callback?:Function) {
+
+export function saveComments(data:{id?:string,mark?:string,model?:string, comment?:string, objective?:string}, callback?:Function) {
     return (dispatch => {
         dispatch(sendRequest({
             url: '/ajax/comments_save.php',
             data
         })).then(function () {
-            callback();
+            if (callback)callback();
             //dispatch(callsDetails(result));
         });
-    })
+    });
 }

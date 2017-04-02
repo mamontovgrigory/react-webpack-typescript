@@ -9,7 +9,8 @@ interface InitProps {
         formatter?:any;
         width?:number;
         editable?:boolean;
-        edittype?:any;
+        edittype?:string;
+        editoptions?:{value:any}
     }[],
     url?:string;
     data?:any[],
@@ -30,6 +31,7 @@ interface InitProps {
     jsonReader?:any;
     gridComplete?:Function;
     onSelectRow?:Function;
+    ondblClickRow?:Function;
 }
 
 interface ReloadProps {
@@ -46,15 +48,10 @@ interface UpdateDataProps {
     data:any;
 }
 
-interface EditRowProps {
-    gridId:string;
-    rowId:string;
-}
-
 class Grid {
-    init(properties:InitProps) {
-        var $grid = $('#' + properties.gridId),
-            pagerId = 'p-' + properties.gridId;
+    init(props:InitProps) {
+        var $grid = $('#' + props.gridId),
+            pagerId = 'p-' + props.gridId;
 
         $grid.jqGrid('GridUnload');
 
@@ -66,10 +63,10 @@ class Grid {
             scrollHeight = 20;
 
         function setHeight() { //Высота по умолчанию = rowsCount * gridRowHeight, если есть измеритель - устанавливается его высота
-            if (!properties.height) {
+            if (!props.height) {
                 var height;
                 var rowsCount = $grid.jqGrid('getGridParam', 'reccount'),
-                    rowsShown = properties.rowsShown ? properties.rowsShown : 10;
+                    rowsShown = props.rowsShown ? props.rowsShown : 10;
                 if (rowsCount === 0) {
                     height = gridRowHeight * 3;
                 } else if (rowsCount <= rowsShown) {
@@ -82,7 +79,7 @@ class Grid {
         }
 
         function setGridWidth() {
-            var gridParentWidth = $('#gbox_' + properties.gridId).parent().width();
+            var gridParentWidth = $('#gbox_' + props.gridId).parent().width();
             $grid.jqGrid('setGridWidth', gridParentWidth - 2, $grid.width() < gridParentWidth);
         }
 
@@ -90,29 +87,30 @@ class Grid {
             setGridWidth();
         });
 
+        let lastsel;
         $grid.jqGrid({ //TODO: Use localization
-            colModel: properties.colModel,
-            data: properties.data ? properties.data : null,
-            datatype: properties.url ? 'json' : 'local',
-            //url: properties.url ? system.serverUrl + properties.url : false,
+            colModel: props.colModel,
+            data: props.data ? props.data : null,
+            datatype: props.url ? 'json' : 'local',
+            //url: props.url ? system.serverUrl + props.url : false,
             //ajaxGridOptions: system.ajaxOptions,
-            mtype: properties.url ? 'GET' : null,
-            multiselect: typeof (properties.multiselect) === 'boolean' ? properties.multiselect : true,
-            multiboxonly: typeof (properties.multiboxonly) === 'boolean' ? properties.multiboxonly : true,
+            mtype: props.url ? 'GET' : null,
+            multiselect: typeof (props.multiselect) === 'boolean' ? props.multiselect : true,
+            multiboxonly: typeof (props.multiboxonly) === 'boolean' ? props.multiboxonly : true,
             viewrecords: true,
-            rowNum: properties.rowNum ? properties.rowNum : 10,
-            rowList: properties.rowList ? properties.rowList : [10, 20, 30, 50, 100, 200],
+            rowNum: props.rowNum ? props.rowNum : 10,
+            rowList: props.rowList ? props.rowList : [10, 20, 30, 50, 100, 200],
             pager: '#' + pagerId,
-            //height: properties.height ? properties.height : 300,
-            //width: properties.width ? properties.width : null,
+            //height: props.height ? props.height : 300,
+            //width: props.width ? props.width : null,
             autoWidth: true,
             shrinkToFit: false,
-            sortname: properties.sortname ? properties.sortname : null,
-            sortorder: properties.sortorder ? properties.sortorder : 'desc',
-            //scroll: properties.scroll ? properties.scroll : false,
+            sortname: props.sortname ? props.sortname : null,
+            sortorder: props.sortorder ? props.sortorder : 'desc',
+            //scroll: props.scroll ? props.scroll : false,
             //emptyrecords: i18next.t('ui.emptyrecords'),
-            jsonReader: properties.jsonReader ?
-                properties.jsonReader :
+            jsonReader: props.jsonReader ?
+                props.jsonReader :
             {
                 page: 'page',
                 total: 'total',
@@ -127,34 +125,39 @@ class Grid {
              },*/
             gridComplete: function () {
                 setGridWidth();
-                if (properties.gridComplete) {
-                    properties.gridComplete();
+                if (props.gridComplete) {
+                    props.gridComplete();
                 }
             },
             onSelectRow: function (rowId, status, e) {
-                if (properties.onSelectRow) {
-                    properties.onSelectRow(rowId, status, e);
+                if (props.onSelectRow) {
+                    props.onSelectRow(rowId, status, e);
+                }
+            },
+            ondblClickRow: function (rowId, status, e) {
+                if (props.ondblClickRow) {
+                    props.ondblClickRow(rowId, status, e);
                 }
             }
         });
 
         $grid.jqGrid('filterToolbar',
-            properties.filter !== false ? {
+            props.filter !== false ? {
                 searchOnEnter: false,
                 stringResult: true,
                 defaultSearch: 'cn',
                 autoSearch: true,
                 beforeSearch: function () {
-                    if (properties.beforeSearch) properties.beforeSearch();
+                    if (props.beforeSearch) props.beforeSearch();
                 },
                 afterSearch: function () {
-                    if (properties.afterSearch) properties.afterSearch();
+                    if (props.afterSearch) props.afterSearch();
                 }
             } : false);
     }
 
-    reload(properties:ReloadProps, callback:Function) {
-        var $grid = $('#' + properties.gridId);
+    reload(props:ReloadProps, callback:Function) {
+        var $grid = $('#' + props.gridId);
         $grid.trigger('reloadGrid');
         callback();
     }
@@ -174,30 +177,31 @@ class Grid {
         return (response ? response : []);
     }
 
-    getData(properties:GetDataProps) {
-        var $grid = $('#' + properties.gridId);
+    getData(props:GetDataProps) {
+        var $grid = $('#' + props.gridId);
 
-        var response = $grid.jqGrid('getRowData', properties && properties.rowId ? properties.rowId : null);
+        var response = $grid.jqGrid('getRowData', props && props.rowId ? props.rowId : null);
 
         return (response);
     }
 
-    updateData(properties:UpdateDataProps) {
-        var $grid = $('#' + properties.gridId);
+    updateData(props:UpdateDataProps) {
+        var $grid = $('#' + props.gridId);
 
         $grid.jqGrid('clearGridData')
-            .jqGrid('setGridParam', {data: properties.data})
+            .jqGrid('setGridParam', {data: props.data})
             .trigger('reloadGrid', [{page: 1}]);
     }
 
-    edittingRowId;
+    editRow(props:{gridId:string, rowId:string, parameters?:{keys:boolean,aftersavefunc?:Function}}) {
+        var $grid = $('#' + props.gridId);
 
-    editRow(properties:EditRowProps) {
-        var $grid = $('#' + properties.gridId);
+        $grid.jqGrid('editRow', props.rowId, props.parameters);
+    }
 
-        if (this.edittingRowId)$grid.jqGrid('restoreRow', this.edittingRowId);
-        this.edittingRowId = properties.rowId;
-        $grid.jqGrid('editRow', properties.rowId, true);
+    restoreRow(props:{gridId:string, rowId:string}) {
+        var $grid = $('#' + props.gridId);
+        $grid.jqGrid('restoreRow', props.rowId);
     }
 }
 
