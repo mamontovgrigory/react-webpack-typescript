@@ -87,11 +87,13 @@ export default class CallsDetails extends React.Component<Props, State> {
                 },
                 {
                     name: 'time',
-                    label: i18next.t('dateAndTime')
+                    label: i18next.t('dateAndTime'),
+                    width: 120
                 },
                 {
                     name: 'numfrom',
                     label: i18next.t('outgoing'),
+                    width: 120,
                     formatter: 'select',
                     stype: 'select',
                     searchoptions: {
@@ -101,6 +103,7 @@ export default class CallsDetails extends React.Component<Props, State> {
                 {
                     name: 'numto',
                     label: i18next.t('incoming'),
+                    width: 120,
                     formatter: 'select',
                     stype: 'select',
                     searchoptions: {
@@ -110,6 +113,7 @@ export default class CallsDetails extends React.Component<Props, State> {
                 {
                     name: 'duration',
                     label: i18next.t('duration'),
+                    width: 120,
                     formatter: function (cellvalue, options, rowObject) {
                         return moment(parseInt(cellvalue) * 1000).utc().format('HH:mm:ss');
                     }
@@ -129,6 +133,7 @@ export default class CallsDetails extends React.Component<Props, State> {
                 {
                     name: 'comment',
                     label: i18next.t('comment'),
+                    width: 200,
                     editable: true,
                     hidden: !this.props.userPermissions.telephonyCommentsView
                 },
