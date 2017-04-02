@@ -8,6 +8,7 @@ interface InitProps {
         classes?:string;
         formatter?:any;
         width?:number;
+        sorttype?:any;
         editable?:boolean;
         edittype?:string;
         editoptions?:{value:any}

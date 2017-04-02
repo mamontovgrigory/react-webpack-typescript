@@ -21,6 +21,7 @@ interface IProps {
 interface IState {
     id?:string;
     callid?:string;
+    duration?:string;
     mark?:string;
     model?:string;
     comment?:string;
@@ -32,9 +33,11 @@ class RecordItem extends React.Component<IProps, IState> {
     constructor(props) {
         super();
 
+        console.log(props);
         this.state = {
             id: props.callDetails.id,
             callid: props.callDetails.callid,
+            duration: props.callDetails.duration,
             mark: props.callDetails.mark,
             model: props.callDetails.model,
             comment: props.callDetails.comment,
@@ -107,9 +110,10 @@ class RecordItem extends React.Component<IProps, IState> {
     render() {
         return (
             <div>
+                {parseInt(this.state.duration) > 0 &&
                 <div className="row">
                     <Audio src={this.state.src}/>
-                </div>
+                </div>}
                 <div className="row">
                     <Select label={i18next.t('objective')}
                             value={this.state.objective}

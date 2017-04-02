@@ -198,9 +198,8 @@ export default class CallsDetails extends React.Component<Props, State> {
         let rowsIds = grid.getSelectedRows(this.gridId);
 
         if (rowsIds.length === 1) {
-            let callDetails = grid.getData({
-                gridId: this.gridId,
-                rowId: _.first(rowsIds)
+            let callDetails = _.find(this.props.callsDetails, function(c){
+                return c.callid === _.first(rowsIds);
             });
             let saveButtonId = generator.genId();
             dialog.modal({
