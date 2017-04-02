@@ -9,6 +9,8 @@ interface InitProps {
         formatter?:any;
         width?:number;
         sorttype?:any;
+        stype?:string;
+        searchoptions?:any;
         editable?:boolean;
         edittype?:string;
         editoptions?:{value:any}
@@ -99,8 +101,8 @@ class Grid {
             multiselect: typeof (props.multiselect) === 'boolean' ? props.multiselect : true,
             multiboxonly: typeof (props.multiboxonly) === 'boolean' ? props.multiboxonly : true,
             viewrecords: true,
-            rowNum: props.rowNum ? props.rowNum : 10,
-            rowList: props.rowList ? props.rowList : [10, 20, 30, 50, 100, 200],
+            rowNum: props.rowNum ? props.rowNum : 25,
+            rowList: props.rowList ? props.rowList : [15, 25, 50, 100, 200],
             pager: '#' + pagerId,
             //height: props.height ? props.height : 300,
             //width: props.width ? props.width : null,

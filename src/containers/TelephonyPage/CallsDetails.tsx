@@ -6,6 +6,7 @@ import {dialog, generator, grid} from 'shell/index';
 import {getCallsDetails, getRecord, saveComments} from 'redux/actions/telephonyActions';
 import Button from 'components/Button/Button';
 import RecordItem from './RecordItem';
+import i18n = require("i18next");
 
 interface Props {
     userPermissions:IUserPermissions;
@@ -62,6 +63,15 @@ export default class CallsDetails extends React.Component<Props, State> {
             return o.value;
         });
         const telephonyCommentsManage = this.props.userPermissions.telephonyCommentsManage;
+        let defaultSearchOptions = {
+            '': i18next.t('selectAll')
+        };
+        let numFromSearchOptions = _.assign({}, defaultSearchOptions);
+        let numToSearchOptions = _.assign({}, defaultSearchOptions);
+        this.state.callsDetails.map((c)=>{
+            numFromSearchOptions[c.numfrom] = c.numfrom;
+            numToSearchOptions[c.numto] = c.numto;
+        });
         grid.init({
             gridId: gridId,
             data: this.state.callsDetails,
@@ -81,11 +91,21 @@ export default class CallsDetails extends React.Component<Props, State> {
                 },
                 {
                     name: 'numfrom',
-                    label: i18next.t('outgoing')
+                    label: i18next.t('outgoing'),
+                    formatter: 'select',
+                    stype: 'select',
+                    searchoptions: {
+                        value: numFromSearchOptions
+                    }
                 },
                 {
                     name: 'numto',
-                    label: i18next.t('incoming')
+                    label: i18next.t('incoming'),
+                    formatter: 'select',
+                    stype: 'select',
+                    searchoptions: {
+                        value: numToSearchOptions
+                    }
                 },
                 {
                     name: 'duration',
@@ -198,11 +218,11 @@ export default class CallsDetails extends React.Component<Props, State> {
         let rowsIds = grid.getSelectedRows(this.gridId);
 
         if (rowsIds.length === 1) {
-            let callDetails = _.find(this.state.callsDetails, function(c){
+            let callDetails = _.find(this.state.callsDetails, function (c) {
                 return c.callid === _.first(rowsIds);
             });
             let saveButtonId = generator.genId();
-            if(callDetails){
+            if (callDetails) {
                 dialog.modal({
                     header: this.props.login + callDetails.time,
                     body: <RecordItem callDetails={callDetails}
