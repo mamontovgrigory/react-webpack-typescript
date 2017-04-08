@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as moment from 'moment';
 
 import {IUserPermissions} from 'models/account';
+import {ICallDetails, IUniqueComments} from 'models/telephony';
 import {dialog, generator, grid} from 'shell/index';
 import {getCallsDetails, getRecord, saveComments} from 'redux/actions/telephonyActions';
 import Button from 'components/Button/Button';
@@ -10,7 +11,8 @@ import i18n = require("i18next");
 
 interface Props {
     userPermissions:IUserPermissions;
-    callsDetails?:any;
+    callsDetails?:ICallDetails[];
+    uniqueComments:IUniqueComments;
     callsDetailsProps:any;
     login:string;
 
@@ -18,7 +20,7 @@ interface Props {
 }
 
 interface State {
-    callsDetails?:any;
+    callsDetails?:ICallDetails[];
 }
 
 export default class CallsDetails extends React.Component<Props, State> {
@@ -233,6 +235,7 @@ export default class CallsDetails extends React.Component<Props, State> {
                     body: <RecordItem callDetails={callDetails}
                                       login={this.props.login}
                                       objectiveOptions={this.objectiveOptions}
+                                      uniqueComments={this.props.uniqueComments}
                                       updateCallsDetailsGrid={this.updateCallsDetailsGrid.bind(this)}
                                       saveButtonId={saveButtonId}
                                       dispatch={this.props.dispatch}/>,

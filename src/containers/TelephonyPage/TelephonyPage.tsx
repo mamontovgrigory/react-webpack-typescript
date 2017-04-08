@@ -3,12 +3,14 @@ import * as moment from 'moment';
 import {connect} from 'react-redux';
 
 import {IUserPermissions} from 'models/account';
+import {IClient, IClientGroup, ICallsTotals, IUniqueComments} from 'models/telephony';
 import {generator, dialog} from 'shell/index';
 import {
     getUpdateDate,
     setClients,
     getCallsTotals,
-    getCallsDetails
+    getCallsDetails,
+    getUniqueComments
 } from 'redux/actions/telephonyActions';
 import CallsDetails from './CallsDetails';
 
@@ -17,9 +19,10 @@ const style = require('./telephonyPage.scss'); //TODO: use classes as variables
 interface Props {
     userPermissions?:IUserPermissions;
     updateDate?:string;
-    clients?:any[];
-    groups?:any[];
-    callsTotals:any;
+    clients?:IClient[];
+    groups?:IClientGroup[];
+    callsTotals:ICallsTotals;
+    uniqueComments:IUniqueComments;
 
     dispatch?:any;
 }
@@ -48,6 +51,7 @@ class Telephony extends React.Component<Props, State> {
 
     componentWillMount() {
         this.props.dispatch(getUpdateDate());
+        this.props.dispatch(getUniqueComments());
     }
 
     componentDidMount() {
@@ -144,9 +148,8 @@ class Telephony extends React.Component<Props, State> {
             return c.login === login;
         });
 
-        let userPermissions = this.props.userPermissions;
+        const {userPermissions, uniqueComments, dispatch} = this.props;
         let dateFormat = this.dateFormat;
-        let dispatch = this.props.dispatch;
         let callsDetailsProps = {
             loginId: clientObj.id,
             date: date,
@@ -156,6 +159,7 @@ class Telephony extends React.Component<Props, State> {
             dialog.modal({
                 header: login + ' ' + moment(date).format(dateFormat),
                 body: <CallsDetails callsDetails={result}
+                                    uniqueComments={uniqueComments}
                                     userPermissions={userPermissions}
                                     dispatch={dispatch}
                                     login={login}
@@ -321,9 +325,18 @@ class Telephony extends React.Component<Props, State> {
 
 function mapStateToProps(state:any) {
     const {user:{permissions}} = state.account;
-    const {updateDate, clients, groups, loginIds, callsTotals, callsDetails} = state.telephony;
+    const {updateDate, clients, groups, loginIds, callsTotals, callsDetails, uniqueComments} = state.telephony;
 
-    return {userPermissions: permissions, updateDate, clients, groups, loginIds, callsTotals, callsDetails};
+    return {
+        userPermissions: permissions,
+        updateDate,
+        clients,
+        groups,
+        loginIds,
+        callsTotals,
+        callsDetails,
+        uniqueComments
+    };
 }
 
 export default connect(mapStateToProps)(Telephony);

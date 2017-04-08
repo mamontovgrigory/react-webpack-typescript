@@ -6,6 +6,7 @@ import {generator} from 'shell/index';
 interface IProps {
     value?:string;
     label:string;
+    placeholder?:string;
     disabled?:boolean;
     onChange?:any;
     s?:number;
@@ -30,6 +31,7 @@ export default class Input extends React.Component<IProps, IState> {
             <div className={classes}>
                 <input type="text"
                        className="validate"
+                       placeholder={this.props.placeholder}
                        onChange={this.props.onChange}
                        disabled={this.props.disabled}
                        value={this.props.value}

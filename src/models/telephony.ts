@@ -4,9 +4,14 @@ export interface IClient {
     checked?:boolean;
 }
 
+export interface IClientGroup{
+    name:string;
+    ids:string[]
+}
+
 export interface ICallsTotals {
     dates:string[],
-    data:{[clientName:string]:number; }[]
+    data:{[clientName:string]:string[]; }
 }
 
 export interface ICallDetails {
@@ -20,4 +25,9 @@ export interface ICallDetails {
     model?:string;
     comment?:string;
     objective?:boolean;
+}
+
+export interface IUniqueComments {
+    marks:string[];
+    models:string[];
 }

@@ -1,6 +1,6 @@
 import * as moment from 'moment';
 
-import {IClient, ICallsTotals, ICallDetails} from 'models/telephony';
+import {IClient, IClientGroup, ICallsTotals, ICallDetails, IUniqueComments} from 'models/telephony';
 
 import {
     UPDATE_DATE_REQUEST_FINISHED,
@@ -8,7 +8,8 @@ import {
     DURATION,
     CLIENTS_REQUEST_FINISHED,
     CALLS_TOTALS,
-    CALLS_DETAILS
+    CALLS_DETAILS,
+    UNIQUE_COMMENTS
 } from 'redux/actions/telephonyActions';
 
 interface State {
@@ -19,22 +20,21 @@ interface State {
     clients:IClient[];
     callsTotals:ICallsTotals;
     callsDetails:any[];
-    groups:{
-        name:string;
-        ids:string[]
-    }[]
+    groups:IClientGroup[];
+    uniqueComments:IUniqueComments
 }
 
 interface Action {
     type:string;
 
-    from:string;
-    to:string;
+    from?:string;
+    to?:string;
     duration?:number;
     updateDate?:string;
-    clients:IClient[];
-    callsTotals?:ICallsTotals;
-    callsDetails:ICallDetails[];
+    clients?:IClient[];
+    callsTotals?:any;
+    callsDetails?:ICallDetails[];
+    uniqueComments?:IUniqueComments;
 }
 
 const dateFormat = 'DD.MM.YYYY'; //TODO: Move to config
@@ -45,10 +45,14 @@ const initialState:State = {
     clients: [],
     callsTotals: {
         dates: [],
-        data: []
+        data: {}
     },
     callsDetails: [],
-    groups: []
+    groups: [],
+    uniqueComments: {
+        marks: [],
+        models: []
+    }
 };
 
 export default function (state:State = initialState, action:Action):State {
@@ -96,6 +100,10 @@ export default function (state:State = initialState, action:Action):State {
         case CALLS_DETAILS:
             return _.assign({}, state, {
                 callsDetails: action.callsDetails
+            });
+        case UNIQUE_COMMENTS:
+            return _.assign({}, state, {
+                uniqueComments: action.uniqueComments
             });
         default:
             return state;

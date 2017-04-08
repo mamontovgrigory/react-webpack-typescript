@@ -7,6 +7,7 @@ export const CALLS_TOTALS:string = 'telephony/CALLS_TOTALS';
 export const CALLS_DETAILS:string = 'telephony/CALLS_DETAILS';
 export const PERIOD:string = 'telephony/PERIOD';
 export const DURATION:string = 'telephony/DURATION';
+export const UNIQUE_COMMENTS:string = 'telephony/UNIQUE_COMMENTS';
 
 function updateDateRequestFinished(updateDate) {
     return {type: UPDATE_DATE_REQUEST_FINISHED, updateDate};
@@ -30,6 +31,10 @@ function period(from, to) {
 
 function duration(duration) {
     return {type: DURATION, duration};
+}
+
+function uniqueComments(uniqueComments){
+    return {type: UNIQUE_COMMENTS, uniqueComments};
 }
 
 
@@ -153,8 +158,19 @@ export function saveComments(data:{id:string,mark?:string,model?:string, comment
             url: '/ajax/comments_save.php',
             data
         })).then(function () {
+            dispatch(getUniqueComments());
             if (callback)callback();
             //dispatch(callsDetails(result));
+        });
+    });
+}
+
+export function getUniqueComments() {//TODO: escape using callback
+    return (dispatch => {
+        dispatch(sendRequest({
+            url: '/ajax/get_unique_comments.php'
+        })).then(function (result) {
+            dispatch(uniqueComments(result));
         });
     });
 }

@@ -25,17 +25,17 @@ export default class Select extends React.Component<IProps, IState> {
 
     componentDidMount() {
         Materialize.updateTextFields();
-        let $groupId = $('#' + this.elementId);
-        $groupId.material_select();
+        let $element = $('#' + this.elementId);
+        $element.material_select();
 
-        $groupId.on('change', this.props.onChange.bind(this)); //TODO: Needs react realization
+        $element.on('change', this.props.onChange.bind(this)); //TODO: Needs react realization
     }
 
     componentDidUpdate() {
-        let $groupId = $('#' + this.elementId);
+        let $element = $('#' + this.elementId);
 
-        $groupId.material_select('destroy');
-        $groupId.material_select();
+        $element.material_select('destroy');
+        $element.material_select();
     }
 
     render() {

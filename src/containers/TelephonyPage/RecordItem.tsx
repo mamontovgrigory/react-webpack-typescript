@@ -1,8 +1,9 @@
 import * as React from 'react';
 
 import {dialog} from 'shell/index';
-import {ICallDetails} from 'models/telephony';
+import {ICallDetails, IUniqueComments} from 'models/telephony';
 import Audio from 'components/Audio/Audio';
+import InputAutocomplete from '../../components/InputAutocomplete/InputAutocomplete';
 import Input from 'components/Input/Input';
 import Select from 'components/Select/Select';
 import Textarea from 'components/Textarea/Textarea';
@@ -11,6 +12,7 @@ import {saveComments, getRecord} from 'redux/actions/telephonyActions';
 interface IProps {
     login:string,
     callDetails:ICallDetails;
+    uniqueComments:IUniqueComments,
     saveButtonId:string;//TODO: Handle click using jquery
     updateCallsDetailsGrid:Function;
     objectiveOptions:any;
@@ -32,14 +34,31 @@ class RecordItem extends React.Component<IProps, IState> {
     constructor(props) {
         super();
 
+        const {callid, duration, mark, model, comment, objective} = props.callDetails;
+
         this.state = {
-            callid: props.callDetails.callid,
-            duration: props.callDetails.duration,
-            mark: props.callDetails.mark,
-            model: props.callDetails.model,
-            comment: props.callDetails.comment,
-            objective: props.callDetails.objective
+            callid: callid ? callid : '',
+            duration: duration ? duration : '',
+            mark: mark ? mark : '',
+            model: model ? model : '',
+            comment: comment ? comment : '',
+            objective: objective ? objective : ''
         }
+    }
+
+    getAutocompleteSource(array) {
+        let source = {};
+        array.map((comment:string) => {
+            for (let i = 1; i <= comment.length; i++) {
+                let key = comment.substr(0, i).toUpperCase();
+                if (!source[key]) source[key] = [];
+                source[key].push({
+                    id: comment,
+                    text: comment
+                });
+            }
+        });
+        return source;
     }
 
     componentDidMount() {
@@ -105,6 +124,8 @@ class RecordItem extends React.Component<IProps, IState> {
     }
 
     render() {
+        let marksSource = this.getAutocompleteSource(this.props.uniqueComments.marks);
+        let modelsSource = this.getAutocompleteSource(this.props.uniqueComments.models);
         return (
             <div>
                 {parseInt(this.state.duration) > 0 &&
@@ -118,14 +139,16 @@ class RecordItem extends React.Component<IProps, IState> {
                             onChange={this.objectiveChangeHandler.bind(this)}/>
                 </div>
                 <div className="row">
-                    <Input label={i18next.t('mark')}
-                           s={6}
-                           value={this.state.mark}
-                           onChange={this.markChangeHandler.bind(this)}/>
-                    <Input label={i18next.t('model')}
-                           s={6}
-                           value={this.state.model}
-                           onChange={this.modelChangeHandler.bind(this)}/>
+                    <InputAutocomplete label={i18next.t('mark')}
+                                       source={marksSource}
+                                       s={6}
+                                       value={this.state.mark}
+                                       onChange={this.markChangeHandler.bind(this)}/>
+                    <InputAutocomplete label={i18next.t('model')}
+                                       source={modelsSource}
+                                       s={6}
+                                       value={this.state.model}
+                                       onChange={this.modelChangeHandler.bind(this)}/>
                 </div>
                 <div className="row">
                     <Textarea label={i18next.t('comment')}
