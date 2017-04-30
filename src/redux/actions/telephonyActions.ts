@@ -1,13 +1,13 @@
 import {IUserPermissions} from 'models/account';
 import {sendRequest} from './requestActions';
 
-export const UPDATE_DATE_REQUEST_FINISHED:string = 'telephony/UPDATE_DATE_REQUEST_FINISHED';
-export const CLIENTS_REQUEST_FINISHED:string = 'telephony/CLIENTS_REQUEST_FINISHED';
-export const CALLS_TOTALS:string = 'telephony/CALLS_TOTALS';
-export const CALLS_DETAILS:string = 'telephony/CALLS_DETAILS';
-export const PERIOD:string = 'telephony/PERIOD';
-export const DURATION:string = 'telephony/DURATION';
-export const UNIQUE_COMMENTS:string = 'telephony/UNIQUE_COMMENTS';
+export const UPDATE_DATE_REQUEST_FINISHED: string = 'telephony/UPDATE_DATE_REQUEST_FINISHED';
+export const CLIENTS_REQUEST_FINISHED: string = 'telephony/CLIENTS_REQUEST_FINISHED';
+export const CALLS_TOTALS: string = 'telephony/CALLS_TOTALS';
+export const CALLS_DETAILS: string = 'telephony/CALLS_DETAILS';
+export const PERIOD: string = 'telephony/PERIOD';
+export const DURATION: string = 'telephony/DURATION';
+export const UNIQUE_COMMENTS: string = 'telephony/UNIQUE_COMMENTS';
 
 function updateDateRequestFinished(updateDate) {
     return {type: UPDATE_DATE_REQUEST_FINISHED, updateDate};
@@ -33,7 +33,7 @@ function duration(duration) {
     return {type: DURATION, duration};
 }
 
-function uniqueComments(uniqueComments){
+function uniqueComments(uniqueComments) {
     return {type: UNIQUE_COMMENTS, uniqueComments};
 }
 
@@ -48,12 +48,12 @@ export function getUpdateDate() {
     });
 }
 
-export function getClients(permissions:IUserPermissions) {
+export function getClients(permissions: IUserPermissions) {
     return (dispatch => {
         dispatch(sendRequest({
             url: '/ajax/get_list_users.php'
         })).then(function (result) {
-            let enabledClients:string[] = permissions && permissions.telephonyClients ? permissions.telephonyClients : [];
+            let enabledClients: string[] = permissions && permissions.telephonyClients ? permissions.telephonyClients : [];
             let clients = result.filter((client) => {
                 return enabledClients.indexOf(client.id) !== -1;
             }).map((client) => {
@@ -66,13 +66,13 @@ export function getClients(permissions:IUserPermissions) {
     });
 }
 
-export function setPeriod(from:string, to:string) {
+export function setPeriod(from: string, to: string) {
     return (dispatch => {
         dispatch(period(from, to));
     });
 }
 
-export function setDuration(result:number) {
+export function setDuration(result: number) {
     return (dispatch => {
         dispatch(duration(result));
     });
@@ -85,13 +85,13 @@ export function setClients(clients) {
 }
 
 interface GetCallsTotalsProps {
-    from:string;
-    to:string;
-    loginIds:any[];
-    duration?:number;
+    from: string;
+    to: string;
+    loginIds: any[];
+    duration?: number;
 }
 
-export function getCallsTotals(data:GetCallsTotalsProps) {
+export function getCallsTotals(data: GetCallsTotalsProps) {
     return (dispatch => {
         dispatch(sendRequest({
             url: '/ajax/get_calls_totals.php',
@@ -112,12 +112,12 @@ export function resetCallsTotals() {
 }
 
 interface GetCallsDetailsProps {
-    loginId:string;
-    date:string;
-    duration?:number;
+    loginId: string;
+    date: string;
+    duration?: number;
 }
 
-export function getCallsDetails(data:GetCallsDetailsProps, callback:Function) {//TODO: escape using callback
+export function getCallsDetails(data: GetCallsDetailsProps, callback: Function) {//TODO: escape using callback
     return (dispatch => {
         dispatch(sendRequest({
             url: '/ajax/get_calls_details.php',
@@ -130,11 +130,11 @@ export function getCallsDetails(data:GetCallsDetailsProps, callback:Function) {/
 }
 
 interface GetRecordProps {
-    login:string;
-    callid:string;
+    login: string;
+    callid: string;
 }
 
-export function getRecord(data:GetRecordProps, callback:Function) {//TODO: escape using callback
+export function getRecord(data: GetRecordProps, callback: Function) {//TODO: escape using callback
     return (dispatch => {
         dispatch(sendRequest({
             url: '/ajax/get_call_record.php',
@@ -151,26 +151,48 @@ export function getRecord(data:GetRecordProps, callback:Function) {//TODO: escap
     });
 }
 
+interface ISaveCommentsProps {
+    id: string,
+    loginId: string;
+    mark?: string;
+    model?: string;
+    comment?: string;
+    objective?: string;
+}
 
-export function saveComments(data:{id:string,mark?:string,model?:string, comment?:string, objective?:string}, callback?:Function) {
+export function saveComments(data: ISaveCommentsProps, callback?: Function) {
     return (dispatch => {
         dispatch(sendRequest({
             url: '/ajax/comments_save.php',
-            data
+            data: {
+                id: data.id,
+                login_id: data.loginId,
+                mark: data.mark,
+                model: data.model,
+                comment: data.comment,
+                objective: data.objective
+            }
         })).then(function () {
-            dispatch(getUniqueComments());
-            if (callback)callback();
+            if (callback) callback();
             //dispatch(callsDetails(result));
         });
     });
 }
 
-export function getUniqueComments() {//TODO: escape using callback
+interface IGetUniqueComments {
+    loginId: string;
+}
+
+export function getUniqueComments(data: IGetUniqueComments, callback: Function) {//TODO: escape using callback
     return (dispatch => {
         dispatch(sendRequest({
-            url: '/ajax/get_unique_comments.php'
+            url: '/ajax/get_unique_comments.php',
+            data: {
+                login_id: data.loginId
+            }
         })).then(function (result) {
-            dispatch(uniqueComments(result));
+            callback(result);
+            //dispatch(uniqueComments(result));
         });
     });
 }

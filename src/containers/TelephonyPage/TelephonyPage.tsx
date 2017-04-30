@@ -3,14 +3,13 @@ import * as moment from 'moment';
 import {connect} from 'react-redux';
 
 import {IUserPermissions} from 'models/account';
-import {IClient, IClientGroup, ICallsTotals, IUniqueComments} from 'models/telephony';
+import {IClient, IClientGroup, ICallsTotals} from 'models/telephony';
 import {dialog, formatter, generator} from 'shell/index';
 import {
     getUpdateDate,
     setClients,
     getCallsTotals,
-    getCallsDetails,
-    getUniqueComments
+    getCallsDetails
 } from 'redux/actions/telephonyActions';
 import CallsDetails from './CallsDetails';
 
@@ -22,7 +21,6 @@ interface Props {
     clients?: IClient[];
     groups?: IClientGroup[];
     callsTotals: ICallsTotals;
-    uniqueComments: IUniqueComments;
 
     dispatch?: any;
 }
@@ -51,7 +49,6 @@ class Telephony extends React.Component<Props, State> {
 
     componentWillMount() {
         this.props.dispatch(getUpdateDate());
-        this.props.dispatch(getUniqueComments());
     }
 
     componentDidMount() {
@@ -148,7 +145,7 @@ class Telephony extends React.Component<Props, State> {
             return c.login === login;
         });
 
-        const {userPermissions, uniqueComments, dispatch} = this.props;
+        const {userPermissions, dispatch} = this.props;
         let dateFormat = this.dateFormat;
         let callsDetailsProps = {
             loginId: clientObj.id,
@@ -159,10 +156,10 @@ class Telephony extends React.Component<Props, State> {
             dialog.modal({
                 header: login + ' ' + moment(date).format(dateFormat),
                 body: <CallsDetails callsDetails={result}
-                                    uniqueComments={uniqueComments}
                                     userPermissions={userPermissions}
                                     dispatch={dispatch}
                                     login={login}
+                                    clientId={clientObj.id}
                                     callsDetailsProps={callsDetailsProps}/>,
                 large: true
             });
@@ -334,7 +331,7 @@ class Telephony extends React.Component<Props, State> {
 
 function mapStateToProps(state: any) {
     const {user: {permissions}} = state.account;
-    const {updateDate, clients, groups, loginIds, callsTotals, callsDetails, uniqueComments} = state.telephony;
+    const {updateDate, clients, groups, loginIds, callsTotals, callsDetails} = state.telephony;
 
     return {
         userPermissions: permissions,
@@ -343,8 +340,7 @@ function mapStateToProps(state: any) {
         groups,
         loginIds,
         callsTotals,
-        callsDetails,
-        uniqueComments
+        callsDetails
     };
 }
 

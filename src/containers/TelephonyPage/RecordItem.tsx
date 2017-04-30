@@ -10,24 +10,25 @@ import Textarea from 'components/Textarea/Textarea';
 import {saveComments, getRecord} from 'redux/actions/telephonyActions';
 
 interface IProps {
-    login:string,
-    callDetails:ICallDetails;
-    uniqueComments:IUniqueComments,
-    saveButtonId:string;//TODO: Handle click using jquery
-    updateCallsDetailsGrid:Function;
-    objectiveOptions:any;
+    login: string,
+    clientId: string;
+    callDetails: ICallDetails;
+    saveButtonId: string;//TODO: Handle click using jquery
+    updateCallsDetailsGrid: Function;
+    objectiveOptions: any;
+    uniqueComments?: IUniqueComments,
 
-    dispatch?:any;
+    dispatch?: any;
 }
 
 interface IState {
-    callid?:string;
-    duration?:string;
-    mark?:string;
-    model?:string;
-    comment?:string;
-    objective?:string;
-    src?:string;
+    callid?: string;
+    duration?: string;
+    mark?: string;
+    model?: string;
+    comment?: string;
+    objective?: string;
+    src?: string;
 }
 
 class RecordItem extends React.Component<IProps, IState> {
@@ -48,7 +49,7 @@ class RecordItem extends React.Component<IProps, IState> {
 
     getAutocompleteSource(array) {
         let source = {};
-        array.map((comment:string) => {
+        array.map((comment: string) => {
             for (let i = 1; i <= comment.length; i++) {
                 let key = comment.substr(0, i).toUpperCase();
                 if (!source[key]) source[key] = [];
@@ -113,6 +114,7 @@ class RecordItem extends React.Component<IProps, IState> {
         let updateCallsDetailsGrid = this.props.updateCallsDetailsGrid;
         this.props.dispatch(saveComments({
             id: this.state.callid,
+            loginId: this.props.clientId,
             mark: this.state.mark,
             model: this.state.model,
             comment: this.state.comment,
@@ -124,17 +126,19 @@ class RecordItem extends React.Component<IProps, IState> {
     }
 
     render() {
+        const {duration, src, mark, model, comment, objective} = this.state;
         let marksSource = this.getAutocompleteSource(this.props.uniqueComments.marks);
         let modelsSource = this.getAutocompleteSource(this.props.uniqueComments.models);
+        console.log(marksSource);
         return (
             <div>
-                {parseInt(this.state.duration) > 0 &&
+                {parseInt(duration) > 0 &&
                 <div className="row">
-                    <Audio src={this.state.src}/>
+                    <Audio src={src}/>
                 </div>}
                 <div className="row">
                     <Select label={i18next.t('objective')}
-                            value={this.state.objective}
+                            value={objective}
                             options={this.props.objectiveOptions}
                             onChange={this.objectiveChangeHandler.bind(this)}/>
                 </div>
@@ -142,17 +146,17 @@ class RecordItem extends React.Component<IProps, IState> {
                     <InputAutocomplete label={i18next.t('mark')}
                                        source={marksSource}
                                        s={6}
-                                       value={this.state.mark}
+                                       value={mark}
                                        onChange={this.markChangeHandler.bind(this)}/>
                     <InputAutocomplete label={i18next.t('model')}
                                        source={modelsSource}
                                        s={6}
-                                       value={this.state.model}
+                                       value={model}
                                        onChange={this.modelChangeHandler.bind(this)}/>
                 </div>
                 <div className="row">
                     <Textarea label={i18next.t('comment')}
-                              value={this.state.comment}
+                              value={comment}
                               onChange={this.commentChangeHandler.bind(this)}/>
                 </div>
             </div>

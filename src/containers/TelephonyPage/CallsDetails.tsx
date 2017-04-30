@@ -2,25 +2,25 @@ import * as React from 'react';
 import * as moment from 'moment';
 
 import {IUserPermissions} from 'models/account';
-import {ICallDetails, IUniqueComments} from 'models/telephony';
+import {ICallDetails} from 'models/telephony';
 import {dialog, generator, grid} from 'shell/index';
-import {getCallsDetails, getRecord, saveComments} from 'redux/actions/telephonyActions';
+import {getCallsDetails, getRecord, saveComments, getUniqueComments} from 'redux/actions/telephonyActions';
 import Button from 'components/Button/Button';
 import RecordItem from './RecordItem';
 import i18n = require("i18next");
 
 interface Props {
-    userPermissions:IUserPermissions;
-    callsDetails?:ICallDetails[];
-    uniqueComments:IUniqueComments;
-    callsDetailsProps:any;
-    login:string;
+    userPermissions: IUserPermissions;
+    callsDetails?: ICallDetails[];
+    callsDetailsProps: any;
+    login: string;
+    clientId: string;
 
-    dispatch?:any;
+    dispatch?: any;
 }
 
 interface State {
-    callsDetails?:ICallDetails[];
+    callsDetails?: ICallDetails[];
 }
 
 export default class CallsDetails extends React.Component<Props, State> {
@@ -32,7 +32,7 @@ export default class CallsDetails extends React.Component<Props, State> {
         };
     }
 
-    gridId:string = generator.genId();
+    gridId: string = generator.genId();
 
     objectiveOptions = [
         {
@@ -60,6 +60,7 @@ export default class CallsDetails extends React.Component<Props, State> {
 
     initGrid() {
         const gridId = this.gridId;
+        const clientId = this.props.clientId;
         const dispatch = this.props.dispatch;
         const objectiveOptions = this.objectiveOptions.map((o) => {
             return o.value;
@@ -70,7 +71,7 @@ export default class CallsDetails extends React.Component<Props, State> {
         };
         let numFromSearchOptions = _.assign({}, defaultSearchOptions);
         let numToSearchOptions = _.assign({}, defaultSearchOptions);
-        this.state.callsDetails.map((c)=>{
+        this.state.callsDetails.map((c) => {
             numFromSearchOptions[c.numfrom] = c.numfrom;
             numToSearchOptions[c.numto] = c.numto;
         });
@@ -186,6 +187,7 @@ export default class CallsDetails extends React.Component<Props, State> {
                                 aftersavefunc: function (r, s, rowData) {
                                     dispatch(saveComments({
                                         id: rowData.callid,
+                                        loginId: clientId,
                                         mark: rowData.mark,
                                         model: rowData.model,
                                         comment: rowData.comment,
@@ -223,6 +225,9 @@ export default class CallsDetails extends React.Component<Props, State> {
 
     editClickHandler() {
         let rowsIds = grid.getSelectedRows(this.gridId);
+        const {login, clientId, dispatch} = this.props;
+        const objectiveOptions = this.objectiveOptions;
+        const updateCallsDetailsGrid = this.updateCallsDetailsGrid.bind(this);
 
         if (rowsIds.length === 1) {
             let callDetails = _.find(this.state.callsDetails, function (c) {
@@ -230,19 +235,24 @@ export default class CallsDetails extends React.Component<Props, State> {
             });
             let saveButtonId = generator.genId();
             if (callDetails) {
-                dialog.modal({
-                    header: this.props.login + callDetails.time,
-                    body: <RecordItem callDetails={callDetails}
-                                      login={this.props.login}
-                                      objectiveOptions={this.objectiveOptions}
-                                      uniqueComments={this.props.uniqueComments}
-                                      updateCallsDetailsGrid={this.updateCallsDetailsGrid.bind(this)}
-                                      saveButtonId={saveButtonId}
-                                      dispatch={this.props.dispatch}/>,
-                    buttons: [
-                        <Button id={saveButtonId}>{i18next.t('save')}</Button>
-                    ]
-                });
+                this.props.dispatch(getUniqueComments({
+                    loginId: clientId
+                }, function (comments) {
+                    dialog.modal({
+                        header: login + callDetails.time,
+                        body: <RecordItem callDetails={callDetails}
+                                          login={login}
+                                          clientId={clientId}
+                                          objectiveOptions={objectiveOptions}
+                                          updateCallsDetailsGrid={updateCallsDetailsGrid}
+                                          saveButtonId={saveButtonId}
+                                          uniqueComments={comments}
+                                          dispatch={dispatch}/>,
+                        buttons: [
+                            <Button id={saveButtonId}>{i18next.t('save')}</Button>
+                        ]
+                    });
+                }));
             }
         } else {
             dialog.modal({
