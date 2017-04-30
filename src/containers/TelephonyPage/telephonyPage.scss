@@ -1,17 +1,23 @@
 @import "../../scss/variables";
 @import "../../scss/mixins";
 
-.telephony{
-  .note{
+.telephony {
+  .note {
     font-size: 12px;
     color: $color-grey;
-    text-align: right;
+    text-align: left;
   }
 
-  .info-cell{
+  .card-wrapper {
+    float: none;
+    display: inline-block;
+    vertical-align: top;
+  }
+
+  .info-cell {
     cursor: pointer;
     @include transition(background 0.5s ease-out);
-    &:hover{
+    &:hover {
       background: $color-main
     }
   }

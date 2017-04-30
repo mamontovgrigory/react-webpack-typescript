@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 
 import {IUserPermissions} from 'models/account';
 import {IClient, IClientGroup, ICallsTotals, IUniqueComments} from 'models/telephony';
-import {generator, dialog} from 'shell/index';
+import {dialog, formatter, generator} from 'shell/index';
 import {
     getUpdateDate,
     setClients,
@@ -17,20 +17,20 @@ import CallsDetails from './CallsDetails';
 const style = require('./telephonyPage.scss'); //TODO: use classes as variables
 
 interface Props {
-    userPermissions?:IUserPermissions;
-    updateDate?:string;
-    clients?:IClient[];
-    groups?:IClientGroup[];
-    callsTotals:ICallsTotals;
-    uniqueComments:IUniqueComments;
+    userPermissions?: IUserPermissions;
+    updateDate?: string;
+    clients?: IClient[];
+    groups?: IClientGroup[];
+    callsTotals: ICallsTotals;
+    uniqueComments: IUniqueComments;
 
-    dispatch?:any;
+    dispatch?: any;
 }
 
 interface State {
-    from?:string; //TODO: Move all state parameters to redux
-    to?:string;
-    duration?:number;
+    from?: string; //TODO: Move all state parameters to redux
+    to?: string;
+    duration?: number;
 }
 
 class Telephony extends React.Component<Props, State> {
@@ -235,13 +235,22 @@ class Telephony extends React.Component<Props, State> {
                         {
                             this.props.clients && this.props.clients.map((client) => {
                                 let checkboxId = generator.getHash(client.id);
+                                const separator = ',';
                                 return (
-                                    <div className="input-field col s3" key={checkboxId}>
+                                    <div className="input-field col s3 card-wrapper" key={checkboxId}>
                                         <input type="checkbox" id={checkboxId}
                                                value={client.id}
                                                checked={client.checked}
                                                onChange={this.clientCheckboxChangeHandler.bind(this)}/>
-                                        <label htmlFor={checkboxId}>{client.login}</label>
+                                        <label htmlFor={checkboxId}>{client.login}<br/>
+                                            {client.numbers.split(separator).map((number, index) => {
+                                                return (
+                                                    <div className="note" key={index}>
+                                                        {formatter.formatPhoneNumber(number)}
+                                                    </div>
+                                                );
+                                            })}
+                                        </label>
                                     </div>
                                 )
                             })
@@ -290,8 +299,8 @@ class Telephony extends React.Component<Props, State> {
                                                 return <td className={'center ' + className}
                                                            key={i}
                                                            onClick={parseInt(el) ? () =>
-                                                           this.infoCellClickHandler(login,
-                                                           this.props.callsTotals.dates[i], duration) : function () {
+                                                               this.infoCellClickHandler(login,
+                                                                   this.props.callsTotals.dates[i], duration) : function () {
                                                            }}>{el}</td>
                                             })
                                         }
@@ -323,8 +332,8 @@ class Telephony extends React.Component<Props, State> {
     }
 }
 
-function mapStateToProps(state:any) {
-    const {user:{permissions}} = state.account;
+function mapStateToProps(state: any) {
+    const {user: {permissions}} = state.account;
     const {updateDate, clients, groups, loginIds, callsTotals, callsDetails, uniqueComments} = state.telephony;
 
     return {
