@@ -133,7 +133,7 @@ class Telephony extends React.Component<Props, State> {
 
     reportClickHandler() {
         let serverUrl = (NODE_ENV.trim() === 'development' ?
-            'http://ramazanavtsinov.myjino.ru' :
+            'http://xn----7sbhtgckcrdddi.xn--p1ai' :
             window.location.origin); //TODO: Move to config
 
         window.location.href = serverUrl + '/ajax/get_report.php?' + $.param(this.getRequestParams());

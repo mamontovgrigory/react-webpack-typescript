@@ -1,4 +1,4 @@
-import {IUserPermissions} from "models/account";
+import {IUserPermissions} from 'models/account';
 import {sendRequest} from './requestActions';
 
 export const UPDATE_DATE_REQUEST_FINISHED:string = 'telephony/UPDATE_DATE_REQUEST_FINISHED';
@@ -141,7 +141,7 @@ export function getRecord(data:GetRecordProps, callback:Function) {//TODO: escap
             data
         })).then(function (result) {
             let src = (NODE_ENV.trim() === 'development' ?
-                    'http://ramazanavtsinov.myjino.ru' :
+                    'http://xn----7sbhtgckcrdddi.xn--p1ai' :
                     window.location.origin) + '/ajax' + result.src; //TODO: Move to config
             callback({
                 src

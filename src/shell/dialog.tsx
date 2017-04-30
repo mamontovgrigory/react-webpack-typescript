@@ -41,7 +41,8 @@ class Dialog {
                 </div>
                 <div className="modal-footer">
                     {!properties.hideDefaultButton &&
-                    <button className="modal-action modal-close waves-effect waves-green btn-flat">
+                    <button className="modal-action modal-close waves-effect waves-green btn-flat"
+                            onClick={() => this.close(dialogId)}>
                         {i18next.t('close')}
                     </button>}
                     {
@@ -65,7 +66,11 @@ class Dialog {
     }
 
     close(dialogId:string):void {
-        $('#' + dialogId).modal('close');
+        let $dialog = $('#' + dialogId);
+        $dialog.modal('close');
+        setTimeout(function () {
+            $dialog.remove();
+        }, 500);
     }
 
     confirm(properties:IConfirmProps):void {
