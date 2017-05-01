@@ -129,7 +129,6 @@ class RecordItem extends React.Component<IProps, IState> {
         const {duration, src, mark, model, comment, objective} = this.state;
         let marksSource = this.getAutocompleteSource(this.props.uniqueComments.marks);
         let modelsSource = this.getAutocompleteSource(this.props.uniqueComments.models);
-        console.log(marksSource);
         return (
             <div>
                 {parseInt(duration) > 0 &&

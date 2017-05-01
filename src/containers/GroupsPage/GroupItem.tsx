@@ -4,18 +4,18 @@ import {saveGroup} from 'redux/actions/groupsActions';
 import {generator, dialog} from 'shell/index';
 
 interface Props {
-    dispatch?:any;
+    dispatch?: any;
 
-    id?:number;
-    name?:string;
-    permissions?:any[];
-    values?:any[];
-    saveButtonId?:string;
+    id?: number;
+    name?: string;
+    permissions?: any[];
+    values?: any[];
+    saveButtonId?: string;
 }
 
 interface State {
-    name?:string;
-    settings?:any;
+    name?: string;
+    settings?: any;
 }
 
 export default class GroupItem extends React.Component<Props, State> {
@@ -23,14 +23,19 @@ export default class GroupItem extends React.Component<Props, State> {
         super(props);
 
         var settings = {};
-        _.forEach(props.values, function (val, i) {
+        _.forEach(props.values, function (val) {
             var permission = _.find(props.permissions, function (p) {
                 return parseInt(p.id) === parseInt(val.permissionId);
             });
             var value = permission.list ? [] : false;
             if (permission.list) {
-                value = _.map(val.value.split(','), function (v) {
+                let list = permission.list.map((el) => {
+                    return parseInt(el.id);
+                });
+                value = val.value === 'all' ? list : val.value.split(',').map((v) => {
                     return parseInt(v);
+                }).filter((v) => {
+                    return list.indexOf(v) !== -1;
                 });
             } else {
                 value = val.value === 'true';
@@ -44,7 +49,7 @@ export default class GroupItem extends React.Component<Props, State> {
         };
     }
 
-    nameInput:HTMLInputElement;
+    nameInput: HTMLInputElement;
 
     componentDidMount() {
         Materialize.updateTextFields();
@@ -53,7 +58,7 @@ export default class GroupItem extends React.Component<Props, State> {
 
         $('#' + this.props.saveButtonId).on('click', function () { //TODO: Needs react realization
             let dialogId = $(this).closest('.modal').attr('id');
-            self.save(function(){
+            self.save(function () {
                 dialog.close(dialogId);
             });
         });
@@ -98,28 +103,50 @@ export default class GroupItem extends React.Component<Props, State> {
         });
     }
 
-    save(callback){
-        if(!this.state.name){
+    save(callback) {
+        const {id, permissions, dispatch} = this.props;
+        const {name, settings} = this.state;
+        if (!name) {
             this.nameInput.focus();
             return;
         }
-        this.props.dispatch(saveGroup({
-            id: this.props.id,
-            name: this.state.name,
-            settings: this.state.settings
+
+        let settingsObject = {};
+        Object.keys(settings).map((key) => {
+            const permission = _.find(permissions, function (p) {
+                return parseInt(p.id) === parseInt(key);
+            });
+            let val = settings[key];
+            if (permission.list) {
+                if (val.length == permission.list.length) {
+                    val = 'all';
+                } else {
+                    val = val.join(',');
+                }
+            }
+            settingsObject[key] = val;
+        });
+
+        dispatch(saveGroup({
+            id: id,
+            name: name,
+            settings: settingsObject
         }));
         callback();
     }
 
     render() {
+        const {name, permissions} = this.props;
         let inputNameId = generator.genId();
         return (
             <div>
                 <div className="row m-b-0">
                     <div className="input-field col s6">
                         <input id={inputNameId} type="text"
-                               defaultValue={this.props.name}
-                               ref={(input) => { this.nameInput = input; }}
+                               defaultValue={name}
+                               ref={(input) => {
+                                   this.nameInput = input;
+                               }}
                                onChange={this.nameChangeHandler.bind(this)}/>
                         <label htmlFor={inputNameId}>{i18next.t('groupName')}</label>
                     </div>
@@ -130,7 +157,7 @@ export default class GroupItem extends React.Component<Props, State> {
                     </div>
                 </div>
                 {
-                    this.props.permissions.map((el) => {
+                    permissions.map((el) => {
                         var checkboxId = generator.genId();
                         var value = this.state.settings[parseInt(el.id)];
                         return (
@@ -142,17 +169,15 @@ export default class GroupItem extends React.Component<Props, State> {
                                         </div>
                                     </div>
                                     {
-                                        //TODO: realize group selection
-                                        /*<div className="row">
+                                        <div className="row">
                                             <div className="input-field col s3">
                                                 <input type="checkbox" id={checkboxId}
                                                        checked={value && el.list.length === value.length}
                                                        onChange={this.selectAllClickHandler.bind(this, el.list, el.id)}/>
-                                                <label htmlFor={checkboxId}>{i18next.t('selectAll')}</label>
+                                                <label htmlFor={checkboxId}>{i18next.t('all')}</label>
                                             </div>
-                                        </div>*/
+                                        </div>
                                     }
-                                    <div className="divider"></div>
                                     <div className="row">
                                         {
                                             el.list.map((li) => {
@@ -162,7 +187,7 @@ export default class GroupItem extends React.Component<Props, State> {
                                                     <div className="input-field col s3" key={li.id}>
                                                         <input type="checkbox" id={listCheckboxId}
                                                                value={li.id}
-                                                               defaultChecked={checked}
+                                                               checked={checked}
                                                                onChange={this.listItemCheckboxChangeHandler.bind(this, el.id, li.id)}/>
                                                         <label htmlFor={listCheckboxId}>{li.name}</label>
                                                     </div>
