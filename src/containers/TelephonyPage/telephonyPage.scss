@@ -27,10 +27,8 @@ $head-column-width: 150px;
   }
 
   .table-wrapper {
-    width: 100%;
-    overflow-x: scroll;
+    overflow-x: auto;
     margin-left: $head-column-width;
-    overflow-y: visible;
     padding: 0;
 
     .head-column {
