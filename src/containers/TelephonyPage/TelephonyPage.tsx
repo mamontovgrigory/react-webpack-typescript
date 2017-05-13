@@ -264,11 +264,11 @@ class Telephony extends React.Component<Props, State> {
                         <i className="material-icons">swap_vert</i>
                     </a>
                 </div>
-                <div className="overflow-auto clear-both p-t-10">
+                <div className="table-wrapper clear-both p-t-10">
                     <table hidden={this.props.callsTotals.dates.length === 0} className="bordered">
                         <tbody>
                         <tr>
-                            <th>{i18next.t('clients')}</th>
+                            <th className="head-column">{i18next.t('clients')}</th>
                             {
                                 this.props.callsTotals.dates.map((el, index) => {
                                     if (!_.has(daysTotals, index)) daysTotals[index] = 0;
@@ -285,7 +285,7 @@ class Telephony extends React.Component<Props, State> {
                                 var clientTotal = 0;
                                 return (
                                     <tr key={index}>
-                                        <td>{login}</td>
+                                        <td className="head-column">{login}</td>
                                         {
                                             loginData.map((el, i) => {
                                                 var count = parseInt(el);
@@ -309,7 +309,7 @@ class Telephony extends React.Component<Props, State> {
                             })
                         }
                         <tr>
-                            <th>{i18next.t('total')}</th>
+                            <th className="head-column">{i18next.t('total')}</th>
                             {
                                 daysTotals.map((el, i) => {
                                     return (

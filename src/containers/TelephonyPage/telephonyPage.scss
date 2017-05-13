@@ -1,7 +1,11 @@
 @import "../../scss/variables";
 @import "../../scss/mixins";
 
+$head-column-width: 150px;
+
 .telephony {
+  position: relative;
+
   .note {
     font-size: 12px;
     color: $color-grey;
@@ -19,6 +23,23 @@
     @include transition(background 0.5s ease-out);
     &:hover {
       background: $color-main
+    }
+  }
+
+  .table-wrapper {
+    width: 100%;
+    overflow-x: scroll;
+    margin-left: $head-column-width;
+    overflow-y: visible;
+    padding: 0;
+
+    .head-column {
+      position: absolute;
+      width: $head-column-width;
+      left: 0;
+      top: auto;
+      border-bottom: 1px solid $border-color;
+      min-height: inherit;
     }
   }
 }

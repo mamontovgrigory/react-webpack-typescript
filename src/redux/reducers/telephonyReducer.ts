@@ -71,7 +71,7 @@ export default function (state:State = initialState, action:Action):State {
                 duration: action.duration
             });
         case CLIENTS_REQUEST_FINISHED:
-            let officials = ['1', '20', '9', '60033', '11', '14', '15', '16', '19', '21', '91501', '394139', '403796']; //TODO: Move to new module
+            let officials = ['1', '20', '9', '60033', '11', '14', '15', '16', '19', '21', '91501', '394139', '403796', '481583', '447057']; //TODO: Move to new module
             return _.assign({}, state, {
                 clients: action.clients,
                 groups: [
