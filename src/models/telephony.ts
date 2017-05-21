@@ -12,7 +12,12 @@ export interface IClientGroup {
 
 export interface ICallsTotals {
     dates: string[],
-    data: { [clientName: string]: string[]; }
+    data: {
+        [clientName: string]: {
+            count: number;
+            objectiveCount: number;
+        }[];
+    }
 }
 
 export interface ICallDetails {

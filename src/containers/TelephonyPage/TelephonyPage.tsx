@@ -168,6 +168,7 @@ class Telephony extends React.Component<Props, State> {
 
     render() {
         let daysTotals = [];
+        let daysTotalsObjective = [];
         let selectAllChecked = this.props.clients.length === this.props.clients.filter((client) => {
                 return client.checked;
             }).length;
@@ -272,6 +273,7 @@ class Telephony extends React.Component<Props, State> {
                             {
                                 this.props.callsTotals.dates.map((el, index) => {
                                     if (!_.has(daysTotals, index)) daysTotals[index] = 0;
+                                    if (!_.has(daysTotalsObjective, index)) daysTotalsObjective[index] = 0;
                                     return (
                                         <th key={index}>{moment(el).format(this.dateFormat)}</th>
                                     )
@@ -281,28 +283,32 @@ class Telephony extends React.Component<Props, State> {
                         </tr>
                         {
                             this.props.callsTotals.data && Object.keys(this.props.callsTotals.data).map((login, index) => {
-                                var loginData = this.props.callsTotals.data[login];
-                                var clientTotal = 0;
+                                let loginData = this.props.callsTotals.data[login];
+                                let clientTotal = 0;
+                                let clientTotalObjective = 0;
                                 return (
                                     <tr key={index}>
                                         <td className="head-column">{login}</td>
                                         {
                                             loginData.map((el, i) => {
-                                                var count = parseInt(el);
+                                                const count = el.count;
+                                                const objectiveCount = el.objectiveCount;
                                                 daysTotals[i] += count;
+                                                daysTotalsObjective[i] += objectiveCount;
                                                 clientTotal += count;
-                                                var className = count !== 0 ? 'info-cell' : '';
-                                                var duration = this.state.duration;
+                                                clientTotalObjective += objectiveCount;
+                                                const className = count !== 0 ? 'info-cell' : '';
+                                                const duration = this.state.duration;
                                                 return <td className={'center ' + className}
                                                            key={i}
-                                                           onClick={parseInt(el) ? () =>
+                                                           onClick={count > 0 ? () =>
                                                                this.infoCellClickHandler(login,
                                                                    this.props.callsTotals.dates[i], duration) : function () {
-                                                           }}>{el}</td>
+                                                           }}>{count} <span className="note">({objectiveCount})</span></td>
                                             })
                                         }
                                         {
-                                            <th className="center">{clientTotal}</th>
+                                            <th className="center">{clientTotal} <span className="note">({clientTotalObjective})</span></th>
                                         }
                                     </tr>
                                 )
@@ -313,13 +319,15 @@ class Telephony extends React.Component<Props, State> {
                             {
                                 daysTotals.map((el, i) => {
                                     return (
-                                        <th key={i} className="center">{el}</th>
+                                        <th key={i} className="center">{el} <span className="note">({daysTotalsObjective[i]})</span></th>
                                     )
                                 })
                             }
                             <th className="center">{_.reduce(daysTotals, function (sum, n) {
                                 return sum + n;
-                            }, 0)}</th>
+                            }, 0)} <span className="note">({_.reduce(daysTotalsObjective, function (sum, n) {
+                                return sum + n;
+                            }, 0)})</span></th>
                         </tr>
                         </tbody>
                     </table>

@@ -97,7 +97,31 @@ export function getCallsTotals(data: GetCallsTotalsProps) {
             url: '/ajax/get_calls_totals.php',
             data
         })).then(function (result) {
-            dispatch(callsTotals(result));
+            dispatch(getCallsTotalsObjective(data, result));
+        });
+    });
+}
+
+export function getCallsTotalsObjective(data: GetCallsTotalsProps, callsTotalsData) {
+    return (dispatch => {
+        dispatch(sendRequest({
+            url: '/ajax/get_calls_totals_objective.php',
+            data
+        })).then(function (result) {
+            Object.keys(callsTotalsData.data).map((login) => {
+                callsTotalsData.data[login] = callsTotalsData.data[login].map((count, index) => {
+                    const date = callsTotalsData.dates[index];
+                    const objectiveData = _.find(result, (o) => {
+                        return o.login === login && o.date === date;
+                    });
+
+                    return {
+                        count: parseInt(count),
+                        objectiveCount: objectiveData ? parseInt(objectiveData.count) : 0
+                    }
+                });
+            });
+            dispatch(callsTotals(callsTotalsData));
         });
     });
 }
