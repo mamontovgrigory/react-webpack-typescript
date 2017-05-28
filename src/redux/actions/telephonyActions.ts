@@ -136,15 +136,16 @@ export function resetCallsTotals() {
 }
 
 interface GetCallsDetailsProps {
-    loginId: string;
-    date: string;
+    loginIds: string[];
+    from: string;
+    to: string;
     duration?: number;
 }
 
 export function getCallsDetails(data: GetCallsDetailsProps, callback: Function) {//TODO: escape using callback
     return (dispatch => {
         dispatch(sendRequest({
-            url: '/ajax/get_calls_details.php',
+            url: '/ajax/get_calls_details_range.php',
             data
         })).then(function (result) {
             callback(result);

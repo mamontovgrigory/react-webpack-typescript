@@ -140,26 +140,30 @@ class Telephony extends React.Component<Props, State> {
         $('#' + this.divClientsListId).slideToggle();
     }
 
-    infoCellClickHandler(login, date, duration) {
-        var clientObj = _.find(this.props.clients, function (c) {
-            return c.login === login;
+    infoCellClickHandler(data: { logins: string[], from: string, to: string, duration?: number }) {
+        const {userPermissions, dispatch, clients} = this.props;
+        const {logins, from, to, duration} = data;
+
+        const loginIds = clients.filter((c) => {
+            return logins.indexOf(c.login) !== -1;
+        }).map((c) => {
+            return c.id;
         });
 
-        const {userPermissions, dispatch} = this.props;
-        let dateFormat = this.dateFormat;
-        let callsDetailsProps = {
-            loginId: clientObj.id,
-            date: date,
+        const dateFormat = this.dateFormat;
+        const callsDetailsProps = {
+            loginIds,
+            from: from + ' 00:00:00',
+            to: to + ' 23:59:59',
             duration: duration
         };
-        this.props.dispatch(getCallsDetails(callsDetailsProps, function (result) {
+
+        dispatch(getCallsDetails(callsDetailsProps, function (result) {
             dialog.modal({
-                header: login + ' ' + moment(date).format(dateFormat),
+                header: logins.join(', ') + ' ' + moment(from).format(dateFormat) + ' - ' + moment(to).format(dateFormat),
                 body: <CallsDetails callsDetails={result}
                                     userPermissions={userPermissions}
                                     dispatch={dispatch}
-                                    login={login}
-                                    clientId={clientObj.id}
                                     callsDetailsProps={callsDetailsProps}/>,
                 large: true
             });
@@ -302,13 +306,27 @@ class Telephony extends React.Component<Props, State> {
                                                 return <td className={'center ' + className}
                                                            key={i}
                                                            onClick={count > 0 ? () =>
-                                                               this.infoCellClickHandler(login,
-                                                                   this.props.callsTotals.dates[i], duration) : function () {
-                                                           }}>{count} <span className="note">({objectiveCount})</span></td>
+                                                               this.infoCellClickHandler({
+                                                                   logins: [login],
+                                                                   from: this.props.callsTotals.dates[i],
+                                                                   to: this.props.callsTotals.dates[i],
+                                                                   duration
+                                                               }) : function () {
+                                                           }}>{count} <span className="note">({objectiveCount})</span>
+                                                </td>
                                             })
                                         }
                                         {
-                                            <th className="center">{clientTotal} <span className="note">({clientTotalObjective})</span></th>
+                                            <th className={'center ' + (clientTotal > 0 ? 'info-cell' : '')}
+                                                onClick={clientTotal > 0 ? () =>
+                                                    this.infoCellClickHandler({
+                                                        logins: [login],
+                                                        from: this.props.callsTotals.dates[0],
+                                                        to: this.props.callsTotals.dates[this.props.callsTotals.dates.length - 1],
+                                                        duration: this.state.duration
+                                                    }) : function () {
+                                                }}>{clientTotal} <span className="note">({clientTotalObjective})</span>
+                                            </th>
                                         }
                                     </tr>
                                 )
@@ -319,11 +337,32 @@ class Telephony extends React.Component<Props, State> {
                             {
                                 daysTotals.map((el, i) => {
                                     return (
-                                        <th key={i} className="center">{el} <span className="note">({daysTotalsObjective[i]})</span></th>
+                                        <th key={i}
+                                            className={'center ' + (el > 0 ? 'info-cell' : '')}
+                                            onClick={el > 0 ? () =>
+                                                this.infoCellClickHandler({
+                                                    logins: this.props.clients.filter(c => c.checked).map(c => c.login),
+                                                    from: this.props.callsTotals.dates[i],
+                                                    to: this.props.callsTotals.dates[i],
+                                                    duration: this.state.duration
+                                                }) : function () {
+                                            }}>{el} <span className="note">({daysTotalsObjective[i]})</span></th>
                                     )
                                 })
                             }
-                            <th className="center">{_.reduce(daysTotals, function (sum, n) {
+                            <th className={'center ' + (_.reduce(daysTotals, function (sum, n) {
+                                return sum + n;
+                            }, 0) > 0 ? 'info-cell' : '')}
+                                onClick={_.reduce(daysTotals, function (sum, n) {
+                                    return sum + n;
+                                }, 0) > 0 ? () =>
+                                    this.infoCellClickHandler({
+                                        logins: this.props.clients.filter(c => c.checked).map(c => c.login),
+                                        from: this.props.callsTotals.dates[0],
+                                        to: this.props.callsTotals.dates[this.props.callsTotals.dates.length - 1],
+                                        duration: this.state.duration
+                                    }) : function () {
+                                }}>{_.reduce(daysTotals, function (sum, n) {
                                 return sum + n;
                             }, 0)} <span className="note">({_.reduce(daysTotalsObjective, function (sum, n) {
                                 return sum + n;

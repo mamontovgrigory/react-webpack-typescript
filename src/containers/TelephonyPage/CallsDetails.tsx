@@ -13,8 +13,6 @@ interface Props {
     userPermissions: IUserPermissions;
     callsDetails?: ICallDetails[];
     callsDetailsProps: any;
-    login: string;
-    clientId: string;
 
     dispatch?: any;
 }
@@ -59,25 +57,26 @@ export default class CallsDetails extends React.Component<Props, State> {
     }
 
     initGrid() {
+        const {dispatch, userPermissions} = this.props;
+        const {callsDetails} = this.state;
+
         const gridId = this.gridId;
-        const clientId = this.props.clientId;
-        const dispatch = this.props.dispatch;
         const objectiveOptions = this.objectiveOptions.map((o) => {
             return o.value;
         });
-        const telephonyCommentsManage = this.props.userPermissions.telephonyCommentsManage;
+        const telephonyCommentsManage = userPermissions.telephonyCommentsManage;
         let defaultSearchOptions = {
             '': i18next.t('selectAll')
         };
         let numFromSearchOptions = _.assign({}, defaultSearchOptions);
         let numToSearchOptions = _.assign({}, defaultSearchOptions);
-        this.state.callsDetails.map((c) => {
+        callsDetails.map((c) => {
             numFromSearchOptions[c.numfrom] = c.numfrom;
             numToSearchOptions[c.numto] = c.numto;
         });
         grid.init({
             gridId: gridId,
-            data: this.state.callsDetails,
+            data: callsDetails,
             colModel: [
                 {
                     name: 'id',
@@ -87,6 +86,14 @@ export default class CallsDetails extends React.Component<Props, State> {
                     name: 'callid',
                     hidden: true,
                     key: true
+                },
+                {
+                    name: 'login',
+                    hidden: true
+                },
+                {
+                    name: 'loginId',
+                    hidden: true
                 },
                 {
                     name: 'time',
@@ -125,20 +132,20 @@ export default class CallsDetails extends React.Component<Props, State> {
                     name: 'mark',
                     label: i18next.t('mark'),
                     editable: true,
-                    hidden: !this.props.userPermissions.telephonyCommentsView
+                    hidden: !userPermissions.telephonyCommentsView
                 },
                 {
                     name: 'model',
                     label: i18next.t('model'),
                     editable: true,
-                    hidden: !this.props.userPermissions.telephonyCommentsView
+                    hidden: !userPermissions.telephonyCommentsView
                 },
                 {
                     name: 'comment',
                     label: i18next.t('comment'),
                     width: 200,
                     editable: true,
-                    hidden: !this.props.userPermissions.telephonyCommentsView
+                    hidden: !userPermissions.telephonyCommentsView
                 },
                 {
                     name: 'objective',
@@ -146,7 +153,7 @@ export default class CallsDetails extends React.Component<Props, State> {
                     editable: true,
                     edittype: 'select',
                     editoptions: {value: objectiveOptions},
-                    hidden: !this.props.userPermissions.telephonyCommentsView
+                    hidden: !userPermissions.telephonyCommentsView
                 },
                 {
                     name: 'record',
@@ -155,7 +162,7 @@ export default class CallsDetails extends React.Component<Props, State> {
                     width: 400,
                     formatter: function (cellvalue, options, rowObject) {
                         if (parseInt(rowObject.duration) > 0) {
-                            return '<a data-callid="' + rowObject.callid + '" data-time="' + rowObject.time + '">' +
+                            return '<a data-callid="' + rowObject.callid + '" data-login="' + rowObject.login + '" data-time="' + rowObject.time + '">' +
                                 i18next.t('load') +
                                 '</a>';
                         } else {
@@ -187,7 +194,7 @@ export default class CallsDetails extends React.Component<Props, State> {
                                 aftersavefunc: function (r, s, rowData) {
                                     dispatch(saveComments({
                                         id: rowData.callid,
-                                        loginId: clientId,
+                                        loginId: rowData.loginId,
                                         mark: rowData.mark,
                                         model: rowData.model,
                                         comment: rowData.comment,
@@ -208,8 +215,9 @@ export default class CallsDetails extends React.Component<Props, State> {
         let self = this;
         $grid.on('click', '.record-link a', function () { //TODO: escape jquery methods
             let callid = $(this).data('callid');
+            let login = $(this).data('login');
             let time = $(this).data('time');
-            self.loadRecord(callid, time);
+            self.loadRecord({callid, login, time});
         });
     }
 
@@ -225,24 +233,26 @@ export default class CallsDetails extends React.Component<Props, State> {
 
     editClickHandler() {
         let rowsIds = grid.getSelectedRows(this.gridId);
-        const {login, clientId, dispatch} = this.props;
+        const {dispatch} = this.props;
+        const {callsDetails} = this.state;
+
         const objectiveOptions = this.objectiveOptions;
         const updateCallsDetailsGrid = this.updateCallsDetailsGrid.bind(this);
 
         if (rowsIds.length === 1) {
-            let callDetails = _.find(this.state.callsDetails, function (c) {
+            let callDetails = _.find(callsDetails, function (c) {
                 return c.callid === _.first(rowsIds);
             });
             let saveButtonId = generator.genId();
             if (callDetails) {
-                this.props.dispatch(getUniqueComments({
-                    loginId: clientId
+                dispatch(getUniqueComments({
+                    loginId: callDetails.loginId
                 }, function (comments) {
                     dialog.modal({
-                        header: login + callDetails.time,
+                        header: callDetails.login + callDetails.time,
                         body: <RecordItem callDetails={callDetails}
-                                          login={login}
-                                          clientId={clientId}
+                                          login={callDetails.login}
+                                          clientId={callDetails.loginId}
                                           objectiveOptions={objectiveOptions}
                                           updateCallsDetailsGrid={updateCallsDetailsGrid}
                                           saveButtonId={saveButtonId}
@@ -262,10 +272,13 @@ export default class CallsDetails extends React.Component<Props, State> {
         }
     }
 
-    loadRecord(callid, time) {
-        let recordName = this.props.login + ' ' + time;
-        this.props.dispatch(getRecord({
-            login: this.props.login,
+    loadRecord(data) {
+        const {dispatch} = this.props;
+        const {callid, login, time} = data;
+
+        let recordName = login + ' ' + time;
+        dispatch(getRecord({
+            login: login,
             callid
         }, function (record) {
             let $element = $('[data-callid="' + callid + '"]');

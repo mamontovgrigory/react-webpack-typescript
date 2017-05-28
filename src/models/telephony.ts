@@ -24,6 +24,8 @@ export interface ICallDetails {
     id: string;
     callid: string;
     time: string;
+    login: string;
+    loginId: string;
     numfrom: string;
     numto: string;
     duration: string;
