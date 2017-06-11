@@ -2,43 +2,37 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 
 import {dialog, generator, grid} from 'shell/index';
-import {getUsers, deleteUsers} from 'redux/actions/usersActions';
-import {getGroups} from 'redux/actions/groupsActions';
-
+import {ICabinet} from 'models/cabinets';
+import {getCabinets, getCabinetsClients, deleteCabinets} from 'redux/actions/cabinetsActions';
 import Button from 'components/Button/Button';
-import UserItem from './UserItem';
+import CabinetItem from './CabinetItem';
 
-interface Props {
-    dispatch?: any;
-    users?: any[];
-    groups?: any[];
+interface IProps {
+    dispatch: any;
+
+    cabinets: ICabinet[];
 }
 
-interface State {
+interface IState {
 
 }
 
-class UsersPage extends React.Component<Props, State> {
+class CabinetsPage extends React.Component<IProps, IState> {
     gridId: string = generator.genId();
 
+    componentWillMount() {
+        const {dispatch} = this.props;
+        dispatch(getCabinets());
+    }
+
     componentDidUpdate() {
+        const {cabinets} = this.props;
         grid.init({
             gridId: this.gridId,
-            data: _.map(this.props.users, function (r) {
-                return {
-                    id: r.id,
-                    login: r.login,
-                    groupId: r.groupId,
-                    groupName: r.groupName
-                };
-            }),
+            data: cabinets,
             colModel: [
                 {
                     name: 'id',
-                    hidden: true
-                },
-                {
-                    name: 'groupId',
                     hidden: true
                 },
                 {
@@ -46,92 +40,14 @@ class UsersPage extends React.Component<Props, State> {
                     label: i18next.t('login')
                 },
                 {
-                    name: 'groupName',
-                    label: i18next.t('group')
+                    name: 'name',
+                    label: i18next.t('cabinetName')
                 }
             ]
         });
     }
 
-    componentWillMount() {
-        this.props.dispatch(getUsers());
-        this.props.dispatch(getGroups());
-    }
-
-    addClickHandler() {
-        let saveButtonId = generator.genId();
-        let buttonText = i18next.t('save');
-        let buttons = [
-            {
-                title: buttonText,
-                id: saveButtonId,
-                text: buttonText
-            }
-        ];
-        this.openUserItemModal(
-            i18next.t('creatingUser'),
-            <UserItem saveButtonId={saveButtonId}
-                      groups={this.props.groups}
-                      dispatch={this.props.dispatch}/>,
-            buttons);
-    }
-
-    editClickHandler() {
-        let rowsIds = grid.getSelectedRows(this.gridId);
-
-        if (rowsIds.length === 1) {
-            let userId = _.first(rowsIds);
-            let userData = _.find(this.props.users, function (u) {
-                return u.id === userId;
-            });
-            let saveButtonId = generator.genId();
-            let editText = i18next.t('save');
-            let buttons = [
-                {
-                    title: editText,
-                    id: saveButtonId,
-                    text: editText
-                }
-            ];
-            this.openUserItemModal(
-                i18next.t('editingUser'),
-                <UserItem id={userData.id}
-                          login={userData.login}
-                          groupId={userData.groupId}
-                          saveButtonId={saveButtonId}
-                          groups={this.props.groups}
-                          dispatch={this.props.dispatch}/>,
-                buttons);
-        } else {
-            dialog.modal({
-                header: i18next.t('chooseOneRow'),
-                body: i18next.t('pleaseChooseOneRowToEdit')
-            });
-        }
-    }
-
-    deleteClickHandler() {
-        let rowsIds = grid.getSelectedRows(this.gridId);
-        if (rowsIds && rowsIds.length > 0) {
-            let dispatch = this.props.dispatch;
-            dialog.confirm({
-                header: i18next.t('confirmAction'),
-                text: i18next.t('deleteChosenData') + '?',
-                confirmCallback: function () {
-                    dispatch(deleteUsers({
-                        ids: rowsIds
-                    }));
-                }
-            });
-        } else {
-            dialog.modal({
-                header: i18next.t('noOneRowChosen'),
-                body: i18next.t('pleaseChooseRowsToDelete')
-            });
-        }
-    }
-
-    openUserItemModal(header, body, buttons: { title: string, id: string, text: string }[]) {
+    openCabinetItemModal(header, body, buttons: { title: string, id: string, text: string }[]) {
         return dialog.modal({
             header: header,
             body: body,
@@ -146,10 +62,91 @@ class UsersPage extends React.Component<Props, State> {
         });
     }
 
+    addClickHandler() {
+        const {dispatch} = this.props;
+        let saveButtonId = generator.genId();
+        let buttonText = i18next.t('save');
+        let buttons = [
+            {
+                title: buttonText,
+                id: saveButtonId,
+                text: buttonText
+            }
+        ];
+        this.openCabinetItemModal(
+            i18next.t('creatingCabinet'),
+            <CabinetItem saveButtonId={saveButtonId}
+                         dispatch={dispatch}/>,
+            buttons);
+    }
+
+    editClickHandler() {
+        const {dispatch, cabinets} = this.props;
+
+        let rowsIds = grid.getSelectedRows(this.gridId);
+        if (rowsIds.length === 1) {
+            const rowId = _.first(rowsIds);
+            const rowData = _.find(cabinets, function (u) {
+                return u.id === rowId;
+            });
+            const saveButtonId = generator.genId();
+            const editText = i18next.t('save');
+            const buttons = [
+                {
+                    title: editText,
+                    id: saveButtonId,
+                    text: editText
+                }
+            ];
+            const openCabinetItemModal = this.openCabinetItemModal.bind(this);
+            dispatch(getCabinetsClients({
+                id: rowData.id
+            }, function (clients) {
+                openCabinetItemModal(
+                    i18next.t('editingCabinet'),
+                    <CabinetItem id={rowData.id}
+                                 login={rowData.login}
+                                 password={rowData.password}
+                                 clients={clients}
+                                 name={rowData.name}
+                                 saveButtonId={saveButtonId}
+                                 dispatch={dispatch}/>,
+                    buttons);
+            }));
+        } else {
+            dialog.modal({
+                header: i18next.t('chooseOneRow'),
+                body: i18next.t('pleaseChooseOneRowToEdit')
+            });
+        }
+    }
+
+    deleteClickHandler() {
+        const {dispatch} = this.props;
+
+        let rowsIds = grid.getSelectedRows(this.gridId);
+        if (rowsIds && rowsIds.length > 0) {
+            dialog.confirm({
+                header: i18next.t('confirmAction'),
+                text: i18next.t('deleteChosenData') + '?',
+                confirmCallback: function () {
+                    dispatch(deleteCabinets({
+                        ids: rowsIds
+                    }));
+                }
+            });
+        } else {
+            dialog.modal({
+                header: i18next.t('noOneRowChosen'),
+                body: i18next.t('pleaseChooseRowsToDelete')
+            });
+        }
+    }
+
     render() {
         return (
             <div>
-                <h4>{i18next.t('users')}</h4>
+                <h4>{i18next.t('telephonyCabinets')}</h4>
                 <div className="row">
                     <Button title={i18next.t('add')}
                             onClick={this.addClickHandler.bind(this)}>
@@ -173,10 +170,9 @@ class UsersPage extends React.Component<Props, State> {
 }
 
 function mapStateToProps(state: any) {
-    const {users} = state.users;
-    const {groups} = state.groups;
+    const {cabinets} = state.cabinets;
 
-    return {users, groups};
+    return {cabinets};
 }
 
-export default connect(mapStateToProps)(UsersPage);
+export default connect(mapStateToProps)(CabinetsPage);

@@ -1,6 +1,6 @@
 import {sendRequest} from './requestActions';
 
-export const PERMISSIONS_REQUEST_FINISHED = 'PERMISSIONS_REQUEST_FINISHED';
+export const PERMISSIONS_REQUEST_FINISHED = 'permissions/PERMISSIONS_REQUEST_FINISHED';
 
 function permissionsRequestFinished(permissions) {
     return {type: PERMISSIONS_REQUEST_FINISHED, permissions};

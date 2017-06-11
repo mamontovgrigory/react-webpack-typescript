@@ -1,33 +1,34 @@
 import {LOG_IN, LOG_OUT, PERMISSIONS} from 'redux/actions/accountActions';
-import {IUser, IUserPermissions} from "models/account";
+import {IUser, IUserPermissions} from 'models/account';
 
 interface State {
-    authorized:boolean;
-    message?:string;
-    user:IUser;
-    permissions:IUserPermissions;
+    authorized: boolean;
+    message?: string;
+    user: IUser;
+    permissions: IUserPermissions;
 }
 
 interface Action {
-    type:string;
-    message?:string;
-    user?:IUser;
-    permissions?:IUserPermissions;
+    type: string;
+    message?: string;
+    user?: IUser;
+    permissions?: IUserPermissions;
 }
 
-const initialState:State = {
+const initialState: State = {
     authorized: false,
     user: {},
     permissions: {
         usersManage: false,
         groupsManage: false,
+        telephonyCabinetsManage: false,
         telephonyCommentsManage: false,
         telephonyCommentsView: false,
         telephonyClients: []
     }
 };
 
-export default function (state:State = initialState, action:Action) {
+export default function (state: State = initialState, action: Action) {
     switch (action.type) {
         case LOG_IN:
             return _.assign({}, state, {

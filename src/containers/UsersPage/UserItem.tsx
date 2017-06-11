@@ -5,24 +5,24 @@ import {generator, dialog} from 'shell/index';
 import Select from 'components/Select/Select';
 
 interface Props {
-    dispatch?:any;
+    dispatch?: any;
 
-    id?:any;
-    login?:any;
-    groupId?:any;
-    groups:any[];
-    saveButtonId?:string;
+    id?: any;
+    login?: any;
+    groupId?: any;
+    groups: any[];
+    saveButtonId?: string;
 }
 
 interface State {
-    loginFieldId?:string;
-    passwordFieldId?:string;
-    groupIdFieldId?:string;
+    loginFieldId?: string;
+    passwordFieldId?: string;
+    groupIdFieldId?: string;
 
-    id?:string;
-    login?:string;
-    groupId?:string;
-    password?:string;
+    id?: string;
+    login?: string;
+    groupId?: string;
+    password?: string;
 }
 
 class UserItem extends React.Component<Props, State> {
@@ -40,8 +40,8 @@ class UserItem extends React.Component<Props, State> {
         }
     }
 
-    loginInput:HTMLInputElement;
-    passwordInput:HTMLInputElement;
+    loginInput: HTMLInputElement;
+    passwordInput: HTMLInputElement;
 
     componentDidMount() {
         Materialize.updateTextFields();
@@ -127,7 +127,9 @@ class UserItem extends React.Component<Props, State> {
                     <div className="input-field col s6">
                         <input id={this.state.loginFieldId} type="text"
                                value={this.state.login}
-                               ref={(input) => { this.loginInput = input; }}
+                               ref={(input) => {
+                                   this.loginInput = input;
+                               }}
                                onChange={this.loginChangeHandler.bind(this)}/>
                         <label htmlFor={this.state.loginFieldId}>{i18next.t('login')}</label>
                     </div>
@@ -141,7 +143,9 @@ class UserItem extends React.Component<Props, State> {
                     <div className="input-field col s6">
                         <input id={this.state.passwordFieldId}
                                type="password"
-                               ref={(input) => { this.passwordInput = input; }}
+                               ref={(input) => {
+                                   this.passwordInput = input;
+                               }}
                                onChange={this.passwordChangeHandler.bind(this)}/>
                         <label
                             htmlFor={this.state.passwordFieldId}>{this.props.id ?

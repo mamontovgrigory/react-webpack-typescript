@@ -12,10 +12,11 @@ interface State {
 
 class MainPage extends React.Component<Props, State> {
     render() {
+        const {modules} = this.props;
         return (
             <div>
                 {
-                    this.props.modules.map((el, index) => {
+                    modules.map((el, index) => {
                         return (
                             el.path !== 'index' && (
                                 <div className="card-wrapper" key={index}>

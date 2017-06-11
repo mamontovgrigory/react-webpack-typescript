@@ -1,19 +1,19 @@
 import {sendRequest} from './requestActions';
 
-export const USERS_REQUEST_FINISHED = 'USERS_REQUEST_FINISHED';
+export const USERS_REQUEST_FINISHED = 'users/USERS_REQUEST_FINISHED';
 
 interface User {
-    id?:string;
-    login:string;
-    groupId:string;
-    password?:string;
+    id?: string;
+    login: string;
+    groupId: string;
+    password?: string;
 }
 
-interface DeleteUsersProps{
-    ids:string[];
+interface DeleteUsersProps {
+    ids: string[];
 }
 
-function usersRequestFinished(users:User[]) {
+function usersRequestFinished(users: User[]) {
     return {type: USERS_REQUEST_FINISHED, users};
 }
 
@@ -27,7 +27,7 @@ export function getUsers() {
     });
 }
 
-export function saveUser(properties: User){
+export function saveUser(properties: User) {
     return (dispatch => {
         dispatch(sendRequest({
             url: '/ajax/user_save.php',
@@ -38,9 +38,9 @@ export function saveUser(properties: User){
     });
 }
 
-export function deleteUsers(properties:DeleteUsersProps){
+export function deleteUsers(properties: DeleteUsersProps) {
     return (dispatch => {
-        _.forEach(properties.ids, function(id){ //TODO: send ids array
+        _.forEach(properties.ids, function (id) { //TODO: send ids array
             dispatch(sendRequest({
                 url: '/ajax/user_delete.php',
                 data: {

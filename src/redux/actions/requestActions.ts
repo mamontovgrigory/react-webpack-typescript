@@ -3,14 +3,14 @@ import * as formData from 'form-urlencoded';
 import {showLoader, hideLoader} from './loaderActions';
 
 interface RequestProps {
-    url:string;
-    method?:string;
-    contentType?:string;
-    credentials?:string;
-    data?:any;
+    url: string;
+    method?: string;
+    contentType?: string;
+    credentials?: string;
+    data?: any;
 }
 
-export function sendRequest(properties:RequestProps, callback?:Function) {
+export function sendRequest(properties: RequestProps, callback?: Function) {
     return (dispatch => {
         dispatch(showLoader());
 

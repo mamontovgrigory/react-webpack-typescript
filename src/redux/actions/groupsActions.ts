@@ -1,6 +1,6 @@
 import {sendRequest} from './requestActions';
 
-export const GROUPS_REQUEST_FINISHED = 'GROUPS_REQUEST_FINISHED';
+export const GROUPS_REQUEST_FINISHED = 'groups/GROUPS_REQUEST_FINISHED';
 
 function groupsRequestFinished(groups) {
     return {type: GROUPS_REQUEST_FINISHED, groups};

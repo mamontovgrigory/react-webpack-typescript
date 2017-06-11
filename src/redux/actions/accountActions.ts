@@ -1,30 +1,30 @@
-import {IUser, IUserPermissions} from "models/account";
+import {IUser, IUserPermissions} from 'models/account';
 import {sendRequest} from './requestActions';
 import {getModules} from './navigationActions';
 import {getClients, resetCallsTotals} from './telephonyActions';
 
-export const LOG_IN = 'account/LOG_IN';
-export const LOG_OUT = 'account/LOG_OUT';
-export const PERMISSIONS = 'account/PERMISSIONS';
+export const LOG_IN: string = 'account/LOG_IN';
+export const LOG_OUT: string = 'account/LOG_OUT';
+export const PERMISSIONS: string = 'account/PERMISSIONS';
 
-export function login(user:IUser) {
+export function login(user: IUser) {
     return {type: LOG_IN, user};
 }
 
-export function logout(message?:string) {
+export function logout(message?: string) {
     return {type: LOG_OUT, message};
 }
 
-export function permissions(permissions:IUserPermissions) {
+export function permissions(permissions: IUserPermissions) {
     return {type: PERMISSIONS, permissions};
 }
 
 interface ILogIn {
-    login:string;
-    password:string;
+    login: string;
+    password: string;
 }
 
-export function loginRequest(properties:ILogIn) {
+export function loginRequest(properties: ILogIn) {
     return (dispatch => {
         if (properties.login && properties.password) {
             dispatch(sendRequest({
@@ -73,6 +73,7 @@ export function checkSession() {
 let permissionsMapping = {
     usersManage: 'users_manage',
     groupsManage: 'groups_manage',
+    telephonyCabinetsManage: 'telephony_cabinets_manage',
     telephonyCommentsManage: 'telephony_comments_manage',
     telephonyCommentsView: 'telephony_comments_view',
     telephonyClients: 'list_users',
@@ -83,9 +84,10 @@ export function getAccountPermissions() {
         dispatch(sendRequest({
             url: '/ajax/get_account.php'
         })).then(function (response) {
-            let result:IUserPermissions = {
+            let result: IUserPermissions = {
                 usersManage: false,
                 groupsManage: false,
+                telephonyCabinetsManage: false,
                 telephonyCommentsManage: false,
                 telephonyCommentsView: false,
                 telephonyClients: []
@@ -93,7 +95,7 @@ export function getAccountPermissions() {
             if (response) {
                 _.forEach(result, function (value, key) {
                     let alias = permissionsMapping[key];
-                    if(alias){
+                    if (alias) {
                         let permission = response.find((p) => {
                             return p.alias === alias;
                         });

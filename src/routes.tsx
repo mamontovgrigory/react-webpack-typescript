@@ -3,9 +3,10 @@ import {IndexRoute, Route}  from 'react-router';
 
 import App from './containers/App';
 import MainPage from './containers/MainPage';
-import Users from './containers/UsersPage';
-import Telephony from './containers/TelephonyPage';
-import Groups from './containers/GroupsPage';
+import UsersPage from './containers/UsersPage';
+import CabinetsPage from './containers/CabinetsPage';
+import TelephonyPage from './containers/TelephonyPage';
+import GroupsPage from './containers/GroupsPage';
 
 let store;
 
@@ -30,9 +31,10 @@ export default function routes(storeRef:Object) {
     return (
         <Route component={App} path='/'>
             <IndexRoute component={MainPage}/>
-            <Route component={Users} path="/users" onEnter={requirePermission}/>
-            <Route component={Groups} path="/groups" onEnter={requirePermission}/>
-            <Route component={Telephony} path="/telephony"/>
+            <Route component={UsersPage} path="/users" onEnter={requirePermission}/>
+            <Route component={GroupsPage} path="/groups" onEnter={requirePermission}/>
+            <Route component={TelephonyPage} path="/telephony"/>
+            <Route component={CabinetsPage} path="/cabinets" onEnter={requirePermission}/>
         </Route>
     );
 }

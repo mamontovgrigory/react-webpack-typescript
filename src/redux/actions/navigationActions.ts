@@ -1,13 +1,13 @@
-import {IUserPermissions} from "models/account";
+import {IUserPermissions} from 'models/account';
 import {IModule} from 'models/navigation';
 
-export const MODULES = 'account/MODULES';
+export const MODULES = 'navigation/MODULES';
 
-export function modules(modules:IModule[]) {
+export function modules(modules: IModule[]) {
     return {type: MODULES, modules};
 }
 
-export function getModules(permissions:IUserPermissions) {
+export function getModules(permissions: IUserPermissions) {
     return (dispatch => {
         let result = [
             {
@@ -23,6 +23,13 @@ export function getModules(permissions:IUserPermissions) {
                 icon: 'supervisor_account',
                 src: require('./content/groups.png'),
                 enabled: permissions.groupsManage
+            },
+            {
+                name: i18next.t('telephonyCabinets'),
+                to: '/cabinets',
+                icon: 'contact_phone',
+                src: require('./content/cabinets.png'),
+                enabled: permissions.telephonyCabinetsManage
             },
             {
                 name: i18next.t('telephony'),

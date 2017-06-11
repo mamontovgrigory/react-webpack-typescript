@@ -1,23 +1,24 @@
-import {GROUPS_REQUEST_FINISHED} from '../actions/groupsActions';
+import {ICabinet} from 'models/cabinets';
+import {CABINETS} from '../actions/cabinetsActions';
 
 interface State {
-    groups: any[];
+    cabinets: ICabinet[];
 }
 
 interface Action {
     type: string;
-    groups: any[];
+    cabinets: ICabinet[];
 }
 
 const initialState: State = {
-    groups: []
+    cabinets: []
 };
 
 export default function (state: State = initialState, action: Action): State {
     switch (action.type) {
-        case GROUPS_REQUEST_FINISHED:
+        case CABINETS:
             return _.assign({}, state, {
-                groups: action.groups
+                cabinets: action.cabinets
             });
         default:
             return state;
