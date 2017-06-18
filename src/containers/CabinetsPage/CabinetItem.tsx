@@ -1,9 +1,10 @@
 import * as React from 'react';
 
-import {dialog} from 'shell/index';
+import { dialog } from 'shell/index';
+import { saveCabinet } from 'redux/actions/cabinetsActions';
 import Input from 'components/Input/Input';
 import Checkbox from 'components/Checkbox/Checkbox';
-import {saveCabinet} from 'redux/actions/cabinetsActions';
+import Button from '../../components/Button/Button';
 
 interface IProps {
     dispatch: any;
@@ -21,9 +22,17 @@ interface IState {
     login?: string;
     password?: string;
     name?: string;
+    clientsSettings?: {
+        id: string;
+        active: boolean;
+        deleted: boolean;
+    }[];
 }
 
 export default class CabinetItem extends React.Component<IProps, IState> {
+    loginInput: HTMLInputElement;
+    passwordInput: HTMLInputElement;
+
     constructor(props) {
         super(props);
 
@@ -31,12 +40,28 @@ export default class CabinetItem extends React.Component<IProps, IState> {
             id: props.id,
             login: props.login,
             password: props.password,
-            name: props.name
+            name: props.name,
+            clientsSettings: props.clients.map((client) => {
+                return {
+                    id: client.id,
+                    active: parseInt(client.active) === 1,
+                    deleted: false
+                };
+            })
         }
     }
 
-    loginInput: HTMLInputElement;
-    passwordInput: HTMLInputElement;
+    componentDidMount() {
+        const {saveButtonId} = this.props;
+
+        const save = this.save.bind(this);
+        $('#' + saveButtonId).on('click', function () { //TODO: Needs react realization
+            const dialogId = $(this).closest('.modal').attr('id');
+            save(function () {
+                dialog.close(dialogId);
+            });
+        });
+    }
 
     loginChangeHandler(e) {
         this.setState({
@@ -56,9 +81,33 @@ export default class CabinetItem extends React.Component<IProps, IState> {
         })
     }
 
+    setClientActive(clientId, e) {
+        const {clientsSettings} = this.state;
+        this.setState({
+            clientsSettings: clientsSettings.map((c) => {
+                if (c.id === clientId) {
+                    c.active = e.target.checked;
+                }
+                return c;
+            })
+        })
+    }
+
+    setClientDeleted(clientId, e) {
+        const {clientsSettings} = this.state;
+        this.setState({
+            clientsSettings: clientsSettings.map((c) => {
+                if (c.id === clientId) {
+                    c.deleted = true;
+                }
+                return c;
+            })
+        })
+    }
+
     save(callback) {
         const {dispatch} = this.props;
-        const {id, login, password, name} = this.state;
+        const {id, login, password, name, clientsSettings} = this.state;
 
         if (!login) {
             this.loginInput.focus();
@@ -69,29 +118,18 @@ export default class CabinetItem extends React.Component<IProps, IState> {
             return;
         }
         dispatch(saveCabinet({
-            id: id,
-            login: login,
-            password: password,
-            name: name
+            id,
+            login,
+            password,
+            name,
+            clientsSettings
         }));
         callback();
     }
 
-    componentDidMount() {
-        const {saveButtonId} = this.props;
-
-        const save = this.save.bind(this);
-        $('#' + saveButtonId).on('click', function () { //TODO: Needs react realization
-            const dialogId = $(this).closest('.modal').attr('id');
-            save(function () {
-                dialog.close(dialogId);
-            });
-        });
-    }
-
     render() {
         const {clients} = this.props;
-        const {login, password, name} = this.state;
+        const {login, password, name, clientsSettings} = this.state;
         return (
             <div>
                 <div className="row">
@@ -116,11 +154,45 @@ export default class CabinetItem extends React.Component<IProps, IState> {
                            label={i18next.t('cabinetName')}/>
                 </div>
                 <div className="row">
-                    {clients && clients.map((client) => {
-                        return (
-                            <Checkbox s={4} label={client.login} checked={client.active === '1'}/>
-                        )
-                    })}
+                    <h5>{i18next.t('clients')}</h5>
+                    <table className="bordered">
+                        <tbody>
+                        <tr>
+                            <th className="head-column"/>
+                            <th className="head-column">{i18next.t('client')}</th>
+                            <th className="head-column"/>
+                        </tr>
+                        {clients && clients.map((client, index) => {
+                            const clientSettings = _.find(clientsSettings, (c) => {
+                                return c.id === client.id;
+                            });
+                            return (
+                                clientSettings.deleted ? null : <tr key={index}>
+                                    <td>
+                                        <div className="switch">
+                                            <label>
+                                                {i18next.t('hide')}
+                                                <input type="checkbox" checked={clientSettings.active}
+                                                       onChange={this.setClientActive.bind(this, client.id)}/>
+                                                <span className="lever"/>
+                                                {i18next.t('show')}
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {client.login}
+                                    </td>
+                                    <td>
+                                        <button className="waves-effect waves-green btn-flat right"
+                                                onClick={this.setClientDeleted.bind(this, client.id)}>
+                                            {i18next.t('delete')}
+                                        </button>
+                                    </td>
+                                </tr>
+                            )
+                        })}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         )

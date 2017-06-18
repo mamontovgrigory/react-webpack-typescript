@@ -1,10 +1,10 @@
 import * as React from 'react';
 import * as moment from 'moment';
 
-import {IUserPermissions} from 'models/account';
-import {ICallDetails} from 'models/telephony';
-import {dialog, generator, grid} from 'shell/index';
-import {getCallsDetails, getRecord, saveComments, getUniqueComments} from 'redux/actions/telephonyActions';
+import { IUserPermissions } from 'models/account';
+import { ICallDetails } from 'models/telephony';
+import { dialog, generator, grid } from 'shell/index';
+import { getCallsDetails, getRecord, saveComments, getUniqueComments } from 'redux/actions/telephonyActions';
 import Button from 'components/Button/Button';
 import RecordItem from './RecordItem';
 import i18n = require("i18next");
@@ -290,9 +290,10 @@ export default class CallsDetails extends React.Component<Props, State> {
             }));
 
             $('#' + callid).find('.download').append($('<a>', {
-                download: recordName,
+                download: recordName + '.mp3',
                 href: record.src,
-                html: i18next.t('download')
+                html: i18next.t('download'),
+                target: '_blank'
             }));
 
             $('#' + audioId).audioPlayer();

@@ -64,7 +64,10 @@
       "mark": "Mark",
       "model": "Model",
       "comment": "Comment",
-      "objective": "objective"
+      "objective": "Objective",
+      "client": "Client",
+      "show": "Show",
+      "hide": "Hide"
     }
   },
   "ru": {
@@ -132,7 +135,10 @@
       "mark": "Марка",
       "model": "Модель",
       "comment": "Комментарий",
-      "objective": "Целевой"
+      "objective": "Целевой",
+      "client": "Клиент",
+      "show": "Отображать",
+      "hide": "Скрывать"
     }
   }
 }
