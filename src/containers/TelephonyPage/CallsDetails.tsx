@@ -123,7 +123,7 @@ export default class CallsDetails extends React.Component<Props, State> {
                 {
                     name: 'duration',
                     label: i18next.t('duration'),
-                    width: 120,
+                    width: 60,
                     formatter: function (cellvalue, options, rowObject) {
                         return moment(parseInt(cellvalue) * 1000).utc().format('HH:mm:ss');
                     }
@@ -132,13 +132,15 @@ export default class CallsDetails extends React.Component<Props, State> {
                     name: 'mark',
                     label: i18next.t('mark'),
                     editable: true,
-                    hidden: !userPermissions.telephonyCommentsView
+                    hidden: !userPermissions.telephonyCommentsView,
+                    width: 60
                 },
                 {
                     name: 'model',
                     label: i18next.t('model'),
                     editable: true,
-                    hidden: !userPermissions.telephonyCommentsView
+                    hidden: !userPermissions.telephonyCommentsView,
+                    width: 60
                 },
                 {
                     name: 'comment',
@@ -153,13 +155,13 @@ export default class CallsDetails extends React.Component<Props, State> {
                     editable: true,
                     edittype: 'select',
                     editoptions: {value: objectiveOptions},
-                    hidden: !userPermissions.telephonyCommentsView
+                    hidden: !userPermissions.telephonyCommentsView,
+                    width: 60
                 },
                 {
                     name: 'record',
                     label: i18next.t('record'),
                     classes: 'record-link',
-                    width: 400,
                     formatter: function (cellvalue, options, rowObject) {
                         if (parseInt(rowObject.duration) > 0) {
                             return '<a data-callid="' + rowObject.callid + '" data-login="' + rowObject.login + '" data-time="' + rowObject.time + '">' +
@@ -168,12 +170,14 @@ export default class CallsDetails extends React.Component<Props, State> {
                         } else {
                             return i18next.t('noRecord');
                         }
-                    }
+                    },
+                    width: 150
                 },
                 {
                     name: 'download',
                     label: i18next.t('download'),
-                    classes: 'download'
+                    classes: 'download',
+                    width: 60
                 }
             ],
             multiselect: false,

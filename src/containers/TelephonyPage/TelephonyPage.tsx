@@ -1,10 +1,10 @@
 import * as React from 'react';
 import * as moment from 'moment';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
-import {IUserPermissions} from 'models/account';
-import {IClient, IClientGroup, ICallsTotals} from 'models/telephony';
-import {dialog, formatter, generator} from 'shell/index';
+import { IUserPermissions } from 'models/account';
+import { IClient, IClientGroup, ICallsTotals } from 'models/telephony';
+import { dialog, formatter, generator } from 'shell/index';
 import {
     getUpdateDate,
     setClients,
@@ -86,28 +86,31 @@ class Telephony extends React.Component<Props, State> {
     }
 
     selectAllChangeHandler(e) {
+        const {groups} = this.props;
         let clients = this.props.clients.map((el) => {
             el.checked = e.target.checked;
             return el;
         });
-        this.props.dispatch(setClients(clients));
+        this.props.dispatch(setClients(clients, groups));
     }
 
     groupChangeHandler(ids, e) {
+        const {groups} = this.props;
         let clients = this.props.clients.map((el) => {
             el.checked = ids.indexOf(el.id) !== -1 ? e.target.checked : el.checked;
             return el;
         });
-        this.props.dispatch(setClients(clients));
+        this.props.dispatch(setClients(clients, groups));
     }
 
     clientCheckboxChangeHandler(e) {
+        const {groups} = this.props;
         let id = e.target.value;
         let clients = this.props.clients.map((el) => {
             el.checked = el.id === id ? e.target.checked : el.checked;
             return el;
         });
-        this.props.dispatch(setClients(clients));
+        this.props.dispatch(setClients(clients, groups));
     }
 
     getRequestParams() {
@@ -176,6 +179,7 @@ class Telephony extends React.Component<Props, State> {
         let selectAllChecked = this.props.clients.length === this.props.clients.filter((client) => {
                 return client.checked;
             }).length;
+        const callsTotalsDataKeys = _.sortBy(Object.keys(this.props.callsTotals.data), [function(o) { return o.toLowerCase(); }]);
         return (
             <div className={'telephony'}>
                 <div className="row">
@@ -286,7 +290,7 @@ class Telephony extends React.Component<Props, State> {
                             <th>{i18next.t('total')}</th>
                         </tr>
                         {
-                            this.props.callsTotals.data && Object.keys(this.props.callsTotals.data).map((login, index) => {
+                            callsTotalsDataKeys.map((login, index) => {
                                 let loginData = this.props.callsTotals.data[login];
                                 let clientTotal = 0;
                                 let clientTotalObjective = 0;

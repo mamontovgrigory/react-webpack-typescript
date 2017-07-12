@@ -1,5 +1,5 @@
-import {IUserPermissions} from 'models/account';
-import {sendRequest} from './requestActions';
+import { IUserPermissions } from 'models/account';
+import { sendRequest } from './requestActions';
 
 export const UPDATE_DATE_REQUEST_FINISHED: string = 'telephony/UPDATE_DATE_REQUEST_FINISHED';
 export const CLIENTS_REQUEST_FINISHED: string = 'telephony/CLIENTS_REQUEST_FINISHED';
@@ -13,8 +13,8 @@ function updateDateRequestFinished(updateDate) {
     return {type: UPDATE_DATE_REQUEST_FINISHED, updateDate};
 }
 
-function clientsRequestFinished(clients) {
-    return {type: CLIENTS_REQUEST_FINISHED, clients};
+function clientsRequestFinished(clients, groups) {
+    return {type: CLIENTS_REQUEST_FINISHED, clients, groups};
 }
 
 function callsTotals(callsTotals) {
@@ -37,7 +37,6 @@ function uniqueComments(uniqueComments) {
     return {type: UNIQUE_COMMENTS, uniqueComments};
 }
 
-
 export function getUpdateDate() {
     return (dispatch => {
         dispatch(sendRequest({
@@ -49,19 +48,43 @@ export function getUpdateDate() {
 }
 
 export function getClients(permissions: IUserPermissions) {
-    return (dispatch => {
+    return ((dispatch) => {
         dispatch(sendRequest({
-            url: '/ajax/get_list_users.php'
-        })).then(function (result) {
-            let enabledClients: string[] = permissions && permissions.telephonyClients ? permissions.telephonyClients : [];
-            let clients = result.filter((client) => {
-                return enabledClients.length === 1 && enabledClients[0] === 'all' || enabledClients.indexOf(client.id) !== -1;
-            }).map((client) => {
-                return _.assign(client, {
-                    checked: true
-                });
-            });
-            dispatch(clientsRequestFinished(clients));
+            url: '/ajax/get_list_cabinets.php'
+        })).then(function (cabinets) {
+            let groups = [];
+            let clients = [];
+            if (cabinets) {
+                cabinets.map((cabinet) => {
+                    dispatch(sendRequest({
+                        url: '/ajax/get_list_cabinets_users.php',
+                        data: {
+                            id: cabinet.id
+                        }
+                    })).then(function (result) {
+                        result = result.filter((client) => {
+                            return parseInt(client.active) === 1 && parseInt(client.deleted) === 0;
+                        });
+                        groups.push({
+                            name: cabinet.name,
+                            ids: result.map(client => client.id)
+                        });
+                        clients = clients.concat(result);
+
+                        let enabledClients: string[] = permissions && permissions.telephonyClients ? permissions.telephonyClients : [];
+                        clients = clients.filter((client) => {
+                            return enabledClients.length === 1 && enabledClients[0] === 'all' || enabledClients.indexOf(client.id) !== -1;
+                        }).map((client) => {
+                            return _.assign(client, {
+                                checked: true
+                            });
+                        });
+
+                        dispatch(clientsRequestFinished(_.sortBy(clients, [function(o) { return o.login; }]),
+                            _.sortBy(groups, [function(o) { return o.name; }])));
+                    });
+                })
+            }
         });
     });
 }
@@ -78,9 +101,9 @@ export function setDuration(result: number) {
     });
 }
 
-export function setClients(clients) {
+export function setClients(clients, groups) {
     return (dispatch => {
-        dispatch(clientsRequestFinished(clients));
+        dispatch(clientsRequestFinished(clients, groups));
     });
 }
 
