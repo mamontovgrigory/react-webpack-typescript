@@ -179,7 +179,6 @@ class Telephony extends React.Component<Props, State> {
         let selectAllChecked = this.props.clients.length === this.props.clients.filter((client) => {
                 return client.checked;
             }).length;
-        const callsTotalsDataKeys = _.sortBy(Object.keys(this.props.callsTotals.data), [function(o) { return o.toLowerCase(); }]);
         return (
             <div className={'telephony'}>
                 <div className="row">
@@ -205,7 +204,7 @@ class Telephony extends React.Component<Props, State> {
                 <div id={this.divClientsListId}>
                     <div className="row">
                         <div className="col a12">
-                            <div className="divider"></div>
+                            <div className="divider"/>
                             <h4>{i18next.t('clients')}</h4>
                         </div>
                     </div>
@@ -237,31 +236,47 @@ class Telephony extends React.Component<Props, State> {
                             })
                         }
                     </div>
-                    <div className="row">
-                        {
-                            this.props.clients && this.props.clients.map((client) => {
-                                let checkboxId = generator.getHash(client.id);
-                                const separator = ',';
-                                return (
-                                    <div className="input-field col s3 card-wrapper" key={checkboxId}>
-                                        <input type="checkbox" id={checkboxId}
-                                               value={client.id}
-                                               checked={client.checked}
-                                               onChange={this.clientCheckboxChangeHandler.bind(this)}/>
-                                        <label htmlFor={checkboxId}>{client.login}<br/>
-                                            {client.numbers.split(separator).map((number, index) => {
-                                                return (
-                                                    <div className="note" key={index}>
-                                                        {formatter.formatPhoneNumber(number)}
-                                                    </div>
-                                                );
-                                            })}
-                                        </label>
-                                    </div>
-                                )
-                            })
-                        }
-                    </div>
+                    {
+                        this.props.groups.map((group) => {
+                            let groupClients = this.props.clients.filter((client) => {
+                                return group.ids.indexOf(client.id) !== -1;
+                            });
+                            groupClients = _.sortBy(groupClients, [function (c) {
+                                const name = c.alias ? c.alias : c.login;
+                                return name.toLowerCase();
+                            }]);
+                            return (
+                                <div className="row">
+                                    <hr/>
+                                    {
+                                        groupClients.map((client) => {
+                                            let checkboxId = generator.getHash(client.id);
+                                            const separator = ',';
+                                            return (
+                                                <div className="input-field col s3 card-wrapper" key={checkboxId}>
+                                                    <input type="checkbox" id={checkboxId}
+                                                           value={client.id}
+                                                           checked={client.checked}
+                                                           onChange={this.clientCheckboxChangeHandler.bind(this)}/>
+                                                    <label
+                                                        htmlFor={checkboxId}>{client.alias ? client.alias : client.login}
+                                                        <br/>
+                                                        {client.numbers.split(separator).map((number, index) => {
+                                                            return (
+                                                                <div className="note" key={index}>
+                                                                    {formatter.formatPhoneNumber(number)}
+                                                                </div>
+                                                            );
+                                                        })}
+                                                    </label>
+                                                </div>
+                                            )
+                                        })
+                                    }
+                                </div>
+                            )
+                        })
+                    }
                 </div>
                 <div className="clear">
                     <a className="waves-effect waves-light btn right m-l-10"
@@ -290,50 +305,82 @@ class Telephony extends React.Component<Props, State> {
                             <th>{i18next.t('total')}</th>
                         </tr>
                         {
-                            callsTotalsDataKeys.map((login, index) => {
-                                let loginData = this.props.callsTotals.data[login];
-                                let clientTotal = 0;
-                                let clientTotalObjective = 0;
+                            this.props.groups.map((group) => {
+                                let groupLogins = this.props.clients.filter((client) => {
+                                    return group.ids.indexOf(client.id) !== -1;
+                                }).map((client) => {
+                                    return client.login;
+                                });
+                                groupLogins = _.sortBy(groupLogins, [function (o) {
+                                    return o.toLowerCase();
+                                }]);
                                 return (
-                                    <tr key={index}>
-                                        <td className="head-column">{login}</td>
-                                        {
-                                            loginData.map((el, i) => {
-                                                const count = el.count;
-                                                const objectiveCount = el.objectiveCount;
-                                                daysTotals[i] += count;
-                                                daysTotalsObjective[i] += objectiveCount;
-                                                clientTotal += count;
-                                                clientTotalObjective += objectiveCount;
-                                                const className = count !== 0 ? 'info-cell' : '';
-                                                const duration = this.state.duration;
-                                                return <td className={'center ' + className}
-                                                           key={i}
-                                                           onClick={count > 0 ? () =>
-                                                               this.infoCellClickHandler({
-                                                                   logins: [login],
-                                                                   from: this.props.callsTotals.dates[i],
-                                                                   to: this.props.callsTotals.dates[i],
-                                                                   duration
-                                                               }) : function () {
-                                                           }}>{count} <span className="note">({objectiveCount})</span>
-                                                </td>
-                                            })
-                                        }
-                                        {
-                                            <th className={'center ' + (clientTotal > 0 ? 'info-cell' : '')}
-                                                onClick={clientTotal > 0 ? () =>
-                                                    this.infoCellClickHandler({
-                                                        logins: [login],
-                                                        from: this.props.callsTotals.dates[0],
-                                                        to: this.props.callsTotals.dates[this.props.callsTotals.dates.length - 1],
-                                                        duration: this.state.duration
-                                                    }) : function () {
-                                                }}>{clientTotal} <span className="note">({clientTotalObjective})</span>
-                                            </th>
-                                        }
-                                    </tr>
-                                )
+                                    [
+                                        <tr>
+                                            <th className="head-column">{group.name}</th>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                        </tr>,
+                                        groupLogins.map((login, index) => {
+                                            let loginData = this.props.callsTotals.data[login];
+                                            loginData = loginData ? loginData : [];
+                                            let clientTotal = 0;
+                                            let clientTotalObjective = 0;
+                                            const clientData = _.find(this.props.clients, (c) => {
+                                                return c.login === login;
+                                            });
+                                            return (
+                                                <tr key={index}>
+                                                    <td className="head-column">{clientData.alias ? clientData.alias : login}</td>
+                                                    {
+                                                        loginData.map((el, i) => {
+                                                            const count = el.count;
+                                                            const objectiveCount = el.objectiveCount;
+                                                            daysTotals[i] += count;
+                                                            daysTotalsObjective[i] += objectiveCount;
+                                                            clientTotal += count;
+                                                            clientTotalObjective += objectiveCount;
+                                                            const className = count !== 0 ? 'info-cell' : '';
+                                                            const duration = this.state.duration;
+                                                            return <td className={'center ' + className}
+                                                                       key={i}
+                                                                       onClick={count > 0 ? () =>
+                                                                           this.infoCellClickHandler({
+                                                                               logins: [login],
+                                                                               from: this.props.callsTotals.dates[i],
+                                                                               to: this.props.callsTotals.dates[i],
+                                                                               duration
+                                                                           }) : function () {
+                                                                       }}>{count} <span
+                                                                className="note">({objectiveCount})</span>
+                                                            </td>
+                                                        })
+                                                    }
+                                                    {
+                                                        <th className={'center ' + (clientTotal > 0 ? 'info-cell' : '')}
+                                                            onClick={clientTotal > 0 ? () =>
+                                                                this.infoCellClickHandler({
+                                                                    logins: [login],
+                                                                    from: this.props.callsTotals.dates[0],
+                                                                    to: this.props.callsTotals.dates[this.props.callsTotals.dates.length - 1],
+                                                                    duration: this.state.duration
+                                                                }) : function () {
+                                                            }}>{clientTotal} <span
+                                                            className="note">({clientTotalObjective})</span>
+                                                        </th>
+                                                    }
+                                                </tr>
+                                            )
+                                        })
+                                    ]
+                                );
                             })
                         }
                         <tr>

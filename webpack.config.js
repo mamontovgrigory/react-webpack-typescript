@@ -55,7 +55,8 @@ module.exports = {
 
     plugins: [
         new HtmlWebpackPlugin({
-            title: 'React webpack typescript',
+            title: 'Online idea',
+            favicon: __dirname + '/favicon.ico',
             template: __dirname + '/index.html'
         }),
         new webpack.DefinePlugin({

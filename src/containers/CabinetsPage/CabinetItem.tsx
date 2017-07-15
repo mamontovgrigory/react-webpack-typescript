@@ -3,8 +3,6 @@ import * as React from 'react';
 import { dialog } from 'shell/index';
 import { saveCabinet } from 'redux/actions/cabinetsActions';
 import Input from 'components/Input/Input';
-import Checkbox from 'components/Checkbox/Checkbox';
-import Button from '../../components/Button/Button';
 
 interface IProps {
     dispatch: any;
@@ -26,6 +24,7 @@ interface IState {
         id: string;
         active: boolean;
         deleted: boolean;
+        alias?: string;
     }[];
 }
 
@@ -45,7 +44,8 @@ export default class CabinetItem extends React.Component<IProps, IState> {
                 return {
                     id: client.id,
                     active: parseInt(client.active) === 1,
-                    deleted: false
+                    deleted: false,
+                    alias: client.alias
                 };
             })
         }
@@ -87,6 +87,18 @@ export default class CabinetItem extends React.Component<IProps, IState> {
             clientsSettings: clientsSettings.map((c) => {
                 if (c.id === clientId) {
                     c.active = e.target.checked;
+                }
+                return c;
+            })
+        })
+    }
+
+    setClientAlias(clientId, e) {
+        const {clientsSettings} = this.state;
+        this.setState({
+            clientsSettings: clientsSettings.map((c) => {
+                if (c.id === clientId) {
+                    c.alias = e.target.value;
                 }
                 return c;
             })
@@ -161,34 +173,42 @@ export default class CabinetItem extends React.Component<IProps, IState> {
                             <th className="head-column"/>
                             <th className="head-column">{i18next.t('client')}</th>
                             <th className="head-column"/>
+                            <th className="head-column"/>
                         </tr>
                         {clients && clients.map((client, index) => {
                             const clientSettings = _.find(clientsSettings, (c) => {
                                 return c.id === client.id;
                             });
                             return (
-                                clientSettings.deleted ? null : <tr key={index}>
-                                    <td>
-                                        <div className="switch">
-                                            <label>
-                                                {i18next.t('hide')}
-                                                <input type="checkbox" checked={clientSettings.active}
-                                                       onChange={this.setClientActive.bind(this, client.id)}/>
-                                                <span className="lever"/>
-                                                {i18next.t('show')}
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        {client.login}
-                                    </td>
-                                    <td>
-                                        <button className="waves-effect waves-green btn-flat right"
-                                                onClick={this.setClientDeleted.bind(this, client.id)}>
-                                            {i18next.t('delete')}
-                                        </button>
-                                    </td>
-                                </tr>
+                                clientSettings.deleted ?
+                                    null :
+                                    <tr key={index}>
+                                        <td>
+                                            <div className="switch">
+                                                <label>
+                                                    {i18next.t('hide')}
+                                                    <input type="checkbox" checked={clientSettings.active}
+                                                           onChange={this.setClientActive.bind(this, client.id)}/>
+                                                    <span className="lever"/>
+                                                    {i18next.t('show')}
+                                                </label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            {client.login}
+                                        </td>
+                                        <td>
+                                            <Input label={i18next.t('alias')}
+                                                   value={clientSettings.alias}
+                                                   onChange={this.setClientAlias.bind(this, client.id)}/>
+                                        </td>
+                                        <td>
+                                            <button className="waves-effect waves-green btn-flat right"
+                                                    onClick={this.setClientDeleted.bind(this, client.id)}>
+                                                {i18next.t('delete')}
+                                            </button>
+                                        </td>
+                                    </tr>
                             )
                         })}
                         </tbody>

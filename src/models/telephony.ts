@@ -1,6 +1,7 @@
 export interface IClient {
     id: string;
     login: string;
+    alias?: string;
     checked?: boolean;
     numbers?: string;
 }

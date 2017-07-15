@@ -67,7 +67,8 @@
       "objective": "Objective",
       "client": "Client",
       "show": "Show",
-      "hide": "Hide"
+      "hide": "Hide",
+      "alias": "Alias"
     }
   },
   "ru": {
@@ -138,7 +139,8 @@
       "objective": "Целевой",
       "client": "Клиент",
       "show": "Отображать",
-      "hide": "Скрывать"
+      "hide": "Скрывать",
+      "alias": "Псевдоним"
     }
   }
 }
