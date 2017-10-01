@@ -45,7 +45,7 @@ class Navbar extends React.Component<Props,State> {
                         <li>
                             <a className="dropdown-button" data-activates="dropdown-user">
                                 <div className="chip">
-                                    {this.props.user.login}
+                                    {this.props.user ? this.props.user.login : null}
                                 </div>
                                 <i className="material-icons right">arrow_drop_down</i>
                             </a>

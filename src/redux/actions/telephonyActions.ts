@@ -50,14 +50,14 @@ export function getUpdateDate() {
 export function getClients(permissions: IUserPermissions) {
     return ((dispatch) => {
         dispatch(sendRequest({
-            url: '/ajax/get_list_cabinets.php'
+            url: '/Api/Cabinets/GetList'
         })).then(function (cabinets) {
             let groups = [];
             let clients = [];
             if (cabinets) {
                 cabinets.map((cabinet) => {
                     dispatch(sendRequest({
-                        url: '/ajax/get_list_cabinets_users.php',
+                        url: '/Api/Clients/GetList',
                         data: {
                             id: cabinet.id
                         }

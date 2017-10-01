@@ -15,7 +15,7 @@ export function sendRequest(properties: RequestProps, callback?: Function) {
         dispatch(showLoader());
 
         return fetch((NODE_ENV.trim() === 'development' ?
-                'http://xn----7sbhtgckcrdddi.xn--p1ai' :
+                'http://localhost:8889' :
                 window.location.origin) + properties.url, { //TODO: Move to config
             method: properties.method ? properties.method : 'POST',
             credentials: 'include',

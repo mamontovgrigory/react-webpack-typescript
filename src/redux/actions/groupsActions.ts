@@ -19,7 +19,7 @@ interface DeleteGroupsProps{
 export function getGroups() {
     return (dispatch => {
         dispatch(sendRequest({
-            url: '/ajax/get_groups.php'
+            url: '/Api/Groups/GetList'
         })).then(function (result) {
             dispatch(groupsRequestFinished(result));
         });

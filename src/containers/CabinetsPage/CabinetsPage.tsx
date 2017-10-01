@@ -85,7 +85,7 @@ class CabinetsPage extends React.Component<IProps, IState> {
 
         let rowsIds = grid.getSelectedRows(this.gridId);
         if (rowsIds.length === 1) {
-            const rowId = _.first(rowsIds);
+            const rowId = Number(_.first(rowsIds));
             const rowData = _.find(cabinets, function (u) {
                 return u.id === rowId;
             });

@@ -13,7 +13,7 @@ export function cabinets(cabinets: ICabinet[]) {
 export function getCabinets() {
     return (dispatch => {
         dispatch(sendRequest({
-            url: '/ajax/get_list_cabinets.php'
+            url: '/Api/Cabinets/GetList'
         })).then(function (result) {
             dispatch(cabinets(result));
         });
@@ -23,7 +23,7 @@ export function getCabinets() {
 export function getCabinetsClients(data: { id: string }, callback) {//TODO: escape using callback
     return (dispatch => {
         dispatch(sendRequest({
-            url: '/ajax/get_list_cabinets_users.php',
+            url: '/Api/Clients/GetList',
             data
         })).then(function (result) {
             if(callback) callback(result);
@@ -35,7 +35,7 @@ export function getCabinetsClients(data: { id: string }, callback) {//TODO: esca
 export function saveCabinet(data: ICabinet) {
     return (dispatch => {
         dispatch(sendRequest({
-            url: '/ajax/cabinet_save.php',
+            url: '/Api/Cabinets/Save',
             data
         })).then(function () {
             dispatch(getCabinets());
@@ -46,7 +46,7 @@ export function saveCabinet(data: ICabinet) {
 export function deleteCabinets(data: { ids: string[] }) {
     return (dispatch => {
         dispatch(sendRequest({
-            url: '/ajax/cabinets_delete.php',
+            url: '/Api/Cabinets/Delete',
             data
         })).then(function () {
             dispatch(getCabinets());

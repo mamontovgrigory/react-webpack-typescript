@@ -28,7 +28,8 @@ export function loginRequest(properties: ILogIn) {
     return (dispatch => {
         if (properties.login && properties.password) {
             dispatch(sendRequest({
-                url: '/ajax/login.php',
+                url: '/Api/Users/Login',
+                method: 'POST',
                 data: properties
             })).then(function (result) {
                 if (result) {
@@ -47,7 +48,7 @@ export function loginRequest(properties: ILogIn) {
 export function logoutRequest() { //TODO: Change route to /
     return (dispatch => {
         dispatch(sendRequest({
-            url: '/ajax/logout.php',
+            url: '/Api/Users/Logout',
             credentials: 'include'
         })).then(function () {
             dispatch(logout());
@@ -59,7 +60,7 @@ export function logoutRequest() { //TODO: Change route to /
 export function checkSession() {
     return (dispatch => {
         dispatch(sendRequest({
-            url: '/ajax/check_session.php',
+            url: '/Api/Users/CheckSession',
             credentials: 'include'
         })).then(function (result) {
             if (result) {
@@ -67,6 +68,11 @@ export function checkSession() {
                 dispatch(getAccountPermissions());
             }
         });
+        /*dispatch(login({
+            id: 1,
+            login: 'test'
+        }));
+        dispatch(getAccountPermissions());*/
     });
 }
 
@@ -81,7 +87,7 @@ let permissionsMapping = {
 
 export function getAccountPermissions() {
     return (dispatch => {
-        dispatch(sendRequest({
+        /*dispatch(sendRequest({
             url: '/ajax/get_account.php'
         })).then(function (response) {
             let result: IUserPermissions = {
@@ -107,6 +113,18 @@ export function getAccountPermissions() {
             dispatch(getModules(result));//TODO: Update data outside account actions
             dispatch(getClients(result));
             dispatch(resetCallsTotals());
-        });
+        });*/
+        let result: IUserPermissions = {
+            usersManage: true,
+            groupsManage: true,
+            telephonyCabinetsManage: true,
+            telephonyCommentsManage: true,
+            telephonyCommentsView: true,
+            telephonyClients: ['all']
+        };
+        dispatch(permissions(result));
+        dispatch(getModules(result));//TODO: Update data outside account actions
+        dispatch(getClients(result));
+        dispatch(resetCallsTotals());
     });
 }

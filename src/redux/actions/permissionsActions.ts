@@ -9,7 +9,7 @@ function permissionsRequestFinished(permissions) {
 export function getPermissions() {
     return (dispatch => {
         dispatch(sendRequest({
-            url: '/ajax/get_permissions.php'
+            url: '/Api/Permissions/GetList'
         })).then(function (result) {
             dispatch(permissionsRequestFinished(result));
         });

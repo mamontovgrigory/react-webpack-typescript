@@ -80,7 +80,7 @@ class UsersPage extends React.Component<Props, State> {
         let rowsIds = grid.getSelectedRows(this.gridId);
 
         if (rowsIds.length === 1) {
-            let userId = _.first(rowsIds);
+            let userId = Number(_.first(rowsIds));
             let userData = _.find(this.props.users, function (u) {
                 return u.id === userId;
             });

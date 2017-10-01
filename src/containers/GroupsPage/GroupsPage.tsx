@@ -76,7 +76,7 @@ class GroupsPage extends React.Component<Props, State> {
         let rowsIds = grid.getSelectedRows(this.state.gridId);
 
         if (rowsIds.length === 1) {
-            let groupId = _.first(rowsIds);
+            let groupId = Number(_.first(rowsIds));
             let groupData = _.find(this.props.groups, function (g) {
                 return g.id === groupId;
             });

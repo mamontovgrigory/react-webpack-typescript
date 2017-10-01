@@ -20,7 +20,7 @@ function usersRequestFinished(users: User[]) {
 export function getUsers() {
     return (dispatch => {
         dispatch(sendRequest({
-            url: '/ajax/get_users.php'
+            url: '/Api/Users/GetList'
         })).then(function (result) {
             dispatch(usersRequestFinished(result));
         });
@@ -30,7 +30,7 @@ export function getUsers() {
 export function saveUser(properties: User) {
     return (dispatch => {
         dispatch(sendRequest({
-            url: '/ajax/user_save.php',
+            url: '/Api/Users/Save',
             data: properties
         })).then(function () {
             dispatch(getUsers());
@@ -42,7 +42,7 @@ export function deleteUsers(properties: DeleteUsersProps) {
     return (dispatch => {
         _.forEach(properties.ids, function (id) { //TODO: send ids array
             dispatch(sendRequest({
-                url: '/ajax/user_delete.php',
+                url: '/Api/Users/Delete',
                 data: {
                     id: id
                 }

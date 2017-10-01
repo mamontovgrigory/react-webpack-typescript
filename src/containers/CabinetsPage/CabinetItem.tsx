@@ -40,14 +40,14 @@ export default class CabinetItem extends React.Component<IProps, IState> {
             login: props.login,
             password: props.password,
             name: props.name,
-            clientsSettings: props.clients.map((client) => {
+            clientsSettings: props.clients ? props.clients.map((client) => {
                 return {
                     id: client.id,
                     active: parseInt(client.active) === 1,
                     deleted: false,
                     alias: client.alias
                 };
-            })
+            }) : []
         }
     }
 
@@ -165,7 +165,7 @@ export default class CabinetItem extends React.Component<IProps, IState> {
                            onChange={this.nameChangeHandler.bind(this)}
                            label={i18next.t('cabinetName')}/>
                 </div>
-                <div className="row">
+                {clientsSettings && <div className="row">
                     <h5>{i18next.t('clients')}</h5>
                     <table className="bordered">
                         <tbody>
@@ -213,7 +213,7 @@ export default class CabinetItem extends React.Component<IProps, IState> {
                         })}
                         </tbody>
                     </table>
-                </div>
+                </div>}
             </div>
         )
     }
