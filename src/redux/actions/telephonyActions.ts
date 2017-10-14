@@ -40,7 +40,7 @@ function uniqueComments(uniqueComments) {
 export function getUpdateDate() {
     return (dispatch => {
         dispatch(sendRequest({
-            url: '/ajax/get_update_date.php'
+            url: '/Api/Telephony/GetLastLog'
         })).then(function (result) {
             dispatch(updateDateRequestFinished(result && result.datetime ? result.datetime : null));
         });
@@ -59,7 +59,7 @@ export function getClients(permissions: IUserPermissions) {
                     dispatch(sendRequest({
                         url: '/Api/Clients/GetList',
                         data: {
-                            id: cabinet.id
+                            parentId: cabinet.id
                         }
                     })).then(function (result) {
                         result = result.filter((client) => {
@@ -117,7 +117,7 @@ interface GetCallsTotalsProps {
 export function getCallsTotals(data: GetCallsTotalsProps) {
     return (dispatch => {
         dispatch(sendRequest({
-            url: '/ajax/get_calls_totals.php',
+            url: '/Api/Calls/GetTotals',
             data
         })).then(function (result) {
             dispatch(getCallsTotalsObjective(data, result));
@@ -128,7 +128,7 @@ export function getCallsTotals(data: GetCallsTotalsProps) {
 export function getCallsTotalsObjective(data: GetCallsTotalsProps, callsTotalsData) {
     return (dispatch => {
         dispatch(sendRequest({
-            url: '/ajax/get_calls_totals_objective.php',
+            url: '/Api/Calls/GetTotalsObjective',
             data
         })).then(function (result) {
             Object.keys(callsTotalsData.data).map((login) => {
@@ -168,7 +168,7 @@ interface GetCallsDetailsProps {
 export function getCallsDetails(data: GetCallsDetailsProps, callback: Function) {//TODO: escape using callback
     return (dispatch => {
         dispatch(sendRequest({
-            url: '/ajax/get_calls_details_range.php',
+            url: '/Api/Calls/GetDetails',
             data
         })).then(function (result) {
             callback(result);
@@ -185,6 +185,7 @@ interface GetRecordProps {
 export function getRecord(data: GetRecordProps, callback: Function) {//TODO: escape using callback
     return (dispatch => {
         dispatch(sendRequest({
+            host: 'http://xn----7sbhtgckcrdddi.xn--p1ai',
             url: '/ajax/get_call_record.php',
             data
         })).then(function (result) {
@@ -211,7 +212,7 @@ interface ISaveCommentsProps {
 export function saveComments(data: ISaveCommentsProps, callback?: Function) {
     return (dispatch => {
         dispatch(sendRequest({
-            url: '/ajax/comments_save.php',
+            url: '/Api/Comments/Save',
             data: {
                 id: data.id,
                 login_id: data.loginId,
@@ -234,7 +235,7 @@ interface IGetUniqueComments {
 export function getUniqueComments(data: IGetUniqueComments, callback: Function) {//TODO: escape using callback
     return (dispatch => {
         dispatch(sendRequest({
-            url: '/ajax/get_unique_comments.php',
+            url: '/Api/Comments/GetUnique',
             data: {
                 login_id: data.loginId
             }

@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/mamontovgrigory/react-webpack-typescript#readme",
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
     "bluebird": "^3.4.7",
     "classnames": "^2.2.5",
     "css-loader": "^0.25.0",

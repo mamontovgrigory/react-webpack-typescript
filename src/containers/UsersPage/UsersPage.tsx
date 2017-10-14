@@ -24,14 +24,7 @@ class UsersPage extends React.Component<Props, State> {
     componentDidUpdate() {
         grid.init({
             gridId: this.gridId,
-            data: _.map(this.props.users, function (r) {
-                return {
-                    id: r.id,
-                    login: r.login,
-                    groupId: r.groupId,
-                    groupName: r.groupName
-                };
-            }),
+            data: this.props.users,
             colModel: [
                 {
                     name: 'id',

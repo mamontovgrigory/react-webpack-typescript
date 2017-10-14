@@ -1,9 +1,10 @@
 import * as formData from 'form-urlencoded';
 
-import {showLoader, hideLoader} from './loaderActions';
+import { showLoader, hideLoader } from './loaderActions';
 
 interface RequestProps {
     url: string;
+    host?: string;
     method?: string;
     contentType?: string;
     credentials?: string;
@@ -13,10 +14,11 @@ interface RequestProps {
 export function sendRequest(properties: RequestProps, callback?: Function) {
     return (dispatch => {
         dispatch(showLoader());
-
-        return fetch((NODE_ENV.trim() === 'development' ?
-                'http://localhost:8889' :
-                window.location.origin) + properties.url, { //TODO: Move to config
+        const host = properties.host ? properties.host :
+            (NODE_ENV.trim() === 'development' ?
+            'http://localhost:8889' :
+            window.location.origin);
+        return fetch(host + properties.url, { //TODO: Move to config
             method: properties.method ? properties.method : 'POST',
             credentials: 'include',
             headers: {

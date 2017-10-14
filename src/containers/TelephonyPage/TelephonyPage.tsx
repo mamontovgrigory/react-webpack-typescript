@@ -249,11 +249,11 @@ class Telephony extends React.Component<Props, State> {
                                 <div className="row">
                                     <hr/>
                                     {
-                                        groupClients.map((client) => {
+                                        groupClients.map((client, index) => {
                                             let checkboxId = generator.getHash(client.id);
                                             const separator = ',';
                                             return (
-                                                <div className="input-field col s3 card-wrapper" key={checkboxId}>
+                                                <div className="input-field col s3 card-wrapper" key={index}>
                                                     <input type="checkbox" id={checkboxId}
                                                            value={client.id}
                                                            checked={client.checked}
@@ -261,9 +261,9 @@ class Telephony extends React.Component<Props, State> {
                                                     <label
                                                         htmlFor={checkboxId}>{client.alias ? client.alias : client.login}
                                                         <br/>
-                                                        {client.numbers.split(separator).map((number, index) => {
+                                                        {client.numbers && client.numbers.split(separator).map((number, i) => {
                                                             return (
-                                                                <div className="note" key={index}>
+                                                                <div className="note" key={i}>
                                                                     {formatter.formatPhoneNumber(number)}
                                                                 </div>
                                                             );

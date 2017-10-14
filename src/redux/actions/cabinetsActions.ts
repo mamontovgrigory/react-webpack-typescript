@@ -24,7 +24,9 @@ export function getCabinetsClients(data: { id: string }, callback) {//TODO: esca
     return (dispatch => {
         dispatch(sendRequest({
             url: '/Api/Clients/GetList',
-            data
+            data: {
+                parentId: data.id
+            }
         })).then(function (result) {
             if(callback) callback(result);
             //dispatch(cabinets(result));

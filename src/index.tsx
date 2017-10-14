@@ -1,3 +1,4 @@
+import 'babel-polyfill';
 import * as ReactDOM from 'react-dom';
 import {Router, hashHistory} from 'react-router';
 import {Provider} from 'react-redux';

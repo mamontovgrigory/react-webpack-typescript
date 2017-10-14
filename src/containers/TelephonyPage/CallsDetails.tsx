@@ -190,19 +190,22 @@ export default class CallsDetails extends React.Component<Props, State> {
                         rowId: editingRowId
                     });
                     if (rowId !== editingRowId) {
+                        const rowData = $grid.getRowData(rowId);
+                        const {loginId} = rowData;
                         grid.editRow({
                             gridId: gridId,
                             rowId: rowId,
                             parameters: {
                                 keys: true,
-                                aftersavefunc: function (r, s, rowData) {
+                                aftersavefunc: function (r, s, newRowData) {
+                                    const {callid, mark, model, comment, objective} = newRowData;
                                     dispatch(saveComments({
-                                        id: rowData.callid,
-                                        loginId: rowData.loginId,
-                                        mark: rowData.mark,
-                                        model: rowData.model,
-                                        comment: rowData.comment,
-                                        objective: rowData.objective
+                                        id: callid,
+                                        loginId,
+                                        mark,
+                                        model,
+                                        comment,
+                                        objective
                                     }));
                                 }
                             }
