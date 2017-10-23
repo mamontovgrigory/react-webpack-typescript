@@ -105,9 +105,9 @@ class Telephony extends React.Component<Props, State> {
 
     clientCheckboxChangeHandler(e) {
         const {groups} = this.props;
-        let id = e.target.value;
+        let id = parseInt(e.target.value);
         let clients = this.props.clients.map((el) => {
-            el.checked = el.id === id ? e.target.checked : el.checked;
+            el.checked = parseInt(el.id) === id ? e.target.checked : el.checked;
             return el;
         });
         this.props.dispatch(setClients(clients, groups));
@@ -133,10 +133,10 @@ class Telephony extends React.Component<Props, State> {
 
     reportClickHandler() {
         let serverUrl = (NODE_ENV.trim() === 'development' ?
-            'http://xn----7sbhtgckcrdddi.xn--p1ai' :
+            'http://localhost:8889' :
             window.location.origin); //TODO: Move to config
 
-        window.location.href = serverUrl + '/ajax/get_report.php?' + $.param(this.getRequestParams());
+        window.location.href = serverUrl + '/Api/Reports/GetStatistic?' + $.param(this.getRequestParams());
     }
 
     slideClickHandler() {
@@ -249,11 +249,11 @@ class Telephony extends React.Component<Props, State> {
                                 <div className="row">
                                     <hr/>
                                     {
-                                        groupClients.map((client, index) => {
-                                            let checkboxId = generator.getHash(client.id);
+                                        groupClients.map((client) => {
+                                            let checkboxId = generator.getHash(client.id.toString());
                                             const separator = ',';
                                             return (
-                                                <div className="input-field col s3 card-wrapper" key={index}>
+                                                <div className="input-field col s3 card-wrapper" key={checkboxId}>
                                                     <input type="checkbox" id={checkboxId}
                                                            value={client.id}
                                                            checked={client.checked}
