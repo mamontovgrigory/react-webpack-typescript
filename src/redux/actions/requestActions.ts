@@ -14,10 +14,10 @@ interface RequestProps {
 export function sendRequest(properties: RequestProps, callback?: Function) {
     return (dispatch => {
         dispatch(showLoader());
-        const host = properties.host ? properties.host :
-            (NODE_ENV.trim() === 'development' ?
+        const host = properties.host ? properties.host : 'http://localhost:8889';
+            /*(NODE_ENV.trim() === 'development' ?
             'http://localhost:8889' :
-            window.location.origin);
+            window.location.origin);*/
         return fetch(host + properties.url, { //TODO: Move to config
             method: properties.method ? properties.method : 'POST',
             credentials: 'include',

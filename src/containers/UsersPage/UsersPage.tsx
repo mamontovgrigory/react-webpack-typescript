@@ -24,7 +24,68 @@ class UsersPage extends React.Component<Props, State> {
     componentDidUpdate() {
         grid.init({
             gridId: this.gridId,
-            data: this.props.users,
+            data: [
+                {
+                    id: 1,
+                    groupId: 2,
+                    name: 'Администратор',
+                    groupName: 'Администраторы'
+                },
+                {
+                    id: 2,
+                    groupId: 2,
+                    name: 'Босс',
+                    groupName: 'Администраторы'
+                },
+                {
+                    id: 8,
+                    groupId: 2,
+                    name: 'Александр Васильев',
+                    groupName: 'Менеджеры'
+                },
+                {
+                    id: 4,
+                    groupId: 2,
+                    name: 'Петр Петров',
+                    groupName: 'Менеджеры'
+                },
+                {
+                    id: 5,
+                    groupId: 2,
+                    name: 'Куповец Мариамов',
+                    groupName: 'Менеджеры'
+                },
+                {
+                    id: 6,
+                    groupId: 2,
+                    name: 'Василий Зайцев',
+                    groupName: 'Менеджеры'
+                },
+                {
+                    id: 3,
+                    groupId: 2,
+                    name: 'Дмитрий Светланов',
+                    groupName: 'Менеджеры'
+                },
+                {
+                    id: 7,
+                    groupId: 2,
+                    name: 'Нестор Иванович',
+                    groupName: 'Менеджеры'
+                },
+                {
+                    id: 9,
+                    groupId: 2,
+                    name: 'Семен Горбунков',
+                    groupName: 'Менеджеры'
+                },
+                {
+                    id: 10,
+                    groupId: 2,
+                    name: 'Геннадий Козодоев',
+                    groupName: 'Менеджеры'
+                }
+            ], // this.props.users,
             colModel: [
                 {
                     name: 'id',
@@ -35,8 +96,8 @@ class UsersPage extends React.Component<Props, State> {
                     hidden: true
                 },
                 {
-                    name: 'login',
-                    label: i18next.t('login')
+                    name: 'name',
+                    label: 'Пользователь'
                 },
                 {
                     name: 'groupName',

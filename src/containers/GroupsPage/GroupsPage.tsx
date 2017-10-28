@@ -30,12 +30,16 @@ class GroupsPage extends React.Component<Props, State> {
     componentDidUpdate() {
         grid.init({
             gridId: this.state.gridId,
-            data: _.map(this.props.groups, function (r) {
-                return {
-                    id: r.id,
-                    name: r.name
-                };
-            }),
+            data: [
+                {
+                    id: 1,
+                    name: 'Администраторы'
+                },
+                {
+                    id: 2,
+                    name: 'Менеджеры'
+                }
+            ],
             colModel: [
                 {
                     name: 'id',

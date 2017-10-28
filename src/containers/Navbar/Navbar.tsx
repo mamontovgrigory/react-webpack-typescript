@@ -36,7 +36,7 @@ class Navbar extends React.Component<Props,State> {
             <nav>
                 <div className="nav-wrapper container">
                     <Link to="/" className="right" style={{height: '64px'}}>
-                        <img src={require('./content/logo.png')}/>
+                        <img src={require('./content/logo.png')} style={{paddingTop: '18px'}}/>
                     </Link>
                     <ul id="dropdown-user" className="dropdown-content">
                         <li><a onClick={this.logoutClickHandler.bind(this)}>{i18next.t('logout')}</a></li>

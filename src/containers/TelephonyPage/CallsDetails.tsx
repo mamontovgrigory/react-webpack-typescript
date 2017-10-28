@@ -129,54 +129,73 @@ export default class CallsDetails extends React.Component<Props, State> {
                     }
                 },
                 {
-                    name: 'mark',
-                    label: i18next.t('mark'),
+                    name: 'client',
+                    label: 'Имя клиента',
                     editable: true,
                     hidden: !userPermissions.telephonyCommentsView,
                     width: 60
                 },
                 {
-                    name: 'model',
-                    label: i18next.t('model'),
+                    name: 'contacts',
+                    label: 'Контакты',
                     editable: true,
                     hidden: !userPermissions.telephonyCommentsView,
                     width: 60
                 },
                 {
-                    name: 'comment',
-                    label: i18next.t('comment'),
-                    width: 200,
+                    name: 'source',
+                    label: 'Источник обращения',
                     editable: true,
-                    hidden: !userPermissions.telephonyCommentsView
-                },
-                {
-                    name: 'objective',
-                    label: i18next.t('objective'),
-                    editable: true,
-                    edittype: 'select',
-                    editoptions: {value: objectiveOptions},
                     hidden: !userPermissions.telephonyCommentsView,
                     width: 60
                 },
                 {
-                    name: 'record',
-                    label: i18next.t('record'),
-                    classes: 'record-link',
-                    formatter: function (cellvalue, options, rowObject) {
-                        if (parseInt(rowObject.duration) > 0) {
-                            return '<a data-callid="' + rowObject.callid + '" data-login="' + rowObject.login + '" data-time="' + rowObject.time + '">' +
-                                i18next.t('load') +
-                                '</a>';
-                        } else {
-                            return i18next.t('noRecord');
-                        }
-                    },
-                    width: 150
+                    name: 'project',
+                    label: 'Проект',
+                    editable: true,
+                    hidden: !userPermissions.telephonyCommentsView,
+                    width: 60
                 },
                 {
-                    name: 'download',
-                    label: i18next.t('download'),
-                    classes: 'download',
+                    name: 'goal',
+                    label: 'Цель обращения',
+                    editable: true,
+                    hidden: !userPermissions.telephonyCommentsView,
+                    width: 60
+                },
+                {
+                    name: 'call',
+                    label: 'Обратный звонок',
+                    editable: true,
+                    hidden: !userPermissions.telephonyCommentsView,
+                    width: 60
+                },
+                {
+                    name: 'meeting',
+                    label: 'Встреча в офисе',
+                    editable: true,
+                    hidden: !userPermissions.telephonyCommentsView,
+                    width: 60
+                },
+                {
+                    name: 'second_call',
+                    label: 'Повторный звонок',
+                    editable: true,
+                    hidden: !userPermissions.telephonyCommentsView,
+                    width: 60
+                },
+                {
+                    name: 'result',
+                    label: 'Результат',
+                    editable: true,
+                    hidden: !userPermissions.telephonyCommentsView,
+                    width: 60
+                },
+                {
+                    name: 'person',
+                    label: 'Редактировал',
+                    editable: true,
+                    hidden: !userPermissions.telephonyCommentsView,
                     width: 60
                 }
             ],

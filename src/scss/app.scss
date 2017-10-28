@@ -1,12 +1,32 @@
 @import "config";
 @import "variables";
 @import "mixins";
-
 @import "./components/grid";
 
+html,
 body {
+  height: 100%;
   margin: 0;
   padding: 0;
+  background: $system-background-color;
+  color: #fff !important;
+}
+
+.btn, .btn-large, .btn:hover, .btn-large:hover {
+  background: #000;
+  border: 1px solid $color-highlight;
+  color: $color-highlight;
+}
+
+.material-icons{
+  color: $color-highlight;
+}
+
+.card{
+  background-color: #000!important;
+  .card-title, .card-action a{
+    color: #fff!important;
+  }
 }
 
 nav {
@@ -70,6 +90,7 @@ table {
 .modal {
   max-width: 90%;
   max-height: 80%;
+  background: $system-background-color;
   &.modal-small {
     width: 50%;
     height: 50%;
@@ -77,6 +98,9 @@ table {
   &.modal-large {
     width: 90%;
     height: 80%;
+  }
+  .modal-footer{
+    background: #000;
   }
 }
 
@@ -93,6 +117,11 @@ table {
 
 .divider {
   clear: both;
+}
+
+[type="checkbox"]:checked + label:before{
+  border-right-color: $color-highlight;
+  border-bottom-color: $color-highlight;
 }
 
 .audioplayer {

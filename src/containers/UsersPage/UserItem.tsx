@@ -152,6 +152,10 @@ class UserItem extends React.Component<Props, State> {
                             i18next.t('newPassword') :
                             i18next.t('password')}</label>
                     </div>
+                    <div className="input-field col s6">
+                        <input id='name' type="text"/>
+                        <label htmlFor='name'>Имя пользователя</label>
+                    </div>
                 </div>
             </div>
         )
