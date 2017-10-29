@@ -27,28 +27,24 @@ export function getUsers() {
     });
 }
 
-export function saveUser(properties: User) {
+export function saveUser(data: User) {
     return (dispatch => {
         dispatch(sendRequest({
             url: '/Api/Users/Save',
-            data: properties
+            data
         })).then(function () {
             dispatch(getUsers());
         });
     });
 }
 
-export function deleteUsers(properties: DeleteUsersProps) {
+export function deleteUsers(data: DeleteUsersProps) {
     return (dispatch => {
-        _.forEach(properties.ids, function (id) { //TODO: send ids array
-            dispatch(sendRequest({
-                url: '/Api/Users/Delete',
-                data: {
-                    id: id
-                }
-            })).then(function () {
-                dispatch(getUsers());
-            });
+        dispatch(sendRequest({
+            url: '/Api/Users/Delete',
+            data
+        })).then(function () {
+            dispatch(getUsers());
         });
     });
 }

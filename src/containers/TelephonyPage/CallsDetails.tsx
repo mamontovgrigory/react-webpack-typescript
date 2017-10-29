@@ -4,12 +4,20 @@ import * as moment from 'moment';
 import { IUserPermissions } from 'models/account';
 import { ICallDetails } from 'models/telephony';
 import { dialog, generator, grid } from 'shell/index';
-import { getCallsDetails, getRecord, saveComments, getUniqueComments } from 'redux/actions/telephonyActions';
+import {
+    getCallsDetails,
+    getRecord,
+    saveComments,
+    deleteComments,
+    getUniqueComments
+} from 'redux/actions/telephonyActions';
 import Button from 'components/Button/Button';
 import RecordItem from './RecordItem';
+import CustomItem from './CustomItem';
 import i18n = require("i18next");
 
 interface Props {
+    loginIds: number[];
     userPermissions: IUserPermissions;
     callsDetails?: ICallDetails[];
     callsDetailsProps: any;
@@ -80,12 +88,12 @@ export default class CallsDetails extends React.Component<Props, State> {
             colModel: [
                 {
                     name: 'id',
-                    hidden: true
+                    hidden: true,
+                    key: true
                 },
                 {
                     name: 'callid',
-                    hidden: true,
-                    key: true
+                    hidden: true
                 },
                 {
                     name: 'login',
@@ -125,7 +133,7 @@ export default class CallsDetails extends React.Component<Props, State> {
                     label: i18next.t('duration'),
                     width: 60,
                     formatter: function (cellvalue, options, rowObject) {
-                        return moment(parseInt(cellvalue) * 1000).utc().format('HH:mm:ss');
+                        return cellvalue ? moment(parseInt(cellvalue) * 1000).utc().format('HH:mm:ss') : '';
                     }
                 },
                 {
@@ -191,26 +199,28 @@ export default class CallsDetails extends React.Component<Props, State> {
                     });
                     if (rowId !== editingRowId) {
                         const rowData = $grid.getRowData(rowId);
-                        const {loginId} = rowData;
-                        grid.editRow({
-                            gridId: gridId,
-                            rowId: rowId,
-                            parameters: {
-                                keys: true,
-                                aftersavefunc: function (r, s, newRowData) {
-                                    const {callid, mark, model, comment, objective} = newRowData;
-                                    dispatch(saveComments({
-                                        id: callid,
-                                        loginId,
-                                        mark,
-                                        model,
-                                        comment,
-                                        objective
-                                    }));
+                        const {loginId, callid} = rowData;
+                        if (callid) {
+                            grid.editRow({
+                                gridId: gridId,
+                                rowId: rowId,
+                                parameters: {
+                                    keys: true,
+                                    aftersavefunc: function (r, s, newRowData) {
+                                        const {callid, mark, model, comment, objective} = newRowData;
+                                        dispatch(saveComments({
+                                            callid,
+                                            loginId,
+                                            mark,
+                                            model,
+                                            comment,
+                                            objective
+                                        }));
+                                    }
                                 }
-                            }
-                        });
-                        $grid.data(editingRowIdData, rowId);
+                            });
+                            $grid.data(editingRowIdData, rowId);
+                        }
                     } else {
                         $grid.data(editingRowIdData, null);
                     }
@@ -238,6 +248,31 @@ export default class CallsDetails extends React.Component<Props, State> {
         }));
     }
 
+    addClickHandler() {
+        const {dispatch, loginIds} = this.props;
+        const {callsDetails} = this.state;
+        const updateCallsDetailsGrid = this.updateCallsDetailsGrid.bind(this);
+        const objectiveOptions = this.objectiveOptions;
+        const loginId = _.first(loginIds);
+        dispatch(getUniqueComments({
+            loginId
+        }, function (comments) {
+            let saveButtonId = generator.genId();
+            dialog.modal({
+                header: i18n.t('noteCreation'),
+                body: <CustomItem clientId={loginId}
+                                  objectiveOptions={objectiveOptions}
+                                  updateCallsDetailsGrid={updateCallsDetailsGrid}
+                                  saveButtonId={saveButtonId}
+                                  uniqueComments={comments}
+                                  dispatch={dispatch}/>,
+                buttons: [
+                    <Button id={saveButtonId}>{i18next.t('save')}</Button>
+                ]
+            });
+        }));
+    }
+
     editClickHandler() {
         let rowsIds = grid.getSelectedRows(this.gridId);
         const {dispatch} = this.props;
@@ -248,7 +283,7 @@ export default class CallsDetails extends React.Component<Props, State> {
 
         if (rowsIds.length === 1) {
             let callDetails = _.find(callsDetails, function (c) {
-                return c.callid === _.first(rowsIds);
+                return c.id === _.first(rowsIds);
             });
             let saveButtonId = generator.genId();
             if (callDetails) {
@@ -257,14 +292,23 @@ export default class CallsDetails extends React.Component<Props, State> {
                 }, function (comments) {
                     dialog.modal({
                         header: callDetails.login + callDetails.time,
-                        body: <RecordItem callDetails={callDetails}
-                                          login={callDetails.login}
-                                          clientId={callDetails.loginId}
-                                          objectiveOptions={objectiveOptions}
-                                          updateCallsDetailsGrid={updateCallsDetailsGrid}
-                                          saveButtonId={saveButtonId}
-                                          uniqueComments={comments}
-                                          dispatch={dispatch}/>,
+                        body: callDetails.callid ?
+                            <RecordItem callDetails={callDetails}
+                                        login={callDetails.login}
+                                        clientId={callDetails.loginId}
+                                        objectiveOptions={objectiveOptions}
+                                        updateCallsDetailsGrid={updateCallsDetailsGrid}
+                                        saveButtonId={saveButtonId}
+                                        uniqueComments={comments}
+                                        dispatch={dispatch}/> :
+                            <CustomItem callDetails={callDetails}
+                                        login={callDetails.login}
+                                        clientId={callDetails.loginId}
+                                        objectiveOptions={objectiveOptions}
+                                        updateCallsDetailsGrid={updateCallsDetailsGrid}
+                                        saveButtonId={saveButtonId}
+                                        uniqueComments={comments}
+                                        dispatch={dispatch}/>,
                         buttons: [
                             <Button id={saveButtonId}>{i18next.t('save')}</Button>
                         ]
@@ -277,6 +321,20 @@ export default class CallsDetails extends React.Component<Props, State> {
                 body: i18next.t('pleaseChooseOneRowToEdit')
             });
         }
+    }
+
+    deleteClickHandler() {
+        let rowsIds = grid.getSelectedRows(this.gridId);
+        const {dispatch} = this.props;
+        const {callsDetails} = this.state;
+        const updateCallsDetailsGrid = this.updateCallsDetailsGrid.bind(this);
+
+        const ids = callsDetails.filter((item) => {
+            return rowsIds.indexOf(item.id) !== -1;
+        }).map(item => item.commentId);
+        dispatch(deleteComments({ids}, function () {
+            updateCallsDetailsGrid();
+        }));
     }
 
     loadRecord(data) {
@@ -308,13 +366,23 @@ export default class CallsDetails extends React.Component<Props, State> {
     }
 
     render() {
+        const {loginIds, userPermissions} = this.props;
+        const addingEnabled = loginIds.length === 1;
         return (
             <div>
-                {this.props.userPermissions.telephonyCommentsManage &&
+                {userPermissions.telephonyCommentsManage &&
                 <div className="row">
+                    {addingEnabled && <Button title={i18next.t('add')}
+                                              onClick={this.addClickHandler.bind(this)}>
+                        <i className="material-icons">playlist_add</i>
+                    </Button>}
                     <Button title={i18next.t('edit')}
                             onClick={this.editClickHandler.bind(this)}>
                         <i className="material-icons">mode_edit</i>
+                    </Button>
+                    <Button title={i18next.t('delete')}
+                            onClick={this.deleteClickHandler.bind(this)}>
+                        <i className="material-icons">delete</i>
                     </Button>
                 </div>}
                 <div className="row">

@@ -68,7 +68,8 @@
       "client": "Client",
       "show": "Show",
       "hide": "Hide",
-      "alias": "Alias"
+      "alias": "Alias",
+      "noteCreation": "Note creation"
     }
   },
   "ru": {
@@ -140,7 +141,8 @@
       "client": "Клиент",
       "show": "Отображать",
       "hide": "Скрывать",
-      "alias": "Псевдоним"
+      "alias": "Псевдоним",
+      "noteCreation": "Создание записи"
     }
   }
 }

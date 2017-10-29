@@ -1,18 +1,17 @@
 import * as React from 'react';
 
-import {dialog} from 'shell/index';
-import {ICallDetails, IUniqueComments} from 'models/telephony';
-import Audio from 'components/Audio/Audio';
+import { dialog } from 'shell/index';
+import { ICallDetails, IUniqueComments } from 'models/telephony';
 import InputAutocomplete from '../../components/InputAutocomplete/InputAutocomplete';
 import Input from 'components/Input/Input';
 import Select from 'components/Select/Select';
 import Textarea from 'components/Textarea/Textarea';
-import {saveComments, getRecord} from 'redux/actions/telephonyActions';
+import { saveComments } from 'redux/actions/telephonyActions';
 
 interface IProps {
-    login: string,
     clientId: number;
-    callDetails: ICallDetails;
+    login?: string;
+    callDetails?: ICallDetails;
     saveButtonId: string;//TODO: Handle click using jquery
     updateCallsDetailsGrid: Function;
     objectiveOptions: any;
@@ -22,28 +21,27 @@ interface IProps {
 }
 
 interface IState {
-    callid?: string;
-    duration?: string;
+    commentId?: number;
+    numfrom?: string;
+    time?: string;
     mark?: string;
     model?: string;
     comment?: string;
     objective?: string;
-    src?: string;
 }
 
-class RecordItem extends React.Component<IProps, IState> {
+class CustomItem extends React.Component<IProps, IState> {
     constructor(props) {
         super(props);
 
-        const {callid, duration, mark, model, comment, objective} = props.callDetails;
-
         this.state = {
-            callid: callid ? callid : '',
-            duration: duration ? duration : '',
-            mark: mark ? mark : '',
-            model: model ? model : '',
-            comment: comment ? comment : '',
-            objective: objective ? objective : ''
+            commentId: props.callDetails && props.callDetails.commentId ? props.callDetails.commentId : '',
+            numfrom: props.callDetails && props.callDetails.numfrom ? props.callDetails.numfrom.replace(/\D/g, '') : '',
+            time: props.callDetails && props.callDetails.time ? props.callDetails.time : '',
+            mark: props.callDetails && props.callDetails.mark ? props.callDetails.mark : '',
+            model: props.callDetails && props.callDetails.model ? props.callDetails.model : '',
+            comment: props.callDetails && props.callDetails.comment ? props.callDetails.comment : '',
+            objective: props.callDetails && props.callDetails.objective ? props.callDetails.objective : ''
         }
     }
 
@@ -64,25 +62,25 @@ class RecordItem extends React.Component<IProps, IState> {
 
     componentDidMount() {
         Materialize.updateTextFields();
-
-        const callid = this.state.callid;
         let self = this;
-        if (callid) {
-            this.props.dispatch(getRecord({
-                login: this.props.login,
-                callid: callid
-            }, function (record) {
-                self.setState({
-                    src: record.src
-                });
-            }));
-        }
 
         $('#' + this.props.saveButtonId).on('click', function () { //TODO: Needs react realization
             let dialogId = $(this).closest('.modal').attr('id');
             self.save(function () {
                 dialog.close(dialogId);
             });
+        });
+    }
+
+    numfromChangeHandler(e) {
+        this.setState({
+            numfrom: e.target.value.substr(0, 11)
+        });
+    }
+
+    timeChangeHandler(e) {
+        this.setState({
+            time: e.target.value
         });
     }
 
@@ -111,34 +109,47 @@ class RecordItem extends React.Component<IProps, IState> {
     }
 
     save(callback) {
-        let updateCallsDetailsGrid = this.props.updateCallsDetailsGrid;
-        this.props.dispatch(saveComments({
-            callid: this.state.callid,
-            loginId: this.props.clientId,
-            mark: this.state.mark,
-            model: this.state.model,
-            comment: this.state.comment,
-            objective: this.state.objective
-        }, function () {
+        const {clientId, dispatch, updateCallsDetailsGrid} = this.props;
+        const {commentId, numfrom, time, mark, model, comment, objective} = this.state;
+        const data: any = {
+            loginId: clientId,
+            numfrom,
+            time,
+            mark,
+            model,
+            comment,
+            objective
+        };
+        if (typeof (commentId) === 'number') {
+            data.id = commentId;
+        }
+        dispatch(saveComments(data, function () {
             updateCallsDetailsGrid();
         }));
         callback();
     }
 
     render() {
-        const {duration, src, mark, model, comment, objective} = this.state;
-        let marksSource = this.getAutocompleteSource(this.props.uniqueComments.marks);
-        let modelsSource = this.getAutocompleteSource(this.props.uniqueComments.models);
+        const {uniqueComments, objectiveOptions} = this.props;
+        const {numfrom, time, mark, model, comment, objective} = this.state;
+        let marksSource = this.getAutocompleteSource(uniqueComments.marks);
+        let modelsSource = this.getAutocompleteSource(uniqueComments.models);
         return (
             <div>
-                {parseInt(duration) > 0 &&
                 <div className="row">
-                    <Audio src={src}/>
-                </div>}
+                    <Input label={i18next.t('dateAndTime')}
+                           s={6}
+                           value={time}
+                           onChange={this.timeChangeHandler.bind(this)}/>
+                    <Input label={i18next.t('outgoing')}
+                           s={6}
+                           value={numfrom}
+                           onChange={this.numfromChangeHandler.bind(this)}/>
+                </div>
                 <div className="row">
                     <Select label={i18next.t('objective')}
                             value={objective}
-                            options={this.props.objectiveOptions}
+                            options={objectiveOptions}
                             onChange={this.objectiveChangeHandler.bind(this)}/>
                 </div>
                 <div className="row">
@@ -163,4 +174,4 @@ class RecordItem extends React.Component<IProps, IState> {
     }
 }
 
-export default RecordItem;
+export default CustomItem;
