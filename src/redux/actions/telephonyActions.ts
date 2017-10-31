@@ -159,7 +159,7 @@ export function resetCallsTotals() {
 }
 
 interface GetCallsDetailsProps {
-    loginIds: string[];
+    loginIds: number[];
     from: string;
     to: string;
     duration?: number;
@@ -201,8 +201,11 @@ export function getRecord(data: GetRecordProps, callback: Function) {//TODO: esc
 }
 
 interface ISaveCommentsProps {
-    id: string,
-    loginId: string;
+    id?: number,
+    callid?: string,
+    loginId: number;
+    numfrom?: string;
+    time?: string;
     mark?: string;
     model?: string;
     comment?: string;
@@ -213,14 +216,7 @@ export function saveComments(data: ISaveCommentsProps, callback?: Function) {
     return (dispatch => {
         dispatch(sendRequest({
             url: '/Api/Comments/Save',
-            data: {
-                id: data.id,
-                login_id: data.loginId,
-                mark: data.mark,
-                model: data.model,
-                comment: data.comment,
-                objective: data.objective
-            }
+            data
         })).then(function () {
             if (callback) callback();
             //dispatch(callsDetails(result));
@@ -228,8 +224,19 @@ export function saveComments(data: ISaveCommentsProps, callback?: Function) {
     });
 }
 
+export function deleteComments(data: {ids: number[]}, callback?: Function) {
+    return (dispatch => {
+        dispatch(sendRequest({
+            url: '/Api/Comments/Delete',
+            data
+        })).then(function () {
+            if (callback) callback();
+        });
+    });
+}
+
 interface IGetUniqueComments {
-    loginId: string;
+    loginId: number;
 }
 
 export function getUniqueComments(data: IGetUniqueComments, callback: Function) {//TODO: escape using callback

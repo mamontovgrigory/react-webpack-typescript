@@ -27,6 +27,7 @@ export interface ICallDetails {
     time: string;
     login: string;
     loginId: string;
+    commentId: number;
     numfrom: string;
     numto: string;
     duration: string;

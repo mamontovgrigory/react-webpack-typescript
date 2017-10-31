@@ -11,7 +11,7 @@ import {saveComments, getRecord} from 'redux/actions/telephonyActions';
 
 interface IProps {
     login: string,
-    clientId: string;
+    clientId: number;
     callDetails: ICallDetails;
     saveButtonId: string;//TODO: Handle click using jquery
     updateCallsDetailsGrid: Function;
@@ -33,7 +33,7 @@ interface IState {
 
 class RecordItem extends React.Component<IProps, IState> {
     constructor(props) {
-        super();
+        super(props);
 
         const {callid, duration, mark, model, comment, objective} = props.callDetails;
 
@@ -113,7 +113,7 @@ class RecordItem extends React.Component<IProps, IState> {
     save(callback) {
         let updateCallsDetailsGrid = this.props.updateCallsDetailsGrid;
         this.props.dispatch(saveComments({
-            id: this.state.callid,
+            callid: this.state.callid,
             loginId: this.props.clientId,
             mark: this.state.mark,
             model: this.state.model,

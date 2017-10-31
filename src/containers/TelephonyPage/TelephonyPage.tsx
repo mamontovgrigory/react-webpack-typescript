@@ -150,7 +150,7 @@ class Telephony extends React.Component<Props, State> {
         const loginIds = clients.filter((c) => {
             return logins.indexOf(c.login) !== -1;
         }).map((c) => {
-            return c.id;
+            return Number(c.id);
         });
 
         const dateFormat = this.dateFormat;
@@ -164,7 +164,8 @@ class Telephony extends React.Component<Props, State> {
         dispatch(getCallsDetails(callsDetailsProps, function (result) {
             dialog.modal({
                 header: logins.join(', ') + ' ' + moment(from).format(dateFormat) + ' - ' + moment(to).format(dateFormat),
-                body: <CallsDetails callsDetails={result}
+                body: <CallsDetails loginIds={loginIds}
+                                    callsDetails={result}
                                     userPermissions={userPermissions}
                                     dispatch={dispatch}
                                     callsDetailsProps={callsDetailsProps}/>,
