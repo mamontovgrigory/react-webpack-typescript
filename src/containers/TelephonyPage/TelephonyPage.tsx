@@ -11,6 +11,7 @@ import {
     getCallsTotals,
     getCallsDetails
 } from 'redux/actions/telephonyActions';
+import Select from 'components/Select/Select';
 import CallsDetails from './CallsDetails';
 
 const style = require('./telephonyPage.scss'); //TODO: use classes as variables
@@ -193,19 +194,128 @@ class Telephony extends React.Component<Props, State> {
                                value={this.state.to}/>
                         <label htmlFor="date-to" className="active">{i18next.t('periodTo')}</label>
                     </div>
-                    <div className="input-field col s3">
+                    <Select label="Способы обращений"
+                            multiple={true}
+                            s={6}
+                            onChange={function(){}}
+                            options={[
+                                {
+                                    name: 'Звонки',
+                                    value: '1'
+                                },
+                                {
+                                    name: 'Эл. почта',
+                                    value: '2'
+                                },
+                                {
+                                    name: 'Первичные визиты',
+                                    value: '3'
+                                },
+                                {
+                                    name: 'Вторичные визиты',
+                                    value: '4'
+                                }
+                            ]}/>
+                    {false && <div className="input-field col s3">
                         <input type="number" id={this.inputDurationId}
                                onChange={this.durationChangeHandler.bind(this)}/>
                         <label htmlFor={this.inputDurationId}>{i18next.t('durationInSeconds')}</label>
-                    </div>
-                    <div className="col s3 note">
+                    </div>}
+                    {false && <div className="col s3 note">
                         {this.props.updateDate && i18next.t('updated') + ' ' + this.props.updateDate}
+                    </div>}
+                </div>
+                <div>
+                    <div className="row" style={{marginBottom: 0}}>
+                        <div className="col a12">
+                            <h4>Регионы</h4>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="input-field col s3">
+                            <input type="checkbox" id={"test"} checked={true}/>
+                            <label htmlFor={"test"}>{i18next.t('selectAll')}</label>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="input-field col s3">
+                            <input type="checkbox" id={"test"} checked={true}/>
+                            <label htmlFor={"test"}>Москва</label>
+                        </div>
+                        <div className="input-field col s3">
+                            <input type="checkbox" id={"test"}/>
+                            <label htmlFor={"test"}>Екатеринбург</label>
+                        </div>
+                        <div className="input-field col s3">
+                            <input type="checkbox" id={"test"}/>
+                            <label htmlFor={"test"}>Пермь</label>
+                        </div>
+                        <div className="input-field col s3">
+                            <input type="checkbox" id={"test"}/>
+                            <label htmlFor={"test"}>Казань</label>
+                        </div>
+                        <div className="input-field col s3">
+                            <input type="checkbox" id={"test"}/>
+                            <label htmlFor={"test"}>Новосибирск</label>
+                        </div>
+                        <div className="input-field col s3">
+                            <input type="checkbox" id={"test"}/>
+                            <label htmlFor={"test"}>Алматы</label>
+                        </div>
+                        <div className="input-field col s3">
+                            <input type="checkbox" id={"test"}/>
+                            <label htmlFor={"test"}>Королёвские Дачи</label>
+                        </div>
                     </div>
                 </div>
-                <div id={this.divClientsListId}>
+                <div className="divider"/>
+                <div>
+                    <div className="row" style={{marginBottom: 0}}>
+                        <div className="col a12">
+                            <h4>Продукты</h4>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="input-field col s3">
+                            <input type="checkbox" id={"test"} checked={true}/>
+                            <label htmlFor={"test"}>{i18next.t('selectAll')}</label>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="input-field col s3">
+                            <input type="checkbox" id={"test"} checked={true}/>
+                            <label htmlFor={"test"}>Берег HONKA</label>
+                        </div>
+                        <div className="input-field col s3">
+                            <input type="checkbox" id={"test"} checked={true}/>
+                            <label htmlFor={"test"}>HONKA CLUB</label>
+                        </div>
+                        <div className="input-field col s3">
+                            <input type="checkbox" id={"test"} checked={true}/>
+                            <label htmlFor={"test"}>Завидово HONKA</label>
+                        </div>
+                        <div className="input-field col s3">
+                            <input type="checkbox" id={"test"} checked={true}/>
+                            <label htmlFor={"test"}>Дома HONKA</label>
+                        </div>
+                        <div className="input-field col s3">
+                            <input type="checkbox" id={"test"} checked={true}/>
+                            <label htmlFor={"test"}>Истринская Ривьера</label>
+                        </div>
+                        <div className="input-field col s3">
+                            <input type="checkbox" id={"test"} checked={true}/>
+                            <label htmlFor={"test"}>HONKA Realty</label>
+                        </div>
+                        <div className="input-field col s3">
+                            <input type="checkbox" id={"test"} checked={true}/>
+                            <label htmlFor={"test"}>Поселки HONKA</label>
+                        </div>
+                    </div>
+                </div>
+                <div className="divider" style={{margin: '0 0 20px 0'}}/>
+                <div id={this.divClientsListId} style={{display: 'none'}}>
                     <div className="row">
                         <div className="col a12">
-                            <div className="divider"/>
                             <h4>{i18next.t('clients')}</h4>
                         </div>
                     </div>
@@ -283,7 +393,7 @@ class Telephony extends React.Component<Props, State> {
                     <a className="waves-effect waves-light btn right m-l-10"
                        onClick={this.searchClickHandler.bind(this)}>{i18next.t('search')}</a>
                     <a className="waves-effect waves-light btn right m-l-10"
-                       onClick={this.reportClickHandler.bind(this)}>{i18next.t('report')}</a>
+                       onClick={this.reportClickHandler.bind(this)}>Отчеты</a>
                     <a className="waves-effect waves-light btn right"
                        onClick={this.slideClickHandler.bind(this)}>
                         <i className="material-icons">swap_vert</i>

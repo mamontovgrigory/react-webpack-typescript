@@ -46,7 +46,7 @@ class UsersPage extends React.Component<Props, State> {
                 {
                     id: 4,
                     groupId: 2,
-                    name: 'Петр Петров',
+                    name: 'Петр Петрович',
                     groupName: 'Менеджеры'
                 },
                 {

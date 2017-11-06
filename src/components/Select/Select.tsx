@@ -14,6 +14,7 @@ interface IProps {
         name?:string;
     }[];
     s?:number;
+    multiple?: boolean;
 }
 
 interface IState {
@@ -39,6 +40,7 @@ export default class Select extends React.Component<IProps, IState> {
     }
 
     render() {
+        const {multiple} = this.props;
         const s = 's' + (this.props.s ? this.props.s : 12);
         let classesObject = {
             'input-field': true,
@@ -52,6 +54,7 @@ export default class Select extends React.Component<IProps, IState> {
                 <select id={this.elementId}
                         defaultValue={this.props.defaultValue}
                         value={this.props.value}
+                        multiple={multiple}
                         onChange={this.props.onChange.bind(this)}>
                     {
                         this.props.options && this.props.options.map((option, i) => {

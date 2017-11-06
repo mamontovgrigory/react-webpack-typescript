@@ -106,7 +106,8 @@ export default class CallsDetails extends React.Component<Props, State> {
                 {
                     name: 'time',
                     label: i18next.t('dateAndTime'),
-                    width: 120
+                    width: 120,
+                    hidden: true
                 },
                 {
                     name: 'numfrom',
@@ -116,7 +117,8 @@ export default class CallsDetails extends React.Component<Props, State> {
                     stype: 'select',
                     searchoptions: {
                         value: numFromSearchOptions
-                    }
+                    },
+                    hidden: true
                 },
                 {
                     name: 'numto',
@@ -126,7 +128,8 @@ export default class CallsDetails extends React.Component<Props, State> {
                     stype: 'select',
                     searchoptions: {
                         value: numToSearchOptions
-                    }
+                    },
+                    hidden: true
                 },
                 {
                     name: 'duration',
@@ -134,7 +137,8 @@ export default class CallsDetails extends React.Component<Props, State> {
                     width: 60,
                     formatter: function (cellvalue, options, rowObject) {
                         return cellvalue ? moment(parseInt(cellvalue) * 1000).utc().format('HH:mm:ss') : '';
-                    }
+                    },
+                    hidden: true
                 },
                 {
                     name: 'client',
@@ -152,7 +156,14 @@ export default class CallsDetails extends React.Component<Props, State> {
                 },
                 {
                     name: 'source',
-                    label: 'Источник обращения',
+                    label: 'Способ обращения',
+                    editable: true,
+                    hidden: !userPermissions.telephonyCommentsView,
+                    width: 60
+                },
+                {
+                    name: 'project',
+                    label: 'Регион',
                     editable: true,
                     hidden: !userPermissions.telephonyCommentsView,
                     width: 60

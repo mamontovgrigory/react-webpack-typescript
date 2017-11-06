@@ -136,6 +136,38 @@ class RecordItem extends React.Component<IProps, IState> {
                     <Audio src={src}/>
                 </div>}
                 <div className="row">
+                    <Select label="Регион"
+                            value={"1"}
+                            s={4}
+                            options={[
+                                {
+                                    name: 'Москва',
+                                    value: '1'
+                                }
+                            ]}
+                            onChange={function(){}}/>
+                    <Select label="Проект"
+                            value={"1"}
+                            s={4}
+                            options={[
+                                {
+                                    name: 'HONKA CLUB',
+                                    value: '1'
+                                }
+                            ]}
+                            onChange={function(){}}/>
+                    <Select label="Способ обращения"
+                            s={4}
+                            options={[
+                                {
+                                    name: 'Звонок',
+                                    value: '1'
+                                }
+                            ]}
+                            value="1"
+                            onChange={function(){}}/>
+                </div>
+                <div className="row">
                     <InputAutocomplete label='Имя клиента'
                                        source={marksSource}
                                        s={6}
@@ -146,38 +178,26 @@ class RecordItem extends React.Component<IProps, IState> {
                                        onChange={this.modelChangeHandler.bind(this)}/>
                 </div>
                 <div className="row">
-                    <Select label="Источник обращения"
-                            value={objective}
-                            s={6}
-                            options={this.props.objectiveOptions}
-                            onChange={this.objectiveChangeHandler.bind(this)}/>
-                    <Select label="Проект"
-                            value={objective}
-                            s={6}
-                            options={this.props.objectiveOptions}
-                            onChange={this.objectiveChangeHandler.bind(this)}/>
-                </div>
-                <div className="row">
                     <Textarea label="Цель обращения"
                               onChange={this.commentChangeHandler.bind(this)}/>
                 </div>
                 <div className="row">
-                    <InputAutocomplete label="Обратный звонок"
-                                       source={marksSource}
-                                       s={4}
-                                       onChange={this.markChangeHandler.bind(this)}/>
-                    <InputAutocomplete label="Встреча в офисе"
-                                       source={modelsSource}
-                                       s={4}
-                                       onChange={this.modelChangeHandler.bind(this)}/>
-                    <InputAutocomplete label="Повторный звонок"
-                                       source={modelsSource}
-                                       s={4}
-                                       onChange={this.modelChangeHandler.bind(this)}/>
-                    <div className="row">
+                    <div className="input-field col s4">
+                        <input type="checkbox" id={"test"} checked={true}/>
+                        <label htmlFor={"test"}>Обратный звонок</label>
+                    </div>
+                    <div className="input-field col s4">
+                        <input type="checkbox" id={"test"} checked={false}/>
+                        <label htmlFor={"test"}>Встреча в офисе</label>
+                    </div>
+                    <div className="input-field col s4">
+                        <input type="checkbox" id={"test"} checked={false}/>
+                        <label htmlFor={"test"}>Повторный звонок</label>
+                    </div>
+                </div>
+                <div className="row">
                     <Textarea label="Результат"
                               onChange={this.commentChangeHandler.bind(this)}/>
-                    </div>
                 </div>
             </div>
         )
