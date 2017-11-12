@@ -141,14 +141,28 @@ export default class CallsDetails extends React.Component<Props, State> {
                     label: i18next.t('mark'),
                     editable: true,
                     hidden: !userPermissions.telephonyCommentsView,
-                    width: 60
+                    width: 100
                 },
                 {
                     name: 'model',
                     label: i18next.t('model'),
                     editable: true,
                     hidden: !userPermissions.telephonyCommentsView,
-                    width: 60
+                    width: 100
+                },
+                {
+                    name: 'client',
+                    label: i18next.t('clientName'),
+                    editable: true,
+                    hidden: !userPermissions.telephonyCommentsView,
+                    width: 100
+                },
+                {
+                    name: 'manager',
+                    label: i18next.t('managerName'),
+                    editable: true,
+                    hidden: !userPermissions.telephonyCommentsView,
+                    width: 100
                 },
                 {
                     name: 'comment',
@@ -207,12 +221,14 @@ export default class CallsDetails extends React.Component<Props, State> {
                                 parameters: {
                                     keys: true,
                                     aftersavefunc: function (r, s, newRowData) {
-                                        const {callid, mark, model, comment, objective} = newRowData;
+                                        const {mark, model, client, manager, comment, objective} = newRowData;
                                         dispatch(saveComments({
                                             callid,
                                             loginId,
                                             mark,
                                             model,
+                                            client,
+                                            manager,
                                             comment,
                                             objective
                                         }));
@@ -291,7 +307,7 @@ export default class CallsDetails extends React.Component<Props, State> {
                     loginId: callDetails.loginId
                 }, function (comments) {
                     dialog.modal({
-                        header: callDetails.login + callDetails.time,
+                        header: callDetails.login + ' ' + callDetails.time,
                         body: callDetails.callid ?
                             <RecordItem callDetails={callDetails}
                                         login={callDetails.login}

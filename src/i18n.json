@@ -69,7 +69,9 @@
       "show": "Show",
       "hide": "Hide",
       "alias": "Alias",
-      "noteCreation": "Note creation"
+      "noteCreation": "Note creation",
+      "clientName": "Client name",
+      "managerName": "Manager name"
     }
   },
   "ru": {
@@ -142,7 +144,9 @@
       "show": "Отображать",
       "hide": "Скрывать",
       "alias": "Псевдоним",
-      "noteCreation": "Создание записи"
+      "noteCreation": "Создание записи",
+      "clientName": "Имя клиента",
+      "managerName": "Имя менеджера"
     }
   }
 }

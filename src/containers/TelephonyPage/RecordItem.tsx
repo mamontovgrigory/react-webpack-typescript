@@ -1,13 +1,13 @@
 import * as React from 'react';
 
-import {dialog} from 'shell/index';
-import {ICallDetails, IUniqueComments} from 'models/telephony';
+import { dialog } from 'shell/index';
+import { ICallDetails, IUniqueComments } from 'models/telephony';
 import Audio from 'components/Audio/Audio';
 import InputAutocomplete from '../../components/InputAutocomplete/InputAutocomplete';
 import Input from 'components/Input/Input';
 import Select from 'components/Select/Select';
 import Textarea from 'components/Textarea/Textarea';
-import {saveComments, getRecord} from 'redux/actions/telephonyActions';
+import { saveComments, getRecord } from 'redux/actions/telephonyActions';
 
 interface IProps {
     login: string,
@@ -26,6 +26,8 @@ interface IState {
     duration?: string;
     mark?: string;
     model?: string;
+    client?: string;
+    manager?: string;
     comment?: string;
     objective?: string;
     src?: string;
@@ -35,13 +37,16 @@ class RecordItem extends React.Component<IProps, IState> {
     constructor(props) {
         super(props);
 
-        const {callid, duration, mark, model, comment, objective} = props.callDetails;
+        const {callid, duration, mark, model, client, manager, comment, objective} = props.callDetails;
+        console.log('constructor', props.callDetails);
 
         this.state = {
             callid: callid ? callid : '',
             duration: duration ? duration : '',
             mark: mark ? mark : '',
             model: model ? model : '',
+            client: client ? client : '',
+            manager: manager ? manager : '',
             comment: comment ? comment : '',
             objective: objective ? objective : ''
         }
@@ -98,6 +103,18 @@ class RecordItem extends React.Component<IProps, IState> {
         });
     }
 
+    clientChangeHandler(e) {
+        this.setState({
+            client: e.target.value
+        });
+    }
+
+    managerChangeHandler(e) {
+        this.setState({
+            manager: e.target.value
+        });
+    }
+
     commentChangeHandler(e) {
         this.setState({
             comment: e.target.value
@@ -117,6 +134,8 @@ class RecordItem extends React.Component<IProps, IState> {
             loginId: this.props.clientId,
             mark: this.state.mark,
             model: this.state.model,
+            client: this.state.client,
+            manager: this.state.manager,
             comment: this.state.comment,
             objective: this.state.objective
         }, function () {
@@ -126,7 +145,7 @@ class RecordItem extends React.Component<IProps, IState> {
     }
 
     render() {
-        const {duration, src, mark, model, comment, objective} = this.state;
+        const {duration, src, mark, model, client, manager, comment, objective} = this.state;
         let marksSource = this.getAutocompleteSource(this.props.uniqueComments.marks);
         let modelsSource = this.getAutocompleteSource(this.props.uniqueComments.models);
         return (
@@ -152,6 +171,16 @@ class RecordItem extends React.Component<IProps, IState> {
                                        s={6}
                                        value={model}
                                        onChange={this.modelChangeHandler.bind(this)}/>
+                </div>
+                <div className="row">
+                    <Input label={i18next.t('clientName')}
+                           s={6}
+                           value={client}
+                           onChange={this.clientChangeHandler.bind(this)}/>
+                    <Input label={i18next.t('managerName')}
+                           s={6}
+                           value={manager}
+                           onChange={this.managerChangeHandler.bind(this)}/>
                 </div>
                 <div className="row">
                     <Textarea label={i18next.t('comment')}

@@ -33,6 +33,8 @@ export interface ICallDetails {
     duration: string;
     mark?: string;
     model?: string;
+    client?: string;
+    manager?: string;
     comment?: string;
     objective?: boolean;
 }

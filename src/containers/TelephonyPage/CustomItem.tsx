@@ -1,9 +1,11 @@
 import * as React from 'react';
+import * as moment from 'moment';
 
 import { dialog } from 'shell/index';
 import { ICallDetails, IUniqueComments } from 'models/telephony';
 import InputAutocomplete from '../../components/InputAutocomplete/InputAutocomplete';
 import Input from 'components/Input/Input';
+import InputMask from 'components/InputMask/InputMask';
 import Select from 'components/Select/Select';
 import Textarea from 'components/Textarea/Textarea';
 import { saveComments } from 'redux/actions/telephonyActions';
@@ -26,6 +28,8 @@ interface IState {
     time?: string;
     mark?: string;
     model?: string;
+    client?: string;
+    manager?: string;
     comment?: string;
     objective?: string;
 }
@@ -40,6 +44,8 @@ class CustomItem extends React.Component<IProps, IState> {
             time: props.callDetails && props.callDetails.time ? props.callDetails.time : '',
             mark: props.callDetails && props.callDetails.mark ? props.callDetails.mark : '',
             model: props.callDetails && props.callDetails.model ? props.callDetails.model : '',
+            client: props.callDetails && props.callDetails.client ? props.callDetails.client : '',
+            manager: props.callDetails && props.callDetails.manager ? props.callDetails.manager : '',
             comment: props.callDetails && props.callDetails.comment ? props.callDetails.comment : '',
             objective: props.callDetails && props.callDetails.objective ? props.callDetails.objective : ''
         }
@@ -74,7 +80,7 @@ class CustomItem extends React.Component<IProps, IState> {
 
     numfromChangeHandler(e) {
         this.setState({
-            numfrom: e.target.value.substr(0, 11)
+            numfrom: e.target.value
         });
     }
 
@@ -96,6 +102,18 @@ class CustomItem extends React.Component<IProps, IState> {
         });
     }
 
+    clientChangeHandler(e) {
+        this.setState({
+            client: e.target.value
+        });
+    }
+
+    managerChangeHandler(e) {
+        this.setState({
+            manager: e.target.value
+        });
+    }
+
     commentChangeHandler(e) {
         this.setState({
             comment: e.target.value
@@ -110,13 +128,15 @@ class CustomItem extends React.Component<IProps, IState> {
 
     save(callback) {
         const {clientId, dispatch, updateCallsDetailsGrid} = this.props;
-        const {commentId, numfrom, time, mark, model, comment, objective} = this.state;
+        const {commentId, numfrom, time, mark, model, client, manager, comment, objective} = this.state;
         const data: any = {
             loginId: clientId,
-            numfrom,
-            time,
+            numfrom: numfrom.replace(/\D/g, ''),
+            time: moment(time, 'DD.MM.YY HH:mm').format('YYYY-MM-DD HH:mm:ss'),
             mark,
             model,
+            client,
+            manager,
             comment,
             objective
         };
@@ -131,20 +151,22 @@ class CustomItem extends React.Component<IProps, IState> {
 
     render() {
         const {uniqueComments, objectiveOptions} = this.props;
-        const {numfrom, time, mark, model, comment, objective} = this.state;
+        const {numfrom, time, mark, model, client, manager, comment, objective} = this.state;
         let marksSource = this.getAutocompleteSource(uniqueComments.marks);
         let modelsSource = this.getAutocompleteSource(uniqueComments.models);
         return (
             <div>
                 <div className="row">
-                    <Input label={i18next.t('dateAndTime')}
-                           s={6}
-                           value={time}
-                           onChange={this.timeChangeHandler.bind(this)}/>
-                    <Input label={i18next.t('outgoing')}
-                           s={6}
-                           value={numfrom}
-                           onChange={this.numfromChangeHandler.bind(this)}/>
+                    <InputMask label={i18next.t('dateAndTime')}
+                               mask="99.99.99 99:99"
+                               s={6}
+                               value={time}
+                               onChange={this.timeChangeHandler.bind(this)}/>
+                    <InputMask label={i18next.t('outgoing')}
+                               mask="+7(999)999-99-99"
+                               s={6}
+                               value={numfrom}
+                               onChange={this.numfromChangeHandler.bind(this)}/>
                 </div>
                 <div className="row">
                     <Select label={i18next.t('objective')}
@@ -163,6 +185,16 @@ class CustomItem extends React.Component<IProps, IState> {
                                        s={6}
                                        value={model}
                                        onChange={this.modelChangeHandler.bind(this)}/>
+                </div>
+                <div className="row">
+                    <Input label={i18next.t('clientName')}
+                           s={6}
+                           value={client}
+                           onChange={this.clientChangeHandler.bind(this)}/>
+                    <Input label={i18next.t('managerName')}
+                           s={6}
+                           value={manager}
+                           onChange={this.managerChangeHandler.bind(this)}/>
                 </div>
                 <div className="row">
                     <Textarea label={i18next.t('comment')}

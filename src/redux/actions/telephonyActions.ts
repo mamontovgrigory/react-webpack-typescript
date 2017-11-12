@@ -210,6 +210,8 @@ interface ISaveCommentsProps {
     model?: string;
     comment?: string;
     objective?: string;
+    client?: string;
+    manager?: string;
 }
 
 export function saveComments(data: ISaveCommentsProps, callback?: Function) {
