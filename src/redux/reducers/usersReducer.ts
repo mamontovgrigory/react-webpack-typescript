@@ -1,19 +1,19 @@
-import {USERS_REQUEST_FINISHED} from '../actions/usersActions';
+import { USERS_REQUEST_FINISHED } from '../actions/usersActions';
 
 interface State {
-    users:any[];
+    users: any[];
 }
 
 interface Action {
-    type:string;
-    users:any[];
+    type: string;
+    users: any[];
 }
 
-const initialState:State = {
+const initialState: State = {
     users: []
 };
 
-export default function (state:State = initialState, action:Action):State {
+export default function (state: State = initialState, action: Action): State {
     switch (action.type) {
         case USERS_REQUEST_FINISHED:
             return _.assign({}, state, {

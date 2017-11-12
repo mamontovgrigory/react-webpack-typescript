@@ -134,7 +134,7 @@ class Telephony extends React.Component<Props, State> {
     reportClickHandler() {
         let serverUrl = (NODE_ENV.trim() === 'development' ?
             'http://localhost:8889' :
-            window.location.origin); //TODO: Move to config
+            'http://188.225.83.13:8889'); //TODO: Move to config
 
         window.location.href = serverUrl + '/Api/Reports/GetStatistic?' + $.param(this.getRequestParams());
     }

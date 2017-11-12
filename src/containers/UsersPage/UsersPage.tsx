@@ -22,9 +22,10 @@ class UsersPage extends React.Component<Props, State> {
     gridId: string = generator.genId();
 
     componentDidUpdate() {
+        const {users} = this.props;
         grid.init({
             gridId: this.gridId,
-            data: this.props.users,
+            data: [].concat(users),
             colModel: [
                 {
                     name: 'id',
