@@ -43,7 +43,7 @@ module.exports = {
             },
             {
                 test: /\.(png|jpg|gif|ico|svg|ttf|eot|woff|woff2|mp3)$/,
-                loader: 'url-loader?limit=10000'
+                loader: 'url-loader?limit=10000&name=public/[hash].[ext]'
             }
         ],
 

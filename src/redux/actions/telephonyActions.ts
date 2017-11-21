@@ -185,13 +185,12 @@ interface GetRecordProps {
 export function getRecord(data: GetRecordProps, callback: Function) {//TODO: escape using callback
     return (dispatch => {
         dispatch(sendRequest({
-            host: 'http://xn----7sbhtgckcrdddi.xn--p1ai',
-            url: '/ajax/get_call_record.php',
+            url: '/Api/Records/Download',
             data
         })).then(function (result) {
             let src = (NODE_ENV.trim() === 'development' ?
-                    'http://xn----7sbhtgckcrdddi.xn--p1ai' :
-                    window.location.origin) + '/ajax' + result.src; //TODO: Move to config
+                    'http://localhost' :
+                    'http://151.248.121.33') + result.src; //TODO: Move to config
             callback({
                 src
             });
@@ -245,9 +244,7 @@ export function getUniqueComments(data: IGetUniqueComments, callback: Function) 
     return (dispatch => {
         dispatch(sendRequest({
             url: '/Api/Comments/GetUnique',
-            data: {
-                login_id: data.loginId
-            }
+            data
         })).then(function (result) {
             callback(result);
             //dispatch(uniqueComments(result));

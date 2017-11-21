@@ -111,20 +111,23 @@ export default class GroupItem extends React.Component<Props, State> {
             return;
         }
 
-        let settingsObject = {};
+        let settingsObject = [];
         Object.keys(settings).map((key) => {
             const permission = _.find(permissions, function (p) {
                 return parseInt(p.id) === parseInt(key);
             });
-            let val = settings[key];
+            let value = settings[key];
             if (permission.list) {
-                if (val.length == permission.list.length) {
-                    val = 'all';
+                if (value.length == permission.list.length) {
+                    value = 'all';
                 } else {
-                    val = val.join(',');
+                    value = value.join(',');
                 }
             }
-            settingsObject[key] = val;
+            settingsObject.push({
+                value,
+                permissionId: key
+            });
         });
 
         dispatch(saveGroup({

@@ -134,7 +134,7 @@ class Telephony extends React.Component<Props, State> {
     reportClickHandler() {
         let serverUrl = (NODE_ENV.trim() === 'development' ?
             'http://localhost:8889' :
-            'http://188.225.83.13:8889'); //TODO: Move to config
+            window.location.origin); //TODO: Move to config
 
         window.location.href = serverUrl + '/Api/Reports/GetStatistic?' + $.param(this.getRequestParams());
     }
@@ -348,32 +348,29 @@ class Telephony extends React.Component<Props, State> {
                                                             daysTotalsObjective[i] += objectiveCount;
                                                             clientTotal += count;
                                                             clientTotalObjective += objectiveCount;
-                                                            const className = count !== 0 ? 'info-cell' : '';
                                                             const duration = this.state.duration;
-                                                            return <td className={'center ' + className}
+                                                            return <td className={'center info-cell'}
                                                                        key={i}
-                                                                       onClick={count > 0 ? () =>
+                                                                       onClick={() =>
                                                                            this.infoCellClickHandler({
                                                                                logins: [login],
                                                                                from: this.props.callsTotals.dates[i],
                                                                                to: this.props.callsTotals.dates[i],
                                                                                duration
-                                                                           }) : function () {
-                                                                       }}>{count} <span
+                                                                           })}>{count} <span
                                                                 className="note">({objectiveCount})</span>
                                                             </td>
                                                         })
                                                     }
                                                     {
-                                                        <th className={'center ' + (clientTotal > 0 ? 'info-cell' : '')}
-                                                            onClick={clientTotal > 0 ? () =>
+                                                        <th className={'center info-cell'}
+                                                            onClick={() =>
                                                                 this.infoCellClickHandler({
                                                                     logins: [login],
                                                                     from: this.props.callsTotals.dates[0],
                                                                     to: this.props.callsTotals.dates[this.props.callsTotals.dates.length - 1],
                                                                     duration: this.state.duration
-                                                                }) : function () {
-                                                            }}>{clientTotal} <span
+                                                                })}>{clientTotal} <span
                                                             className="note">({clientTotalObjective})</span>
                                                         </th>
                                                     }

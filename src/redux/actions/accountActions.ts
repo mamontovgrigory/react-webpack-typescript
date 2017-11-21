@@ -68,11 +68,6 @@ export function checkSession() {
                 dispatch(getAccountPermissions());
             }
         });
-        /*dispatch(login({
-            id: 1,
-            login: 'test'
-        }));
-        dispatch(getAccountPermissions());*/
     });
 }
 
@@ -87,8 +82,8 @@ let permissionsMapping = {
 
 export function getAccountPermissions() {
     return (dispatch => {
-        /*dispatch(sendRequest({
-            url: '/ajax/get_account.php'
+        dispatch(sendRequest({
+            url: '/Api/Users/GetAccount'
         })).then(function (response) {
             let result: IUserPermissions = {
                 usersManage: false,
@@ -113,18 +108,6 @@ export function getAccountPermissions() {
             dispatch(getModules(result));//TODO: Update data outside account actions
             dispatch(getClients(result));
             dispatch(resetCallsTotals());
-        });*/
-        let result: IUserPermissions = {
-            usersManage: true,
-            groupsManage: true,
-            telephonyCabinetsManage: true,
-            telephonyCommentsManage: true,
-            telephonyCommentsView: true,
-            telephonyClients: ['all']
-        };
-        dispatch(permissions(result));
-        dispatch(getModules(result));//TODO: Update data outside account actions
-        dispatch(getClients(result));
-        dispatch(resetCallsTotals());
+        });
     });
 }
