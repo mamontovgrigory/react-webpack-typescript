@@ -190,7 +190,7 @@ export function getRecord(data: GetRecordProps, callback: Function) {//TODO: esc
         })).then(function (result) {
             let src = (NODE_ENV.trim() === 'development' ?
                     'http://localhost' :
-                    'http://151.248.121.33') + result.src; //TODO: Move to config
+                    window.location.origin) + result.src; //TODO: Move to config
             callback({
                 src
             });
