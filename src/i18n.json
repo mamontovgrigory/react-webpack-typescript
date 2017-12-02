@@ -71,7 +71,11 @@
       "alias": "Alias",
       "noteCreation": "Note creation",
       "clientName": "Client name",
-      "managerName": "Manager name"
+      "managerName": "Manager name",
+      "file": "File",
+      "baseFile": "Base file",
+      "stockFile": "Stock file",
+      "stock": "Stock"
     }
   },
   "ru": {
@@ -146,7 +150,11 @@
       "alias": "Псевдоним",
       "noteCreation": "Создание записи",
       "clientName": "Имя клиента",
-      "managerName": "Имя менеджера"
+      "managerName": "Имя менеджера",
+      "file": "Файл",
+      "baseFile": "Базовый файл",
+      "stockFile": "Стоковый файл",
+      "stock": "Сток"
     }
   }
 }

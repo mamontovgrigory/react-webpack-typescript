@@ -74,6 +74,7 @@ export function checkSession() {
 let permissionsMapping = {
     usersManage: 'users_manage',
     groupsManage: 'groups_manage',
+    stockManage: 'stock_manage',
     telephonyCabinetsManage: 'telephony_cabinets_manage',
     telephonyCommentsManage: 'telephony_comments_manage',
     telephonyCommentsView: 'telephony_comments_view',
@@ -88,6 +89,7 @@ export function getAccountPermissions() {
             let result: IUserPermissions = {
                 usersManage: false,
                 groupsManage: false,
+                stockManage: false,
                 telephonyCabinetsManage: false,
                 telephonyCommentsManage: false,
                 telephonyCommentsView: false,

@@ -21,6 +21,7 @@ const initialState: State = {
     permissions: {
         usersManage: false,
         groupsManage: false,
+        stockManage: false,
         telephonyCabinetsManage: false,
         telephonyCommentsManage: false,
         telephonyCommentsView: false,

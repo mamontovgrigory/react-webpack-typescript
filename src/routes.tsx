@@ -7,6 +7,7 @@ import UsersPage from './containers/UsersPage';
 import CabinetsPage from './containers/CabinetsPage';
 import TelephonyPage from './containers/TelephonyPage';
 import GroupsPage from './containers/GroupsPage';
+import StockPage from './containers/StockPage';
 
 let store;
 
@@ -34,6 +35,7 @@ export default function routes(storeRef:Object) {
             <Route component={UsersPage} path="/users" onEnter={requirePermission}/>
             <Route component={GroupsPage} path="/groups" onEnter={requirePermission}/>
             <Route component={TelephonyPage} path="/telephony"/>
+            <Route component={StockPage} path="/stock" onEnter={requirePermission}/>
             <Route component={CabinetsPage} path="/cabinets" onEnter={requirePermission}/>
         </Route>
     );
