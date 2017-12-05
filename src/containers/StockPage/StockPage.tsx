@@ -7,7 +7,7 @@ interface IState {}
 export default class StockPage extends React.Component<IProps, IState> {
     render () {
         return (
-            <form method="post" encType="multipart/form-data" action="/Api/Test/Test">
+            <form method="post" encType="multipart/form-data" action="/Api/Stock/FillPhotos">
                 <div className="file-field input-field">
                     <div className="btn">
                         <span>{i18next.t('baseFile')}</span>

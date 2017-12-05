@@ -73,7 +73,7 @@ export function getClients(permissions: IUserPermissions) {
 
                         let enabledClients: string[] = permissions && permissions.telephonyClients ? permissions.telephonyClients : [];
                         clients = clients.filter((client) => {
-                            return enabledClients.length === 1 && enabledClients[0] === 'all' || enabledClients.indexOf(client.id) !== -1;
+                            return enabledClients.length === 1 && enabledClients[0] === 'all' || enabledClients.indexOf(String(client.id)) !== -1;
                         }).map((client) => {
                             return _.assign(client, {
                                 checked: true
