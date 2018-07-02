@@ -49,6 +49,9 @@ export default class CallsDetails extends React.Component<Props, State> {
         },
         {
             value: i18next.t('no')
+        },
+        {
+            value: i18next.t('toModeration')
         }
     ];
 

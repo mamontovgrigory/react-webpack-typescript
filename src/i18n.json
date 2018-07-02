@@ -75,7 +75,8 @@
       "file": "File",
       "baseFile": "Base file",
       "stockFile": "Stock file",
-      "stock": "Stock"
+      "stock": "Stock",
+      "toModeration": "To moderation"
     }
   },
   "ru": {
@@ -152,9 +153,10 @@
       "clientName": "Имя клиента",
       "managerName": "Имя менеджера",
       "file": "Файл",
-      "baseFile": "Базовый файл",
-      "stockFile": "Стоковый файл",
-      "stock": "Сток"
+      "baseFile": "Файл с фото",
+      "stockFile": "Прайс",
+      "stock": "Сток",
+      "toModeration": "На модерацию"
     }
   }
 }
