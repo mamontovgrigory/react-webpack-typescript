@@ -25,6 +25,7 @@ interface IState {
         active: boolean;
         deleted: boolean;
         alias?: string;
+        price?: string;
     }[];
 }
 
@@ -45,7 +46,8 @@ export default class CabinetItem extends React.Component<IProps, IState> {
                     id: client.id,
                     active: parseInt(client.active) === 1,
                     deleted: false,
-                    alias: client.alias
+                    alias: client.alias,
+                    price: client.price
                 };
             }) : []
         }
@@ -99,6 +101,18 @@ export default class CabinetItem extends React.Component<IProps, IState> {
             clientsSettings: clientsSettings.map((c) => {
                 if (c.id === clientId) {
                     c.alias = e.target.value;
+                }
+                return c;
+            })
+        })
+    }
+
+    setClientPrice(clientId, e) {
+        const {clientsSettings} = this.state;
+        this.setState({
+            clientsSettings: clientsSettings.map((c) => {
+                if (c.id === clientId) {
+                    c.price = e.target.value;
                 }
                 return c;
             })
@@ -201,6 +215,11 @@ export default class CabinetItem extends React.Component<IProps, IState> {
                                             <Input label={i18next.t('alias')}
                                                    value={clientSettings.alias}
                                                    onChange={this.setClientAlias.bind(this, client.id)}/>
+                                        </td>
+                                        <td>
+                                            <Input label={i18next.t('price')}
+                                                   value={clientSettings.price}
+                                                   onChange={this.setClientPrice.bind(this, client.id)}/>
                                         </td>
                                         <td>
                                             <button className="waves-effect waves-green btn-flat right"

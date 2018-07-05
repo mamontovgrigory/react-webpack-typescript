@@ -177,6 +177,7 @@ class Telephony extends React.Component<Props, State> {
     render() {
         let daysTotals = [];
         let daysTotalsObjective = [];
+        let totalPrice = 0;
         let selectAllChecked = this.props.clients.length === this.props.clients.filter((client) => {
                 return client.checked;
             }).length;
@@ -304,6 +305,7 @@ class Telephony extends React.Component<Props, State> {
                                 })
                             }
                             <th>{i18next.t('total')}</th>
+                            <th>{i18next.t('price')}</th>
                         </tr>
                         {
                             this.props.groups.map((group) => {
@@ -319,6 +321,7 @@ class Telephony extends React.Component<Props, State> {
                                     [
                                         <tr>
                                             <th className="head-column">{group.name}</th>
+                                            <td>&nbsp;</td>
                                             <td>&nbsp;</td>
                                             <td>&nbsp;</td>
                                             <td>&nbsp;</td>
@@ -348,6 +351,7 @@ class Telephony extends React.Component<Props, State> {
                                                             daysTotalsObjective[i] += objectiveCount;
                                                             clientTotal += count;
                                                             clientTotalObjective += objectiveCount;
+                                                            totalPrice += clientData.price ? objectiveCount * Number(clientData.price) : 0;
                                                             const duration = this.state.duration;
                                                             return <td className={'center info-cell'}
                                                                        key={i}
@@ -362,18 +366,19 @@ class Telephony extends React.Component<Props, State> {
                                                             </td>
                                                         })
                                                     }
-                                                    {
-                                                        <th className={'center info-cell'}
-                                                            onClick={() =>
-                                                                this.infoCellClickHandler({
-                                                                    logins: [login],
-                                                                    from: this.props.callsTotals.dates[0],
-                                                                    to: this.props.callsTotals.dates[this.props.callsTotals.dates.length - 1],
-                                                                    duration: this.state.duration
-                                                                })}>{clientTotal} <span
-                                                            className="note">({clientTotalObjective})</span>
-                                                        </th>
-                                                    }
+                                                    <th className={'center info-cell'}
+                                                        onClick={() =>
+                                                            this.infoCellClickHandler({
+                                                                logins: [login],
+                                                                from: this.props.callsTotals.dates[0],
+                                                                to: this.props.callsTotals.dates[this.props.callsTotals.dates.length - 1],
+                                                                duration: this.state.duration
+                                                            })}>{clientTotal} <span
+                                                        className="note">({clientTotalObjective})</span>
+                                                    </th>
+                                                    <th>
+                                                        {clientData.price ? clientTotalObjective * Number(clientData.price) : 0}
+                                                    </th>
                                                 </tr>
                                             )
                                         })
@@ -416,6 +421,7 @@ class Telephony extends React.Component<Props, State> {
                             }, 0)} <span className="note">({_.reduce(daysTotalsObjective, function (sum, n) {
                                 return sum + n;
                             }, 0)})</span></th>
+                            <th>{totalPrice}</th>
                         </tr>
                         </tbody>
                     </table>
