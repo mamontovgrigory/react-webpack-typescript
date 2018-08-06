@@ -245,7 +245,7 @@ export default class CallsDetails extends React.Component<Props, State> {
                                 parameters: {
                                     keys: true,
                                     aftersavefunc: function (r, s, newRowData) {
-                                        const {mark, model, client, manager, comment, objective} = newRowData;
+                                        const {mark, model, client, manager, comment, objective, moderation} = newRowData;
                                         dispatch(saveComments({
                                             callid,
                                             loginId,
@@ -254,7 +254,8 @@ export default class CallsDetails extends React.Component<Props, State> {
                                             client,
                                             manager,
                                             comment,
-                                            objective
+                                            objective,
+                                            moderation
                                         }));
                                     }
                                 }
