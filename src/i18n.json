@@ -77,7 +77,8 @@
       "stockFile": "Stock file",
       "stock": "Stock",
       "toModeration": "To moderation",
-      "price": "Price"
+      "price": "Price",
+      "moderation": "M"
     }
   },
   "ru": {
@@ -158,7 +159,8 @@
       "stockFile": "Прайс",
       "stock": "Сток",
       "toModeration": "На модерацию",
-      "price": "Бюджет"
+      "price": "Бюджет",
+      "moderation": "М"
     }
   }
 }

@@ -55,6 +55,15 @@ export default class CallsDetails extends React.Component<Props, State> {
         }
     ];
 
+    moderationOptions = [
+        {
+            value: ''
+        },
+        {
+            value: i18next.t('moderation')
+        }
+    ];
+
     componentDidMount() {
         let initGrid = this.initGrid.bind(this);
         setTimeout(function () {
@@ -74,6 +83,9 @@ export default class CallsDetails extends React.Component<Props, State> {
         const gridId = this.gridId;
         const objectiveOptions = this.objectiveOptions.map((o) => {
             return o.value;
+        });
+        const moderationOptions = this.moderationOptions.map((m) => {
+            return m.value;
         });
         const telephonyCommentsManage = userPermissions.telephonyCommentsManage;
         let defaultSearchOptions = {
@@ -184,6 +196,15 @@ export default class CallsDetails extends React.Component<Props, State> {
                     width: 60
                 },
                 {
+                    name: 'moderation',
+                    label: i18next.t('moderation'),
+                    editable: true,
+                    edittype: 'select',
+                    editoptions: {value: moderationOptions},
+                    hidden: !userPermissions.telephonyCommentsView,
+                    width: 60
+                },
+                {
                     name: 'record',
                     label: i18next.t('record'),
                     classes: 'record-link',
@@ -269,9 +290,9 @@ export default class CallsDetails extends React.Component<Props, State> {
 
     addClickHandler() {
         const {dispatch, loginIds} = this.props;
-        const {callsDetails} = this.state;
         const updateCallsDetailsGrid = this.updateCallsDetailsGrid.bind(this);
         const objectiveOptions = this.objectiveOptions;
+        const moderationOptions = this.moderationOptions;
         const loginId = _.first(loginIds);
         dispatch(getUniqueComments({
             loginId
@@ -281,6 +302,7 @@ export default class CallsDetails extends React.Component<Props, State> {
                 header: i18n.t('noteCreation'),
                 body: <CustomItem clientId={loginId}
                                   objectiveOptions={objectiveOptions}
+                                  moderationOptions={moderationOptions}
                                   updateCallsDetailsGrid={updateCallsDetailsGrid}
                                   saveButtonId={saveButtonId}
                                   uniqueComments={comments}
@@ -298,6 +320,7 @@ export default class CallsDetails extends React.Component<Props, State> {
         const {callsDetails} = this.state;
 
         const objectiveOptions = this.objectiveOptions;
+        const moderationOptions = this.moderationOptions;
         const updateCallsDetailsGrid = this.updateCallsDetailsGrid.bind(this);
 
         if (rowsIds.length === 1) {
@@ -316,6 +339,7 @@ export default class CallsDetails extends React.Component<Props, State> {
                                         login={callDetails.login}
                                         clientId={callDetails.loginId}
                                         objectiveOptions={objectiveOptions}
+                                        moderationOptions={moderationOptions}
                                         updateCallsDetailsGrid={updateCallsDetailsGrid}
                                         saveButtonId={saveButtonId}
                                         uniqueComments={comments}
@@ -324,6 +348,7 @@ export default class CallsDetails extends React.Component<Props, State> {
                                         login={callDetails.login}
                                         clientId={callDetails.loginId}
                                         objectiveOptions={objectiveOptions}
+                                        moderationOptions={moderationOptions}
                                         updateCallsDetailsGrid={updateCallsDetailsGrid}
                                         saveButtonId={saveButtonId}
                                         uniqueComments={comments}

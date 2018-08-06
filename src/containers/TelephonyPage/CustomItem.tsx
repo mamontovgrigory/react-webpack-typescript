@@ -17,6 +17,7 @@ interface IProps {
     saveButtonId: string;//TODO: Handle click using jquery
     updateCallsDetailsGrid: Function;
     objectiveOptions: any;
+    moderationOptions: any;
     uniqueComments?: IUniqueComments,
 
     dispatch?: any;
@@ -32,6 +33,7 @@ interface IState {
     manager?: string;
     comment?: string;
     objective?: string;
+    moderation?: string;
 }
 
 class CustomItem extends React.Component<IProps, IState> {
@@ -47,7 +49,8 @@ class CustomItem extends React.Component<IProps, IState> {
             client: props.callDetails && props.callDetails.client ? props.callDetails.client : '',
             manager: props.callDetails && props.callDetails.manager ? props.callDetails.manager : '',
             comment: props.callDetails && props.callDetails.comment ? props.callDetails.comment : '',
-            objective: props.callDetails && props.callDetails.objective ? props.callDetails.objective : ''
+            objective: props.callDetails && props.callDetails.objective ? props.callDetails.objective : '',
+            moderation: props.callDetails && props.callDetails.moderation ? props.callDetails.moderation : ''
         }
     }
 
@@ -126,9 +129,15 @@ class CustomItem extends React.Component<IProps, IState> {
         });
     }
 
+    moderationChangeHandler(e) {
+        this.setState({
+            moderation: e.target.value
+        });
+    }
+
     save(callback) {
         const {clientId, dispatch, updateCallsDetailsGrid} = this.props;
-        const {commentId, numfrom, time, mark, model, client, manager, comment, objective} = this.state;
+        const {commentId, numfrom, time, mark, model, client, manager, comment, objective, moderation} = this.state;
         const data: any = {
             loginId: clientId,
             numfrom: numfrom.replace(/\D/g, ''),
@@ -138,7 +147,8 @@ class CustomItem extends React.Component<IProps, IState> {
             client,
             manager,
             comment,
-            objective
+            objective,
+            moderation
         };
         if (typeof (commentId) === 'number') {
             data.id = commentId;
@@ -150,8 +160,8 @@ class CustomItem extends React.Component<IProps, IState> {
     }
 
     render() {
-        const {uniqueComments, objectiveOptions} = this.props;
-        const {numfrom, time, mark, model, client, manager, comment, objective} = this.state;
+        const {uniqueComments, objectiveOptions, moderationOptions} = this.props;
+        const {numfrom, time, mark, model, client, manager, comment, objective, moderation} = this.state;
         let marksSource = this.getAutocompleteSource(uniqueComments.marks);
         let modelsSource = this.getAutocompleteSource(uniqueComments.models);
         return (
@@ -170,9 +180,15 @@ class CustomItem extends React.Component<IProps, IState> {
                 </div>
                 <div className="row">
                     <Select label={i18next.t('objective')}
+                            s={6}
                             value={objective}
                             options={objectiveOptions}
                             onChange={this.objectiveChangeHandler.bind(this)}/>
+                    <Select label={i18next.t('moderation')}
+                            s={6}
+                            value={moderation}
+                            options={moderationOptions}
+                            onChange={this.moderationChangeHandler.bind(this)}/>
                 </div>
                 <div className="row">
                     <InputAutocomplete label={i18next.t('mark')}

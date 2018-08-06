@@ -47,7 +47,7 @@ export default class CabinetItem extends React.Component<IProps, IState> {
                     active: parseInt(client.active) === 1,
                     deleted: false,
                     alias: client.alias,
-                    price: client.price
+                    price: client.price ? client.price : ''
                 };
             }) : []
         }
