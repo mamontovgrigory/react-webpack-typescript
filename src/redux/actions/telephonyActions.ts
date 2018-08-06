@@ -209,6 +209,7 @@ interface ISaveCommentsProps {
     model?: string;
     comment?: string;
     objective?: string;
+    moderation?: string;
     client?: string;
     manager?: string;
 }

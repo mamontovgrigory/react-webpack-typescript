@@ -394,16 +394,16 @@ export default class CallsDetails extends React.Component<Props, State> {
             let $element = $('[data-callid="' + callid + '"]');
             let audioId = generator.genId();
 
-            $element.replaceWith($('<audio>', {//TODO: needs optimization
-                'id': audioId,
-                'src': record.src
-            }));
-
-            $('#' + callid).find('.download').append($('<a>', {
+            $element.closest('tr').find('.download').append($('<a>', {
                 download: recordName + '.mp3',
                 href: record.src,
                 html: i18next.t('download'),
                 target: '_blank'
+            }));
+
+            $element.replaceWith($('<audio>', {//TODO: needs optimization
+                'id': audioId,
+                'src': record.src
             }));
 
             $('#' + audioId).audioPlayer();
