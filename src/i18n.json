@@ -79,7 +79,8 @@
       "toModeration": "To moderation",
       "price": "Price",
       "moderation": "M",
-      "secondHand": "SH"
+      "secondHand": "SH",
+      "link": "Link"
     }
   },
   "ru": {
@@ -162,7 +163,8 @@
       "toModeration": "На модерацию",
       "price": "Цена звонка",
       "moderation": "М",
-      "secondHand": "БУ"
+      "secondHand": "БУ",
+      "link": "Ссылка"
     }
   }
 }

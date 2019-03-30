@@ -32,6 +32,7 @@ interface IState {
     client?: string;
     manager?: string;
     comment?: string;
+    link?: string;
     objective?: string;
     moderation?: string;
 }
@@ -48,6 +49,7 @@ class CustomItem extends React.Component<IProps, IState> {
             model: props.callDetails && props.callDetails.model ? props.callDetails.model : '',
             client: props.callDetails && props.callDetails.client ? props.callDetails.client : '',
             manager: props.callDetails && props.callDetails.manager ? props.callDetails.manager : '',
+            link: props.callDetails && props.callDetails.link ? props.callDetails.link : '',
             comment: props.callDetails && props.callDetails.comment ? props.callDetails.comment : '',
             objective: props.callDetails && props.callDetails.objective ? props.callDetails.objective : '',
             moderation: props.callDetails && props.callDetails.moderation ? props.callDetails.moderation : ''
@@ -123,6 +125,12 @@ class CustomItem extends React.Component<IProps, IState> {
         });
     }
 
+    linkChangeHandler(e) {
+        this.setState({
+            link: e.target.value
+        });
+    }
+
     objectiveChangeHandler(e) {
         this.setState({
             objective: e.target.value
@@ -137,7 +145,7 @@ class CustomItem extends React.Component<IProps, IState> {
 
     save(callback) {
         const {clientId, dispatch, updateCallsDetailsGrid} = this.props;
-        const {commentId, numfrom, time, mark, model, client, manager, comment, objective, moderation} = this.state;
+        const {commentId, numfrom, time, mark, model, client, manager, comment, link, objective, moderation} = this.state;
         const data: any = {
             loginId: clientId,
             numfrom: numfrom.replace(/\D/g, ''),
@@ -147,6 +155,7 @@ class CustomItem extends React.Component<IProps, IState> {
             client,
             manager,
             comment,
+            link,
             objective,
             moderation
         };
@@ -161,7 +170,7 @@ class CustomItem extends React.Component<IProps, IState> {
 
     render() {
         const {uniqueComments, objectiveOptions, moderationOptions} = this.props;
-        const {numfrom, time, mark, model, client, manager, comment, objective, moderation} = this.state;
+        const {numfrom, time, mark, model, client, manager, comment, link, objective, moderation} = this.state;
         let marksSource = this.getAutocompleteSource(uniqueComments.marks);
         let modelsSource = this.getAutocompleteSource(uniqueComments.models);
         return (
@@ -216,6 +225,11 @@ class CustomItem extends React.Component<IProps, IState> {
                     <Textarea label={i18next.t('comment')}
                               value={comment}
                               onChange={this.commentChangeHandler.bind(this)}/>
+                </div>
+                <div className="row">
+                    <Textarea label={i18next.t('link')}
+                              value={link}
+                              onChange={this.linkChangeHandler.bind(this)}/>
                 </div>
             </div>
         )
