@@ -61,6 +61,9 @@ export default class CallsDetails extends React.Component<Props, State> {
         },
         {
             value: i18next.t('moderation')
+        },
+        {
+            value: i18next.t('secondHand')
         }
     ];
 

@@ -37,13 +37,6 @@ export function getModules(permissions: IUserPermissions) {
                 icon: 'phone',
                 src: require('./content/telephony.png'),
                 enabled: true
-            },
-            {
-                name: i18next.t('stock'),
-                to: '/stock',
-                icon: 'directions_car',
-                src: require('./content/stock.png'),
-                enabled: permissions.stockManage
             }
         ];
         dispatch(modules(result));

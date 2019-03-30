@@ -78,7 +78,8 @@
       "stock": "Stock",
       "toModeration": "To moderation",
       "price": "Price",
-      "moderation": "M"
+      "moderation": "M",
+      "secondHand": "SH"
     }
   },
   "ru": {
@@ -159,8 +160,9 @@
       "stockFile": "Прайс",
       "stock": "Сток",
       "toModeration": "На модерацию",
-      "price": "Бюджет",
-      "moderation": "М"
+      "price": "Цена звонка",
+      "moderation": "М",
+      "secondHand": "БУ"
     }
   }
 }
