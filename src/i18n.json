@@ -80,7 +80,8 @@
       "price": "Price",
       "moderation": "M",
       "secondHand": "SH",
-      "link": "Link"
+      "link": "Link",
+      "proposals": "Proposal"
     }
   },
   "ru": {
@@ -164,7 +165,8 @@
       "price": "Цена звонка",
       "moderation": "М",
       "secondHand": "БУ",
-      "link": "Ссылка"
+      "link": "Ссылка",
+      "proposals": "Заявки"
     }
   }
 }

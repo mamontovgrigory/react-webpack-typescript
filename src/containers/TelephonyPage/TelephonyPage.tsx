@@ -334,7 +334,9 @@ class Telephony extends React.Component<Props, State> {
                                         </tr>,
                                         groupLogins.map((login, index) => {
                                             let loginData = this.props.callsTotals.data[login];
-                                            loginData = loginData ? loginData : [];
+                                            if (!loginData) {
+                                                return null;
+                                            }
                                             let clientTotal = 0;
                                             let clientTotalObjective = 0;
                                             const clientData = _.find(this.props.clients, (c) => {
